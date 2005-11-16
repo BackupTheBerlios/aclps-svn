@@ -1,0 +1,58 @@
+body
+{
+	background-color: #404040;
+	margin: 0px;
+}
+
+#floatclear
+{
+	clear: both
+}
+
+#topbar
+{
+	width: 100%;
+	background-color: aliceblue;
+	margin-bottom: 50px;
+
+	font-size: medium;
+	
+}
+
+#image
+{
+	width: 800px;
+	margin: 20px auto;
+}
+
+#container
+{
+	width: 800px;
+	margin: 20px auto;
+	color: white;
+}
+
+#content
+{
+	float: left;
+	width: 500px;
+	margin: 0px;
+}
+
+#sidecontent
+{
+	margin-left: 500px;
+}
+
+#contentbox
+{
+	width: 450px;
+	margin: 10px 0px;
+	text-align: left;
+}
+
+#sidecontentbox
+{
+	width: 250px;
+	text-align: left;
+}
