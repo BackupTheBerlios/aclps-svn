@@ -67,6 +67,12 @@ class BusinessLogic_Post_Post
 	public function HandleRequest()
 	{
 		//Checks $_GET[‘action’] to see if the action belongs to the Post class. If so, the appropriate function is called. Otherwise, Comment.HandleRequest() is called.
+		$request = $_GET['Action'];
+		switch($request)
+		{
+			//TODO: add actions here, if any
+			default:
+				die('Unknown Request.');
 		//TODO
 	}
 

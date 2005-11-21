@@ -16,7 +16,8 @@ abstract class Presentation_View_View
     {
         if ($value == $aViewName)
         {
-            unset($this->$Views[$key]);
+            unset($this->Views[$key]);
+            break;
         }
     }
   }

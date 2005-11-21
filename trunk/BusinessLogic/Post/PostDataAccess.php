@@ -4,6 +4,20 @@ class BusinessLogic_Post_PostSecurity
 {
 //Helper class which interacts with the Data Access layer. This class is also responsible for converting data into a View structure.
 
+	private function __construct()
+	{
+		//Do Nothing
+	}
+
+	static public function GetInstance()
+	{
+		if (!isset($_SESSION['BusinessLogic_Post_PostDataAccess']))
+		{
+			$_SESSION['BusinessLogic_Post_PostDataAccess'] = new BusinessLogic_Post_PostDataAccess();
+		}
+		return $_SESSION['BusinessLogic_Post_PostDataAccess'];
+	}
+
 	public function ProcessNewPost()
 	{
 		//Inserts data into the Posts table.
