@@ -37,22 +37,30 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
 		$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
 		$connection = $this->GetConnection('Select');
 		return $this->Query($connection, $query);
-		
 	}
 
+    //modified: 11/21/2005 by Chun-Nan
 	public function Insert($baseQuery, $arguments)
 	{
-		//TODO
+		$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
+		$connection = $this->GetConnection('Insert');
+		return $this->Query($connection, $query);
 	}
 
+    //modified: 11/21/2005 by Chun-Nan
   	public function Update($baseQuery, $arguments)
 	{
-		//TODO
+		$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
+		$connection = $this->GetConnection('Update');
+		return $this->Query($connection, $query);
 	}
 
+    //modified: 11/21/2005 by Chun-Nan
   	public function Delete($baseQuery, $arguments)
 	{
-		//TODO
+		$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
+		$connection = $this->GetConnection('Delete');
+		return $this->Query($connection, $query);
 	}
 
 	private function GetConnection($action)
@@ -138,8 +146,6 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
 		{
 			return $query;
 		}
-		
 	}
 }
-
 ?>
