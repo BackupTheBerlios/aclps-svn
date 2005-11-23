@@ -3,48 +3,48 @@
 class BusinessLogic_User
 {
 
-	private $status;
-	private $auth_table;
+    private $status;
+    private $auth_table;
 	
-	public function HandleRequest()
-	{
-		//TODO
-	}
+    public function HandleRequest()
+    {
+	//TODO
+    }
 
-	public function EditUserData()
-	{
-		//TODO
-	}
+    public function EditUserData()
+    {
+	//TODO
+    }
 
-	public function ProcessEditUserData()
-	{
-		//TODO
-	}
+    public function ProcessEditUserData()
+    {
+	//TODO
+    }
 
-	public function ViewSignIn()
-	{
-		//TODO
-	}
+    public function ViewSignIn()
+    {
+	//TODO
+    }
 
-	public function ProcessSignIn()
-	{
-		//TODO
-	}
+    public function ProcessSignIn()
+    {
+	//TODO
+    }
 
-	public function ProcessSignOut()
-	{
-		//TODO
-	}
+    public function ProcessSignOut()
+    {
+	//TODO
+    }
 
-	public function ViewRegister()
-	{
-		//TODO
-	}
+    public function ViewRegister()
+    {
+	//TODO
+    }
 
-	public function ProcessRegister()
-	{
-		//TODO
-	}
+    public function ProcessRegister()
+    {
+	//TODO
+    }
 }
 
 ?>

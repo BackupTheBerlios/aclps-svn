@@ -6,146 +6,146 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
 
     static protected $DB_SETTINGS = 'Settings/DBSettings.php';
 
-  	private $dbHost;
-  	private $dbName;
-  	private $dbUser;
-  	private $dbPassword;
+    private $dbHost;
+    private $dbName;
+    private $dbUser;
+    private $dbPassword;
 
-	private $connections;
+    private $connections;
 
-  	function __construct($dbHost, $dbName, $dbUser, $dbPassword)
-	{
-		$this->dbHost = $dbHost;
-		$this->dbName = $dbName;
-		$this->dbUser = $dbUser;
-		$this->dbPassword = $dbPassword;
-  	}
-
-  	public static function GetInstance()
-	{
-   	if(!isset($_SESSION['DataAccess_MySQLDataAccess']))
+    function __construct($dbHost, $dbName, $dbUser, $dbPassword)
     {
-        require self::$DB_SETTINGS;
-			$_SESSION['DataAccess_MySQLDataAccess'] = new DataAccess_MySQLDataAccess($dbHost, $dbName, $dbUser, $dbPassword);
+	$this->dbHost = $dbHost;
+	$this->dbName = $dbName;
+	$this->dbUser = $dbUser;
+	$this->dbPassword = $dbPassword;
+    }
+
+    public static function GetInstance()
+    {
+   	if(!isset($_SESSION['DataAccess_MySQLDataAccess']))
+	{
+	    require self::$DB_SETTINGS;
+	    $_SESSION['DataAccess_MySQLDataAccess'] = new DataAccess_MySQLDataAccess($dbHost, $dbName, $dbUser, $dbPassword);
    	}
     
    	return $_SESSION['DataAccess_MySQLDataAccess'];
-	}
+    }
 
-	public function Select($baseQuery, $arguments)
-	{
-		$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
-		$connection = $this->GetConnection('Select');
-		return $this->Query($connection, $query);
-	}
-
-    //modified: 11/21/2005 by Chun-Nan
-	public function Insert($baseQuery, $arguments)
-	{
-		$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
-		$connection = $this->GetConnection('Insert');
-		return $this->Query($connection, $query);
-	}
+    public function Select($baseQuery, $arguments)
+    {
+	$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
+	$connection = $this->GetConnection('Select');
+	return $this->Query($connection, $query);
+    }
 
     //modified: 11/21/2005 by Chun-Nan
-  	public function Update($baseQuery, $arguments)
-	{
-		$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
-		$connection = $this->GetConnection('Update');
-		return $this->Query($connection, $query);
-	}
+    public function Insert($baseQuery, $arguments)
+    {
+	$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
+	$connection = $this->GetConnection('Insert');
+	return $this->Query($connection, $query);
+    }
 
     //modified: 11/21/2005 by Chun-Nan
-  	public function Delete($baseQuery, $arguments)
-	{
-		$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
-		$connection = $this->GetConnection('Delete');
-		return $this->Query($connection, $query);
-	}
+    public function Update($baseQuery, $arguments)
+    {
+	$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
+	$connection = $this->GetConnection('Update');
+	return $this->Query($connection, $query);
+    }
 
-	private function GetConnection($action)
-	{
-		//TODO add variations on getting connections by action
-		//TODO need error checking
+    //modified: 11/21/2005 by Chun-Nan
+    public function Delete($baseQuery, $arguments)
+    {
+	$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
+	$connection = $this->GetConnection('Delete');
+	return $this->Query($connection, $query);
+    }
 
-		$connection = new mysqli($this->dbHost, $this->dbUser, $this->dbPassword, $this->dbName);
+    private function GetConnection($action)
+    {
+	//TODO add variations on getting connections by action
+	//TODO need error checking
+
+	$connection = new mysqli($this->dbHost, $this->dbUser, $this->dbPassword, $this->dbName);
 		
         if (mysqli_connect_errno())
         {
             throw new Exception(mysqli_connect_error());
         }
 
-		return $connection;
+	return $connection;
+    }
+
+    private function Query($connection, $query)
+    {
+	$query = $this->InsertSlashes($query);
+	$queryResult = $connection->query($query);
+
+	//TODO check for query failure
+	//TODO check for success but no result (i.e. update, etc.)
+
+	$returnResult = array();
+
+	while ($row = $queryResult->fetch_assoc())
+	{
+	    $returnResult[] = $this->RemoveSlashes($row);
 	}
 
-	private function Query($connection, $query)
+	return $returnResult;
+    }
+
+    private function InsertArgumentsIntoQuery($baseQuery, $arguments)
+    {
+	$size = count($arguments) - 1;
+
+	if (!strstr($baseQuery, '[' . $size . ']') or strstr($baseQuery, '[' . ($size + 1) . ']'))
 	{
-		$query = $this->InsertSlashes($query);
-		$queryResult = $connection->query($query);
-
-		//TODO check for query failure
-		//TODO check for success but no result (i.e. update, etc.)
-
-		$returnResult = array();
-
-		while ($row = $queryResult->fetch_assoc())
-		{
-			$returnResult[] = $this->RemoveSlashes($row);
-		}
-
-		return $returnResult;
+	    throw new Exception('Malformed Query');
 	}
 
-	private function InsertArgumentsIntoQuery($baseQuery, $arguments)
+	//TODO: need to catch exception
+
+	$query = $baseQuery;
+
+	foreach($arguments as $key=>$value)
 	{
-		$size = count($arguments) - 1;
-
-		if (!strstr($baseQuery, '[' . $size . ']') or strstr($baseQuery, '[' . ($size + 1) . ']'))
-		{
-			throw new Exception('Malformed Query');
-		}
-
-		//TODO: need to catch exception
-
-		$query = $baseQuery;
-
-		foreach($arguments as $key=>$value)
-		{
-			//TODO: NEED TO SANITIZE $value
-			$query = str_replace('[' . $key . ']', $value, $query);
-		}
+	    //TODO: NEED TO SANITIZE $value
+	    $query = str_replace('[' . $key . ']', $value, $query);
+	}
 		
-		return $query;
-	}
+	return $query;
+    }
 			
-	private function InsertSlashes($query)
+    private function InsertSlashes($query)
+    {
+	if (!get_magic_quotes_gpc())
 	{
-		if (!get_magic_quotes_gpc())
-		{
-			return addslashes($query);
-		}	
-		else
-		{
-			return $query;
-		}
-		
+	    return addslashes($query);
+	}	
+	else
+	{
+	    return $query;
 	}
+		
+    }
 
-	private function RemoveSlashes($result)
+    private function RemoveSlashes($result)
+    {
+	if (!get_magic_quotes_gpc())
 	{
-		if (!get_magic_quotes_gpc())
-		{
-			foreach($result as $key=>$value)
-			{
-				$result[$key] = stripslashes($value);
-			}
+	    foreach($result as $key=>$value)
+	    {
+		$result[$key] = stripslashes($value);
+	    }
 		
-			return $result;
-		}	
-		else
-		{
-			return $query;
-		}
+	    return $result;
+	}	
+	else
+	{
+	    return $query;
 	}
+    }
 }
 ?>

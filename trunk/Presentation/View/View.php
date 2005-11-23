@@ -2,33 +2,33 @@
 
 abstract class Presentation_View_View
 {
-  private $Views;
+    private $Views;
   
-  public function AddView($aView)
-  {
-    print_r( $this->Views);
-    $this->Views[] = $aView;
-  }
-  
-  public function DeleteView($aViewName)
-  {
-    foreach($this->Views as $key=>$value)
+    public function AddView($aView)
     {
-        if ($value == $aViewName)
-        {
-            unset($this->Views[$key]);
-            break;
-        }
+	print_r( $this->Views);
+	$this->Views[] = $aView;
     }
-  }
   
-  public function Display()
-  {
+    public function DeleteView($aViewName)
+    {
+	foreach($this->Views as $key=>$value)
+	{
+	    if ($value == $aViewName)
+	    {
+		unset($this->Views[$key]);
+		break;
+	    }
+	}
+    }
+  
+    public function Display()
+    {
         foreach($this->Views as $key=>$value)
         {
-          $value->$Display();
+	    $value->$Display();
         }
-  }
+    }
 }
 
 ?>
