@@ -6,7 +6,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     private function __construct()
     {
-	$this->$TABLE = 'Blogs'
+	$this->$TABLE = 'Blogs';
     }
 
     static public function GetInstance()
