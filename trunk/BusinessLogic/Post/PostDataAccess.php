@@ -2,11 +2,16 @@
 
 class BusinessLogic_Post_PostSecurity
 {
-    //Helper class which interacts with the Data Access layer. This class is also responsible for converting data into a View structure.
+    //Helper class which interacts with the Data Access layer.
+    //This class is also responsible for converting data into a View structure.
+
+    private $TABLE;
+    private $TIMESTAMP_FIELD;
 
     private function __construct()
     {
-	//Do Nothing
+	$this->TABLE = 'Posts';
+	$this->TIMESTAMP_FIELD = 'Timestamp';
     }
 
     static public function GetInstance()
@@ -18,58 +23,136 @@ class BusinessLogic_Post_PostSecurity
 	return $_SESSION['BusinessLogic_Post_PostDataAccess'];
     }
 
-    public function ProcessNewPost()
+    public function ProcessNewPost($postView)
     {
 	//Inserts data into the Posts table.
-	//TODO
+	$query = 'insert into [0] (PostID,BlogID,Author,Title,Timestamp,Content) VALUES (\'[1]\',\'[2]\',\'[3]\',\'[4]\',\'[5]\',\'[6]\')'
+	$arguments = array($this->TABLE, $postview->getPostID(),$postView->getBlogID(),
+			   $postView->getAuthor(), $postView->getTitle(), $postView->getTimestamp(),
+			   $postView->getContent());
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Insert($query, $arguments);
+	//TODO: check valid timestamps?
     }
 
-    public function EditPost()
+    public function EditPost($blogID, $postID)
     {
 	//Returns an EditPostView with data from the Posts table.
-	//TODO
+	//TODO: create editpostview then get back to this
     }
 
-    public function ProcessEditPost()
+    public function ProcessEditPost($postView)
     {
 	//Updates the Posts table with the new data.
-	//TODO
+	$query = 'update [0] set Author=\'[1]\', Title=\'[2]\', Timestamp=\'[3]\', Content=\'[4]\' where PostID=\'[5]\'';
+	$arguments = array($this->TABLE, $postview->getAuthor(),$postView->getTitle(),
+			   $postView->getTimestamp(), $postView->getContent(), $postView->getPostID());
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Update($query, $arguments);
+	//TODO: check valid timestamps?
     }
 
-    public function DeletePost()
+    public function DeletePost($blogID, $postID)
     {
 	//Returns a DeletePostView with data from the Posts table.
-	//TODO
+	//TODO: create deletepostview then get back to this
     }
 
-    public function ProcessDeletePost()
+    public function ProcessDeletePost($postID)
     {
 	//Updates the Posts table with the new data.
-	//TODO
+	$query = 'delete from \'[0]\' where PostID=\'[1]\'';
+	$arguments = array($this->TABLE, $postID);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Delete($query, $arguments);
     }
 
-    public function ViewPost()
+    public function ViewPostsByID($blogID, $postID)
     {
-	//Returns a ViewPostCollectionView with data from the Posts table.
-	//TODO
+	//Returns an array of ViewPostViews with data from the Posts table.
+	$query = 'select * from \'[0]\' where BlogID=\'[1]\' and PostID=\'[2]\' order by Timestamp desc';
+        $arguments = array($this->TABLE, $blogID, $postID);
+        
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Select($query, $arguments);
+
+        return $this->SQLResultsToPostViews($response);
     }
 
-    public function ViewPostByRecent()
+    public function ViewPostsByRecentCount($blogID, $postCount)
     {
-	//Returns a ViewPostCollectionView with data from the Posts table.
-	//TODO
+	//Returns an array of ViewPostViews with data from the Posts table.
+	$query = 'select * from \'[0]\' where BlogID=\'[1]\' order by Timestamp desc limit \'[2]\'';
+        $arguments = array($this->TABLE, $blogID, $postCount);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Select($query, $arguments);
+
+        return $this->SQLResultsToPostViews($response);
     }
 
-    public function ViewPostByDay()
+    public function ViewPostsByDaysOld($blogID, $daysOld)
     {
-	//Returns a ViewPostCollectionView with data from the Posts table.
-	//TODO
+	//Returns an array of ViewPostViews with data from the Posts table.
+	$query = 'select * from \'[0]\' where BlogID=\'[1]\' and Timestamp >= date_sub(curdate(),interval [2] day) order by Timestamp desc';
+	
+	$arguments = array($this->TABLE, $blogID, $daysOld);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Select($query, $arguments);
+
+        return $this->SQLResultsToPostViews($response);
     }
 
-    public function ViewPostByMonth()
+    public function ViewPostsByMonth($blogID, $year, $month)
     {
-	//Returns a ViewPostCollectionView with data from the Posts table.
-	//TODO
+	//Returns an array of ViewPostViews with data from the Posts table.
+	if (strlen($year) != 4)
+	{
+	    throw new Exception('Year must be 4 digits');
+	}
+	if (strlen($month) < 2)
+	{
+	    $month = '0'+$month;
+	}
+
+	$followingmonth = ($month%12)+1;
+	if ($followingmonth == 1)
+	{
+	    $followingyear = $year + 1;
+	}
+	else
+	{
+	    $followingyear = $year;
+	}
+
+	$query = 'select Timestamp from \'[0]\' where Timestamp >= \'[1][2]01\' AND Timestamp < \'[3][4]01\'';
+
+	$arguments = array($this->TABLE, $year, $month, $followingyear, $followingmonth);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Select($query, $arguments);
+
+	return $this->SQLResultsToPostViews($response);
+    }
+
+    private function SQLResultsToPostViews($results)
+    {
+	if (count($results) < 1)
+	{
+	    throw new Exception('No posts were found.');
+	}
+
+	foreach ($results as $key=>$value)
+	{
+	    $returnme[$key] = new Presentation_View_ViewPostView($value['BlogID'], $value['PostID'],
+								$value['Author'], $value['Title'],
+								$value['Timestamp']);
+	}
+	return $returnme
     }
 }
 

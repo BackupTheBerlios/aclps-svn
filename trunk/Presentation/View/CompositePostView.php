@@ -11,22 +11,23 @@ class Presentation_View_CompositePostView extends Presentation_View_View
     
     public function Display()
     {
+	//TODO: This should be HTMLized
 	foreach($this->Posts as $key=>$value)
 	{
 	    $value->$Display();
 	}
     }
 
-    public function AddPost($post)
+    public function AddView($view)
     {
 	$this->Posts[] = $post;
     }
 
-    public function DeletePost($post)
+    public function DeleteView($view)
     {
 	foreach($this->Views as $key=>$value)
 	{
-	    if ($value == $post)
+	    if ($value->getPostID() == $view->getPostID())
 	    {
 		unset($this->Posts[$key]);
 		break;

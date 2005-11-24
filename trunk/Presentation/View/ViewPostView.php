@@ -1,6 +1,6 @@
 <?php
 
-class Presentation_View_ViewPostView extends Presentation_View_View
+class Presentation_View_ViewPostView
 {
     private $blogID;
     private $postID;
@@ -9,79 +9,69 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     private $timestamp;
     private $content;
     
-    public function __construct($blogID, $postID, $author, $title, $timestamp)
+    public function __construct($blogID, $postID, $author, $title, $timestamp,$content)
     {
 	$this->blogID = $blogID;
 	$this->postID = $postID;
 	$this->author = $author;
 	$this->title = $title;
 	$this->timestamp = $timestamp;
-
-	$this->content = '';
+	$this->content = $content;
     }
     
     public function Display()
     {
-	die("ViewPostView does not display.");
+	die("ViewPostView does not display. Call CompositePostView.Display() instead");
     }
     
-    public function SetContent($aContent)
+    public function setContent($aContent)
     {
 	$this->content = $aContent;
     }
-    
-    public function DisplayContent()
+    public function getContent()
     {
-	if (is_object($this->content))
-	{
-	    return $this->content->Display();
-	}
-	elseif (isset($this->content))
-	{
-	    return $this->content;
-	}
-	else
-	{
-	    return '&nbsp;';
-	}
+	return $this->content;
     }
 
-    public function DisplayAuthor()
+    public function setAuthor($aAuthor)
     {
-	if (isset($this->author))
-	{
-	    return $this->author;
-	}
-	else
-	{
-	    return '&nbsp;';
-	}
+	$this->author = $aAuthor;
+    }
+    public function getAuthor()
+    {
+	return $this->author;
     }
 
-    public function DisplayTitle()
+    public function setTitle($aTitle)
     {
-	if (isset($this->title))
-	{
-	    return $this->title;
-	}
-	else
-	{
-	    return '&nbsp;';
-	}
+	$this->title = $aTitle;
+    }
+    public function getTitle()
+    {
+	return $this->title;
     }
 
-    public function DisplayTimestamp()
+    public function setTimestamp($aTimestamp)
     {
-	if (isset($this->timestamp))
-	{
-	    return $this->timestamp;
-	}
-	else
-	{
-	    return '&nbsp;';
-	}
+	//TODO: perhaps some sort of checking on the new timestamp?
+	$this->timestamp = $aTimestamp;
+    }
+    public function getTimestamp()
+    {
+	return $this->timestamp;
     }
 
+    //postID cannot be changed
+    public function getPostID()
+    {
+	return $this->postID;
+    }
+
+    //blogID cannot be changed
+    public function getBlogID()
+    {
+	return $this->blogID;
+    }
 }
 
 ?>

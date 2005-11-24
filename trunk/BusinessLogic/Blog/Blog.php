@@ -31,7 +31,7 @@ class BusinessLogic_Blog_Blog
 	{
 	case 'ViewBlog':
 
-	    //$aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->GetRecentPosts);
+	    //$aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($blogID,$userID,$postcount);
 	    break;
 				
 	case 'ViewArchive':
@@ -68,7 +68,7 @@ class BusinessLogic_Blog_Blog
 	    //TODO
 	    break;
 	default:
-	    die('Unknown Request.');
+	    BusinessLogic_Post_Post::GetInstance()->HandleRequest();
 	}
 
 	return $aViewBlogView;

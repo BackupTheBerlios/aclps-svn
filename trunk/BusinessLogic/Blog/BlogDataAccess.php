@@ -2,9 +2,11 @@
 
 class BusinessLogic_Blog_BlogDataAccess
 {
+    private $TABLE;
+
     private function __construct()
     {
-	//Do Nothing
+	$this->$TABLE = 'Blogs'
     }
 
     static public function GetInstance()
@@ -21,8 +23,7 @@ class BusinessLogic_Blog_BlogDataAccess
     {
 	$query = 'select * from [0] where BlogID=[1]';
 
-	$TABLE = 'Blogs';
-        $arguments = array($TABLE, $blogID);
+        $arguments = array($this->$TABLE, $blogID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
 
