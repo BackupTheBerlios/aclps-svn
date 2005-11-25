@@ -35,6 +35,13 @@ class BusinessLogic_User
 	//TODO
     }
 
+    private function GetPasshash($string)
+    {
+	//Encrypts a password into a hash, returns the hash.
+	//The database stores these hashes, so compare what this returns against that when verifying a user.
+	return crypt($string,$string); //Use string itself as the salt
+    }
+
     public function ProcessSignOut()
     {
 	//Sets $_SESSION = array(). Confirms sign out by returning ViewSignOutView
@@ -53,8 +60,12 @@ class BusinessLogic_User
 	//TODO
     }
 
-    public function UserPermission()
-	//Returns the permission level for this user ("owner", "editor", "author" or "nobody")
+    public function UserPermission($blogID,$userID)
+    {
+	//Returns the permission level for this user ("owner"=80, "editor"=40, "author"=20 or "nobody"=0)
+	//TODO
+	return 'nobody';
+    }
 }
 
 ?>

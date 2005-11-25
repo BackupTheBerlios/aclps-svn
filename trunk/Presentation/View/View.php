@@ -6,7 +6,7 @@ abstract class Presentation_View_View
   
     public function AddView($aView)
     {
-	print_r( $this->Views);
+	//print_r( $this->Views);
 	$this->Views[] = $aView;
     }
   
