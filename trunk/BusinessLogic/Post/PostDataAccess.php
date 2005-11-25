@@ -27,9 +27,9 @@ class BusinessLogic_Post_PostSecurity
     {
 	//Inserts data into the Posts table.
 	$query = 'insert into [0] (PostID,BlogID,Author,Title,Timestamp,Content) VALUES (\'[1]\',\'[2]\',\'[3]\',\'[4]\',\'[5]\',\'[6]\')'
-	$arguments = array($this->TABLE, $postview->getPostID(),$postView->getBlogID(),
-			   $postView->getAuthor(), $postView->getTitle(), $postView->getTimestamp(),
-			   $postView->getContent());
+	$arguments = array($this->TABLE, $postview->GetPostID(),$postView->GetBlogID(),
+			   $postView->GetAuthor(), $postView->GetTitle(), $postView->GetTimestamp(),
+			   $postView->GetContent());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Insert($query, $arguments);
@@ -46,8 +46,8 @@ class BusinessLogic_Post_PostSecurity
     {
 	//Updates the Posts table with the new data.
 	$query = 'update [0] set Author=\'[1]\', Title=\'[2]\', Timestamp=\'[3]\', Content=\'[4]\' where PostID=\'[5]\'';
-	$arguments = array($this->TABLE, $postview->getAuthor(),$postView->getTitle(),
-			   $postView->getTimestamp(), $postView->getContent(), $postView->getPostID());
+	$arguments = array($this->TABLE, $postview->GetAuthor(),$postView->GetTitle(),
+			   $postView->GetTimestamp(), $postView->GetContent(), $postView->GetPostID());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Update($query, $arguments);
@@ -112,11 +112,7 @@ class BusinessLogic_Post_PostSecurity
 	//Returns an array of ViewPostViews with data from the Posts table.
 	if (strlen($year) != 4)
 	{
-	    throw new Exception('Year must be 4 digits');
-	}
-	if (strlen($month) < 2)
-	{
-	    $month = '0'+$month;
+	    throw new Exception('Year must be 4 digits.');
 	}
 
 	$followingmonth = ($month%12)+1;
@@ -128,13 +124,38 @@ class BusinessLogic_Post_PostSecurity
 	{
 	    $followingyear = $year;
 	}
+	if (strlen($month) < 2)
+	{
+	    $month = '0'+$month;
+	}
 
-	$query = 'select Timestamp from \'[0]\' where Timestamp >= \'[1][2]01\' AND Timestamp < \'[3][4]01\'';
+	$query = 'select Timestamp from \'[0]\' where Timestamp >= \'[1][2]01\' and Timestamp < \'[3][4]01\'';
 
 	$arguments = array($this->TABLE, $year, $month, $followingyear, $followingmonth);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
+
+	return $this->SQLResultsToPostViews($response);
+    }
+
+    public function ViewPostsByDay($blogID, $year, $month, $date)
+    {
+	//Returns an array of ViewPostViews with data from the Posts table.
+	if (strlen($year) != 4)
+	{
+	    throw new Exception('Year must be 4 digits.');
+	}
+
+	$begtime = '000000';
+	$endtime = '235959';
+
+	$query = 'select Timestamp from \'[0]\' where Timestamp >= \'[1][2][3]'.$begtime.'\' and Timestamp <= \'[1][2][3]'.$endtime.'\'';
+
+	$arguments = array($this->TABLE, $year, $month, $date);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+	$response = $DataAccess->Select($query, $arguments);
 
 	return $this->SQLResultsToPostViews($response);
     }
