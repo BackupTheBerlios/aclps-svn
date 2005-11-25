@@ -39,7 +39,6 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
 	return $this->Query($connection, $query);
     }
 
-    //modified: 11/21/2005 by Chun-Nan
     public function Insert($baseQuery, $arguments)
     {
 	$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
@@ -47,7 +46,6 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
 	return $this->Query($connection, $query);
     }
 
-    //modified: 11/21/2005 by Chun-Nan
     public function Update($baseQuery, $arguments)
     {
 	$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
@@ -55,7 +53,6 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
 	return $this->Query($connection, $query);
     }
 
-    //modified: 11/21/2005 by Chun-Nan
     public function Delete($baseQuery, $arguments)
     {
 	$query = $this->InsertArgumentsIntoQuery($baseQuery, $arguments);
@@ -70,7 +67,7 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
 
 	$connection = new mysqli($this->dbHost, $this->dbUser, $this->dbPassword, $this->dbName);
 		
-        if (mysqli_connect_errno())
+        if(mysqli_connect_errno())
         {
             throw new Exception(mysqli_connect_error());
         }
@@ -78,13 +75,22 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
 	return $connection;
     }
 
+//returns true on success for update, insert, etc.
+//returns the results on success for select, etc.
+//throws an exception on failure for all
     private function Query($connection, $query)
     {
 	$query = $this->InsertSlashes($query);
 	$queryResult = $connection->query($query);
 
-	//TODO check for query failure
-	//TODO check for success but no result (i.e. update, etc.)
+	if(!$queryResult)
+    {
+        throw new Exception($connection->error);
+    }
+    else if(is_bool($queryResult))
+    {
+        return true;
+    }
 
 	$returnResult = array();
 
@@ -111,7 +117,8 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
 
 	foreach($arguments as $key=>$value)
 	{
-	    //TODO: NEED TO SANITIZE $value
+	    //SANITIZE $value
+        $value = mysql_real_escape_string($value);
 	    $query = str_replace('[' . $key . ']', $value, $query);
 	}
 		
@@ -128,7 +135,6 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
 	{
 	    return $query;
 	}
-		
     }
 
     private function RemoveSlashes($result)
