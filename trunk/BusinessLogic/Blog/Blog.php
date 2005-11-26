@@ -30,7 +30,6 @@ class BusinessLogic_Blog_Blog
 	switch($request)
 	{
 	case 'ViewBlog':
-
 	    //TODO: real values for postcount/userid:
 	    $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],10,1));
 	    break;		

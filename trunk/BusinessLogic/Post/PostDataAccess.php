@@ -6,12 +6,10 @@ class BusinessLogic_Post_PostDataAccess
     //This class is also responsible for converting data into a View structure.
 
     private $TABLE;
-    private $TIMESTAMP_FIELD;
 
     private function __construct()
     {
 	$this->TABLE = 'Posts';
-	$this->TIMESTAMP_FIELD = 'Timestamp';
     }
 
     static public function GetInstance()
@@ -25,15 +23,8 @@ class BusinessLogic_Post_PostDataAccess
 
     public function NewPost($blogID)
     {
-	//Creates a new empty post with the proper postID contained within.
-	$query = 'select MAX(PostID) from [0] where BlogID=\'[1]\'';
-	$arguments = array($this->TABLE, $blogID);
-
-	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
-	//TODO: what kind of value does this return? int? string? Make sure it's an int:
-	$response = $DataAccess->Select($query, $arguments);
-
-	$newPostData = new Presentation_View_CompositePostView($blogID, ++$response,
+	//Creates a new empty post and returns it.
+	$newPostData = new Presentation_View_CompositePostView($blogID, 0,
 							       '', '',
 							       true, 0,
 							       '');
@@ -43,12 +34,19 @@ class BusinessLogic_Post_PostDataAccess
     public function ProcessNewPost($postView)
     {
 	//Inserts data into the Posts table.
-	$query = 'insert into [0] (PostID,BlogID,Author,Title,Timestamp,Content) VALUES ([1],[2],[3],[4],[5],[6])';
-	$arguments = array($this->TABLE, $postview->GetPostID(),$postView->GetBlogID(),
-			   $postView->GetAuthor(), $postView->GetTitle(), $postView->GetTimestamp(),
+	$query = 'select MAX(PostID) from [0] where BlogID=[1]';
+	$arguments = array($this->TABLE, $blogID);
+
+	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
+	//TODO: what kind of value does this return? int? string? Make sure it's an int:
+	//TODO: WHAT HAPPENS IF THERE ARE NO POSTS YET?
+	$currMaxPostID = $DataAccess->Select($query, $arguments);
+
+	$query = 'insert into [0] (PostID,BlogID,UserID,Title,Timestamp,Content) VALUES ([1],[2],[3],[4],[5],[6])';
+	$arguments = array($this->TABLE, ($currMaxPostID+1), $postView->GetBlogID(),
+			   $postView->GetAuthorID(), $postView->GetTitle(), $postView->GetTimestamp(),
 			   $postView->GetContent());
 
-        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Insert($query, $arguments);
     }
 
@@ -62,9 +60,9 @@ class BusinessLogic_Post_PostDataAccess
     public function ProcessEditPost($postView)
     {
 	//Updates the Posts table with the new data.
-	$query = 'update [0] set Author=[1], Title=[2], Timestamp=[3], Content=[4] where PostID=[5]';
-	$arguments = array($this->TABLE, $postview->GetAuthor(),$postView->GetTitle(),
-			   $postView->GetTimestamp(), $postView->GetContent(), $postView->GetPostID());
+	$query = 'update [0] set UserID=[1], Title=[2], Timestamp=[3], Content=[4] where BlogID=[5] and PostID=[6]';
+	$arguments = array($this->TABLE, $postview->GetAuthorID(),$postView->GetTitle(), $postView->GetTimestamp(),
+			   $postView->GetContent(), $postView->GetBlogID(), $postView->GetPostID());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Update($query, $arguments);
@@ -189,7 +187,7 @@ class BusinessLogic_Post_PostDataAccess
     {
 	//Returns the authorid of a given post within this blog.
 	//Used by PostSecurity to determine if an Author can mess with a post.
-	$query = 'select Author from [0] where BlogID=[1] and PostID=[2] order by Timestamp desc';
+	$query = 'select UserID from [0] where BlogID=[1] and PostID=[2] order by Timestamp desc';
 	$arguments = array($this->TABLE, $blogID, $postID);
 
 	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -203,7 +201,7 @@ class BusinessLogic_Post_PostDataAccess
     {
 	if (count($results) < 1)
 	{
-	    throw new Exception('No posts were found.');
+	    return array();
 	}
 
 	//go through each row and make a postview from it:
@@ -211,7 +209,7 @@ class BusinessLogic_Post_PostDataAccess
 	{
 	    //TODO: make sure that "public" is being sent as a boolean:
 	    $returnme[$key] = new Presentation_View_CompositePostView($value['BlogID'], $value['PostID'],
-								      $value['Author'], $value['Title'],
+								      $value['UserID'], $value['Title'],
 								      $value['Public'], $value['Timestamp'],
 								      $value['Content']);
 	}

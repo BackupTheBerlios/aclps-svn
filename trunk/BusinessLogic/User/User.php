@@ -1,10 +1,7 @@
 <?php
 
-class BusinessLogic_User
+class BusinessLogic_User_User
 {
-    private $status;
-    private $auth_table;
-
     private function __construct()
     {
 	//Do Nothing
@@ -12,22 +9,27 @@ class BusinessLogic_User
 
     static public function GetInstance()
     {
-	if (isset($_SESSION['BusinessLogic_User']))
+	if (isset($_SESSION['BusinessLogic_User_User']))
 	{
-	    return $_SESSION['BusinessLogic_User'];
+	    return $_SESSION['BusinessLogic_User_User'];
 	}
 	else
 	{
-	    $_SESSION['BusinessLogic_User'] = new BusinessLogic_User();
-	    return $_SESSION['BusinessLogic_User'];
+	    $_SESSION['BusinessLogic_User_User'] = new BusinessLogic_User_User();
+	    return $_SESSION['BusinessLogic_User_User'];
 	}
-
     }
-	
+
     public function HandleRequest()
     {
-	//Checks $_GET['action'] to see if the action belongs to the User class. If so, the appropriate function is called. Otherwise, an exception is thrown.
-	//TODO
+	//Checks $_GET['action'] to see if the action belongs to the Post class. If so, the appropriate function is called. Otherwise, dies, as there is no further link in the CHAIN OF RESPONSIBILITY
+	$request = $_GET['Action'];
+	switch($request)
+	{
+	    //TODO: add actions here, if any
+	default:
+	    die('Unknown Request.');
+	}
     }
 
     public function EditUserData()
@@ -77,6 +79,13 @@ class BusinessLogic_User
     {
 	//Processes the form data in EditUserDataView and modifies the Users table.
 	//TODO
+    }
+
+    public static function ConvertUIDToName($userID)
+    {
+	//Given a userID, returns the user's name
+	//TODO
+	return 'username';
     }
 
     public function UserPermission($blogID)

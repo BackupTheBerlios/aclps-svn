@@ -21,7 +21,7 @@ class BusinessLogic_Post_PostSecurity
     public function NewPost($blogID,$userID)
     {
 	//Returns true if the user has privilege {Author, Editor, Owner}. Otherwise, false.
-	$permission = BusinessLogic_User::GetInstance()->UserPermission($blogID,$userID);
+	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
 	if ($permission != "nobody")
 	{
 	    return true;
@@ -35,7 +35,7 @@ class BusinessLogic_Post_PostSecurity
     public function ProcessNewPost($blogID,$userID)
     {
 	//Returns true if the user has privilege {Author, Editor, Owner}. Otherwise, false.
-	$permission = BusinessLogic_User::GetInstance()->UserPermission($blogID,$userID);
+	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
 	if ($permission != "nobody")
 	{
 	    return true;
@@ -49,7 +49,7 @@ class BusinessLogic_Post_PostSecurity
     public function EditPost($blogID, $postID, $userID)
     {
 	//Returns true if the user has privilege {Editor, Owner}. Returns true if the user has privilege Author and is the creator of the post. Otherwise, false.
-	$permission = BusinessLogic_User::GetInstance()->UserPermission($blogID, $userID);
+	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
 	if ($permission == "owner" or $permission == "editor")
 	{
 	    return true;
@@ -68,7 +68,7 @@ class BusinessLogic_Post_PostSecurity
     public function ProcessEditPost($blogID, $postID, $userID)
     {
 	//Returns true if the user has privilege {Editor, Owner}. Returns true if the user has privilege Author and is the creator of the post. Otherwise, false.
-	$permission = BusinessLogic_User::GetInstance()->UserPermission($blogID, $userID);
+	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
 	if ($permission == "owner" or $permission == "editor")
 	{
 	    return true;
@@ -87,7 +87,7 @@ class BusinessLogic_Post_PostSecurity
     public function DeletePost($blogID, $postID, $userID)
     {
 	//Returns true if the user has privilege {Editor, Owner}. Returns true if the user has privilege Author and is the creator of the post. Otherwise, false.
-	$permission = BusinessLogic_User::GetInstance()->UserPermission($blogID, $userID);
+	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
 	if ($permission == "owner" or $permission == "editor")
 	{
 	    return true;
@@ -106,7 +106,7 @@ class BusinessLogic_Post_PostSecurity
     public function ProcessDeletePost($blogID, $postID, $userID)
     {
 	//Returns true if the user has privilege {Editor, Owner}. Returns true if the user has privilege Author and is the creator of the post. Otherwise, false.
-	$permission = BusinessLogic_User::GetInstance()->UserPermission($blogID, $userID);
+	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
 	if ($permission == "owner" or $permission == "editor")
 	{
 	    return true;
@@ -125,31 +125,31 @@ class BusinessLogic_Post_PostSecurity
     public function ViewPostsByID($blogID,$userID)
     {
 	//Returns the privilege level of the user.
-	return BusinessLogic_User::GetInstance()->UserPermission($blogID,$userID);
+	return BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
     }
 
     public function ViewPostsByRecentCount($blogID,$userID)
     {
 	//Returns the privilege level of the user.
-	return BusinessLogic_User::GetInstance()->UserPermission($blogID,$userID);
+	return BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
     }
 
     public function ViewPostsByDaysOld($blogID,$userID)
     {
 	//Returns the privilege level of the user.
-	return BusinessLogic_User::GetInstance()->UserPermission($blogID,$userID);
+	return BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
     }
 
     public function ViewPostsByMonth($blogID,$userID)
     {
 	//Returns the privilege level of the user.
-	return BusinessLogic_User::GetInstance()->UserPermission($blogID,$userID);
+	return BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
     }
 
     public function ViewPostsByDay($blogID,$userID)
     {
 	//Returns the privilege level of the user.
-	return BusinessLogic_User::GetInstance()->UserPermission($blogID,$userID);
+	return BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
     }
 }
 

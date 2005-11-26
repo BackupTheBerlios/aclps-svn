@@ -16,7 +16,8 @@ class BusinessLogic_Post_Post
     public function NewPost($blogID, $userID)
     {
 	//Calls the PostSecurity class to determine if the user can create a new post. If so, a NewPostView is returned. Otherwise, an exception is thrown.
-	if (!BusinessLogic_Post_PostSecurity::GetInstance()->NewPost($blogID,$userID)) {
+	if (!BusinessLogic_Post_PostSecurity::GetInstance()->NewPost($blogID,$userID))
+	{
 	    throw new Exception("Insufficient permissions.");
 	}
 	$post = BusinessLogic_Post_PostDataAccess::GetInstance()->NewPost($blogID);
@@ -27,7 +28,8 @@ class BusinessLogic_Post_Post
     {
 	//Calls PostSecurity to determine if the user can create a new post. If so, it will process the form data in NewPostView and call PostDataAccess.ProcessNewPost() to commit the new data to storage. Otherwise, an exception is thrown.
 	$blogID = $postView->GetBlogID();
-	if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessNewPost($blogID,$userID)) {
+	if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessNewPost($blogID,$userID))
+	{
 	    throw new Exception("Insufficient permissions.");
 	}
 	BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessNewPost($postView);
@@ -36,7 +38,8 @@ class BusinessLogic_Post_Post
     public function EditPost($blogID, $postID, $userID)
     {
 	//Calls the PostSecurity class to determine if the user can edit a post. If so, PostDataAccess is called and an EditPostView is returned. Otherwise, an exception is thrown.
-	if (!BusinessLogic_Post_PostSecurity::GetInstance()->EditPost($blogID,$userID)) {
+	if (!BusinessLogic_Post_PostSecurity::GetInstance()->EditPost($blogID,$userID))
+	{
 	    throw new Exception("Insufficient permissions.");
 	}
 	return BusinessLogic_Post_PostDataAccess::GetInstance()->EditPost($blogID,$postID);
@@ -46,7 +49,8 @@ class BusinessLogic_Post_Post
     {
 	//Calls PostSecurity to determine if the user can edit a post. If so, it will process the form data in EditPostView and call PostDataAccess.ProcessEditPost() to commit the new data to storage. Otherwise, an exception is thrown.
 	$blogID = $postView->GetBlogID();
-	if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessEditPost($blogID,$userID)) {
+	if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessEditPost($blogID,$userID))
+	{
 	    throw new Exception("Insufficient permissions.");
 	}
 	BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessEditPost($postView);
@@ -55,7 +59,8 @@ class BusinessLogic_Post_Post
     public function DeletePost($blogID, $postID, $userID)
     {
 	//Calls the PostSecurity class to determine if the user can delete a post. If so, PostDataAccess is called and a DeletePostView is returned. Otherwise, an exception is thrown.
-	if (!BusinessLogic_Post_PostSecurity::GetInstance()->DeletePost($blogID,$userID)) {
+	if (!BusinessLogic_Post_PostSecurity::GetInstance()->DeletePost($blogID,$userID))
+	{
 	    throw new Exception("Insufficient permissions.");
 	}
 	return BusinessLogic_Post_PostDataAccess::GetInstance()->DeletePost($blogID,$postID);
@@ -65,7 +70,8 @@ class BusinessLogic_Post_Post
     {
 	//Calls PostSecurity to determine if the user can delete a post. If so, it will call PostDataAccess.ProcessDeletePost() to delete the post. Otherwise, an exception is thrown.
 	$blogID = $postView->GetBlogID();
-	if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessDeletePost($blogID,$userID)) {
+	if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessDeletePost($blogID,$userID))
+	{
 	    throw new Exception("Insufficient permissions.");
 	}
 	BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessDeletePost($postView);
@@ -137,7 +143,27 @@ class BusinessLogic_Post_Post
 	$request = $_GET['Action'];
 	switch($request)
 	{
-	    //TODO: add actions here, if any
+	case 'ViewPost':
+	    //TODO
+	    break;
+	case 'NewPost':
+	    //TODO
+	    break;
+	case 'ProcessNewPost':
+	    //TODO
+	    break;
+	case 'EditPost':
+	    //TODO
+	    break;
+	case 'ProcessEditPost':
+	    //TODO
+	    break;
+	case 'DeletePost':
+	    //TODO
+	    break;
+	case 'ProcessDeletePost':
+	    //TODO
+	    break;
 	default:
 	    BusinessLogic_Comment_Comment::GetInstance()->HandleRequest();
 	}

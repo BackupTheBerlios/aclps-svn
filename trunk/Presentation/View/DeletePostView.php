@@ -1,6 +1,6 @@
 <?php
 
-  //this class represents a new post
+  //this class represents a post to be deleted
 class Presentation_View_DeletePostView extends Presentation_View_View
 {
     private $post;

@@ -1,6 +1,6 @@
 <?php
 
-  //this class represents a new post
+  //this class represents a post to be edited
 class Presentation_View_EditPostView extends Presentation_View_View
 {
     private $post;
