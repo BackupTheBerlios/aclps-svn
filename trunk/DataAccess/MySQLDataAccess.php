@@ -121,7 +121,7 @@ class DataAccess_MySQLDataAccess implements DataAccess_DataAccess
 	{
 	    //SANITIZE $value
 	    //note: it bitches about being unable to find a mysql to connect to (to call the library function)
-	    //in our case as the webserver isnt running one locally, so we use the server that we're getting our data from
+	    //in our case, the webserver isnt running one locally, so we use the server that we're getting our data from
 	    $connection = mysql_connect($this->dbHost, $this->dbUser, $this->dbPassword);
 	    $value = mysql_real_escape_string($value, $connection);
 	    $query = str_replace('[' . $key . ']', $value, $query);
