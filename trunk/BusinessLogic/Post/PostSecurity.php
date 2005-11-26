@@ -4,6 +4,20 @@ class BusinessLogic_Post_PostSecurity
 {
     //Helper class which determines whether a user can use a certain function.
 
+    private function __construct()
+    {
+	//Do Nothing
+    }
+
+    static public function GetInstance()
+    {
+	if (!isset($_SESSION['BusinessLogic_Post_PostSecurity']))
+	{
+	    $_SESSION['BusinessLogic_Post_PostSecurity'] = new BusinessLogic_Post_PostSecurity();
+	}
+	return $_SESSION['BusinessLogic_Post_PostSecurity'];
+    }
+
     public function NewPost($blogID,$userID)
     {
 	//Returns true if the user has privilege {Author, Editor, Owner}. Otherwise, false.

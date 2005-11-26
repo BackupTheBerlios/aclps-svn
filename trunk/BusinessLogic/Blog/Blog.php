@@ -31,7 +31,8 @@ class BusinessLogic_Blog_Blog
 	{
 	case 'ViewBlog':
 
-	    $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($blogID,$postcount,$userID);
+	    //TODO: real values for postcount/userid:
+	    $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],10,1));
 	    break;		
 	case 'ViewArchive':
 	    //TODO

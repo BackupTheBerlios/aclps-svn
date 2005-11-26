@@ -23,7 +23,7 @@ class BusinessLogic_Blog_BlogSecurity
     
     public function ViewBlog($blogID)
     {
-	return BusinessLogic_User_User::GetInstance()->UserPermission($blogID);
+	return BusinessLogic_User::GetInstance()->UserPermission($blogID);
     }
 
     public function ViewArchive()

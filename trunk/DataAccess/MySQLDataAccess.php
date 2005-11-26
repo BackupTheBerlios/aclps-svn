@@ -1,9 +1,8 @@
 <?php
 
 require_once 'DataAccess.php';
-class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
+class DataAccess_MySQLDataAccess implements DataAccess_DataAccess
 {
-
     static protected $DB_SETTINGS = 'Settings/DBSettings.php';
 
     private $dbHost;
@@ -81,32 +80,35 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
     private function Query($connection, $query)
     {
 	$query = $this->InsertSlashes($query);
+	print 'QUERY: '.$query.'<br />';
 	$queryResult = $connection->query($query);
-
+	
 	if(!$queryResult)
-    {
-        throw new Exception($connection->error);
-    }
-    else if(is_bool($queryResult))
-    {
-        return true;
-    }
-
+	{
+	    throw new Exception($connection->error);
+	}
+	else if(is_bool($queryResult))
+	{
+	    return true;
+	}
+	
 	$returnResult = array();
-
+	
 	while ($row = $queryResult->fetch_assoc())
 	{
 	    $returnResult[] = $this->RemoveSlashes($row);
 	}
-
+	
 	return $returnResult;
     }
 
     private function InsertArgumentsIntoQuery($baseQuery, $arguments)
     {
-	$size = count($arguments) - 1;
+	$lastindex = count($arguments)-1;
 
-	if (!strstr($baseQuery, '[' . $size . ']') or strstr($baseQuery, '[' . ($size + 1) . ']'))
+	//check for too few or too many replacement flags in basequery:
+	if (!strstr($baseQuery, '[' . $lastindex . ']') or
+	    strstr($baseQuery, '[' . ($lastindex+1) . ']'))
 	{
 	    throw new Exception('Malformed Query');
 	}
@@ -118,10 +120,13 @@ class DataAccess_MySQLDataAccess extends DataAccess_DataAccess
 	foreach($arguments as $key=>$value)
 	{
 	    //SANITIZE $value
-        $value = mysql_real_escape_string($value);
+	    //note: it bitches about being unable to find a mysql to connect to (to call the library function)
+	    //in our case as the webserver isnt running one locally, so we use the server that we're getting our data from
+	    $connection = mysql_connect($this->dbHost, $this->dbUser, $this->dbPassword);
+	    $value = mysql_real_escape_string($value, $connection);
 	    $query = str_replace('[' . $key . ']', $value, $query);
 	}
-		
+	
 	return $query;
     }
 			

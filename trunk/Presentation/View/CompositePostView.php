@@ -10,13 +10,6 @@ class Presentation_View_CompositePostView extends Presentation_View_View
     private $public;
     private $timestamp;
     private $content;
-    
-    public function __construct($blogID, $postID)
-    {
-	$this->blogID = $blogID;
-	$this->postID = $postID;
-	$this->public = true;
-    }
 
     public function __construct($blogID, $postID, $author, $title, $public, $timestamp, $content)
     {
