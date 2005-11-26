@@ -20,8 +20,8 @@ class BusinessLogic_Comment_Comment
 	{
 	    throw new Exception("Insufficient permissions.");
 	}
-	$post = BusinessLogic_Comment_CommentDataAccess::GetInstance()->NewPost($blogID);
-	//TODO: set comment author (derived from userid) and return comment
+	$comment = BusinessLogic_Comment_CommentDataAccess::GetInstance()->NewComment($blogID,$postID,$userID);
+	return $comment;
     }
 
     public function ProcessNewComment($commentView, $userID)
@@ -35,14 +35,14 @@ class BusinessLogic_Comment_Comment
 	BusinessLogic_Post_CommentDataAccess::GetInstance()->ProcessNewComment($commentView);
     }
 
-    public function EditComment($blogID, $postID, $commentID, $userID)
+    public function EditComment($blogID, $commentID, $userID)
     {
 	//Calls the CommentSecurity class to determine if the user can edit a comment. If so, CommentDataAccess is called and an EditCommentView is returned. Otherwise, an exception is thrown.
 	if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->EditComment($blogID,$userID))
 	{
 	    throw new Exception("Insufficient permissions.");
 	}
-	return BusinessLogic_Comment_CommentDataAccess::GetInstance()->EditComment($blogID,$postID,$commentID);
+	return BusinessLogic_Comment_CommentDataAccess::GetInstance()->EditComment($commentID);
     }
 
     public function ProcessEditComment($commentView, $userID)
@@ -57,42 +57,45 @@ class BusinessLogic_Comment_Comment
 
     }
 
-    public function DeleteComment($blogID, $postID, $commentID, $userID)
+    public function DeleteComment($blogID, $commentID, $userID)
     {
 	//Calls the CommentSecurity class to determine if the user can delete a post. If so, CommentDataAccess is called and a DeleteCommentView is returned. Otherwise, an exception is thrown.
 	if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->DeleteComment($blogID,$userID))
 	{
 	    throw new Exception("Insufficient permissions.");
 	}
-	return BusinessLogic_Comment_CommentDataAccess::GetInstance()->DeleteComment($blogID,$postID,$commentID);
+	return BusinessLogic_Comment_CommentDataAccess::GetInstance()->DeleteComment($commentID);
     }
 
-    public function ProcessDeleteComment($commentData, $userID)
+    public function ProcessDeleteComment($commentView, $userID)
     {
 	//Calls CommentSecurity to determine if the user can delete a post. If so, it will process the form data in DeleteCommentView and call CommentDataAccess.ProcessDeleteComment() to commit the new data to storage. Otherwise, an exception is thrown.
-	$blogID = $postView->GetBlogID();
+	$blogID = $commentView->GetBlogID();
 	if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->ProcessDeleteComment($blogID,$userID)) {
 	    throw new Exception("Insufficient permissions.");
 	}
-	BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessDeleteComment($postView);
+	BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessDeleteComment($commentView);
     }
 
     public function ViewComments($blogID, $postID)
     {
 	//Calls the CommentDataAccess class and returns a ViewCommentsView.
 	$permission = BusinessLogic_Comment_CommentSecurity::GetInstance()->ViewComments($blogID,$userID);
-	$postView = BusinessLogic_Comment_CommentDataAccess::GetInstance()->ViewComments($blogID,$count);
-	if ($permission == "nobody")
-	{
-	    $postView->RemovePrivatePosts();
+	if (!$permission) {
+	    throw new Exception("Insufficient permissions.");
 	}
-	return $postView;
+	$commentView = BusinessLogic_Comment_CommentDataAccess::GetInstance()->ViewComments($blogID,$postID);
+	return $commentView;
     }
 
     public function ViewLinkToComments($blogID, $postID)
     {
 	//Calls the CommentDataAccess class and returns a URL to the location of the comments.
 	//TODO
+	$permission = BusinessLogic_Comment_CommentSecurity::GetInstance()->ViewLinkToComments($blogID,$userID);
+	if (!$permission) {
+	    throw new Exception("Insufficient permissions.");
+	}
 	return "Link to comments here";
     }
 
@@ -124,7 +127,7 @@ class BusinessLogic_Comment_Comment
 	    //TODO
 	    break;
 	default:
-	    BusinessLogic_User_User::GetInstance()->HandleRequest();
+	    die('Unknown Request.');
 	}
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-  //this class represents a single comment's data, and can display it.
-class Presentation_View_ViewCommentView extends Presentation_View_View
+  //this class represents a single post's data, and can display it.
+class Presentation_View_ViewPostView extends Presentation_View_View
 {
     private $blogID;
     private $postID;
@@ -12,7 +12,7 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
     private $timestamp;
     private $content;
 
-    public function __construct($blogID, $postID, $commentID, $author, $title, $public, $timestamp, $content)
+    public function __construct($blogID, $postID, $author, $title, $public, $timestamp, $content)
     {
 	$this->blogID = $blogID;
 	$this->postID = $postID;
@@ -27,11 +27,12 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
 
     public function Display()
     {
-	//TODO: make this pretty
-	$displaystr = '<div id="commenttitle">'.$this->title.'</div>'.
-	    '<div id="commentauthor">'.$this->authorName.'</div>'.
-	    '<div id="commenttime">'.$this->timestamp.'</div>'.
-	    '<div id="commentcontent">'.$this->content.'</div>';
+	$commentlink = BusinessLogic_Comment_Comment::ViewLinkToComments($this->blogID,$this->postID);
+	$displaystr = '<div id="posttitle">'.$this->title.'</div>'.
+	    '<div id="postauthor">'.$this->authorName.'</div>'.
+	    '<div id="posttime">'.$this->timestamp.'</div>'.
+	    '<div id="postcontent">'.$this->content.'</div>'.
+	    '<div id="postcommentlink">'.$commentlink.'</div>';
 	return $displaystr;
     }
 
@@ -39,6 +40,11 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
     {
 	//TODO: make this a pretty form
 	return "THIS SHOULD BE A PRETTY FORM!<br />Title ".$this->title."<br />Content: ".$this->content;
+    }
+
+    public function DisplayAsSingle()
+    {
+	//TODO
     }
 
     public function SetContent($aContent)
@@ -67,7 +73,6 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
 	}
 	return "&nbsp;";
     }
-
     public function GetAuthorName()
     {
 	if (isset($this->authorName))
@@ -136,7 +141,7 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
     {
 	if (!isset($this->blogID))
 	{
-	    return new Exception("PlogID must always be set.");
+	    return new Exception("BlogID must always be set.");
 	}
 	return $this->blogID;
     }

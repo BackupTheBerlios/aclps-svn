@@ -1,10 +1,11 @@
 <?php
 
-  //this class represents a single post's data, and can display it.
-class Presentation_View_ViewPostView extends Presentation_View_View
+  //this class represents a single comment's data, and can display it.
+class Presentation_View_ViewCommentView extends Presentation_View_View
 {
     private $blogID;
     private $postID;
+    private $commentID;
     private $authorID;
     private $authorName;
     private $title;
@@ -12,11 +13,12 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     private $timestamp;
     private $content;
 
-    public function __construct($blogID, $postID, $author, $title, $public, $timestamp, $content)
+    public function __construct($blogID, $postID, $commentID, $authorID, $title, $public, $timestamp, $content)
     {
 	$this->blogID = $blogID;
 	$this->postID = $postID;
-	$this->authorID = $author;
+	$this->commentID = $commentID;
+	$this->authorID = $authorID;
 	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($this->authorID);
 	$this->title = $title;
 	$this->public = $public;
@@ -27,12 +29,11 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 
     public function Display()
     {
-	$commentlink = BusinessLogic_Comment_Comment::ViewLinkToComments($this->blogID,$this->postID);
-	$displaystr = '<div id="posttitle">'.$this->title.'</div>'.
-	    '<div id="postauthor">'.$this->authorName.'</div>'.
-	    '<div id="posttime">'.$this->timestamp.'</div>'.
-	    '<div id="postcontent">'.$this->content.'</div>'.
-	    '<div id="postcommentlink">'.$commentlink.'</div>';
+	//TODO: make this pretty
+	$displaystr = '<div id="commenttitle">'.$this->title.'</div>'.
+	    '<div id="commentauthor">'.$this->authorName.'</div>'.
+	    '<div id="commenttime">'.$this->timestamp.'</div>'.
+	    '<div id="commentcontent">'.$this->content.'</div>';
 	return $displaystr;
     }
 
@@ -40,11 +41,6 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     {
 	//TODO: make this a pretty form
 	return "THIS SHOULD BE A PRETTY FORM!<br />Title ".$this->title."<br />Content: ".$this->content;
-    }
-
-    public function DisplayAsSingle()
-    {
-	//TODO
     }
 
     public function SetContent($aContent)
@@ -125,6 +121,16 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 	    return $this->timestamp;
 	}
 	return "&nbsp;";
+    }
+
+    //commentID cannot be changed, is always set in constructor
+    public function GetCommentID()
+    {
+	if (!isset($this->commentID))
+	{
+	    return new Exception("CommentID must always be set.");
+	}
+	return $this->commentID;
     }
 
     //postID cannot be changed, is always set in constructor

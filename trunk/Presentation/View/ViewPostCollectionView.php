@@ -53,18 +53,6 @@ class Presentation_View_ViewPostCollectionView extends Presentation_View_View
 	    }
 	}
     }
-
-    public function RemovePrivatePosts()
-    {
-	foreach($this->posts as $key=>$value)
-	{
-	    if (!$value->GetPublic())
-	    {
-		unset($this->posts[$key]);
-		break;
-	    }
-	}
-    }
 }
 
 ?>

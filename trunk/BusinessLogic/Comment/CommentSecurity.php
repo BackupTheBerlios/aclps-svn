@@ -18,10 +18,10 @@ class BusinessLogic_Comment_CommentSecurity
 	return $_SESSION['BusinessLogic_Post_PostSecurity'];
     }
 
-    public function NewComment($blogID,$userID)
+    public function NewComment($blogID, $userID)
     {
 	//Returns false if the user has privilege {Nobody}. Otherwise, true.
-	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
+	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
 	if ($permission != "nobody")
 	{
 	    return true;
@@ -31,19 +31,9 @@ class BusinessLogic_Comment_CommentSecurity
 	    return false;
 	}
     }
-
-    public function ProcessNewComment($blogID,$userID)
+    public function ProcessNewComment($blogID, $userID)
     {
-	//Returns false if the user has privilege {Nobody}. Otherwise, true.
-	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
-	if ($permission != "nobody")
-	{
-	    return true;
-	}
-	else
-	{
-	    return false;
-	}
+	return $this->NewComment($blogID, $userID);
     }
 
     public function EditComment($blogID, $userID)
@@ -62,16 +52,7 @@ class BusinessLogic_Comment_CommentSecurity
 
     public function ProcessEditComment($blogID, $userID)
     {
-	//Returns true if the user has privilege {Editor, Owner}.
-	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
-	if ($permission == "owner" or $permission == "editor")
-	{
-	    return true;
-	}
-	else
-	{
-	    return false;
-	}
+	return $this->EditComment($blogID, $userID);
     }
 
     public function DeleteComment($blogID, $userID)
@@ -87,19 +68,9 @@ class BusinessLogic_Comment_CommentSecurity
 	    return false;
 	}
     }
-
     public function ProcessDeleteComment($blogID, $userID)
     {
-	//Returns true if the user has privilege {Editor, Owner}. Otherwise, false.
-	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
-	if ($permission == "owner" or $permission == "editor")
-	{
-	    return true;
-	}
-	else
-	{
-	    return false;
-	}
+	return $this->DeleteComment($blogID, $userID);
     }
 
     public function ViewComments($blogID, $userID)

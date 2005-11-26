@@ -21,120 +21,125 @@ class BusinessLogic_Post_PostDataAccess
 	return $_SESSION['BusinessLogic_Post_PostDataAccess'];
     }
 
-    public function NewPost($blogID)
+    public function NewPost($blogID,$userID)
     {
 	//Creates a new empty post and returns it.
-	$newPostData = new Presentation_View_CompositePostView($blogID, 0,
-							       '', '',
-							       true, 0,
-							       '');
+	//$blogID, $postID, $authorID, $title, $public, $timestamp, $content
+	$newPostData = new Presentation_View_ViewPostView($blogID, 0, $userID, '', true, 0, '');
 	return new Presentation_View_NewPostView($newPostData);
     }
 
     public function ProcessNewPost($postView)
     {
 	//Inserts data into the Posts table.
-	$query = 'select MAX(PostID) from [0] where BlogID=[1]';
-	$arguments = array($this->TABLE, $blogID);
-
-	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
-	//TODO: what kind of value does this return? int? string? Make sure it's an int:
-	//TODO: WHAT HAPPENS IF THERE ARE NO POSTS YET?
-	$currMaxPostID = $DataAccess->Select($query, $arguments);
-
-	$query = 'insert into [0] (PostID,BlogID,UserID,Title,Timestamp,Content) VALUES ([1],[2],[3],[4],[5],[6])';
-	$arguments = array($this->TABLE, ($currMaxPostID+1), $postView->GetBlogID(),
-			   $postView->GetAuthorID(), $postView->GetTitle(), $postView->GetTimestamp(),
-			   $postView->GetContent());
+	$query = 'insert into [0] (BlogID,UserID,Title,Timestamp,Content) VALUES ([1],[2],[3],[4],[5])';
+	$arguments = array($this->TABLE, $postView->GetBlogID(), $postView->GetAuthorID(),
+			   $postView->GetTitle(), $postView->GetTimestamp(), $postView->GetContent());
 
         $response = $DataAccess->Insert($query, $arguments);
     }
 
-    public function EditPost($blogID, $postID)
+    public function EditPost($postID)
     {
 	//Returns an EditPostView with data from the Posts table.
-	$postarray = $this->ViewPostsByID($blogID,$postID);
+	$postarray = $this->ViewPostsByID($postID);
 	return new Presentation_View_EditPostView($postarray[0]);
     }
 
     public function ProcessEditPost($postView)
     {
 	//Updates the Posts table with the new data.
-	$query = 'update [0] set UserID=[1], Title=[2], Timestamp=[3], Content=[4] where BlogID=[5] and PostID=[6]';
+	$query = 'update [0] set UserID=[1], Title=[2], Timestamp=[3], Content=[4] where PostID=[5]';
 	$arguments = array($this->TABLE, $postview->GetAuthorID(),$postView->GetTitle(), $postView->GetTimestamp(),
-			   $postView->GetContent(), $postView->GetBlogID(), $postView->GetPostID());
+			   $postView->GetContent(), $postView->GetPostID());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Update($query, $arguments);
     }
 
-    public function DeletePost($blogID, $postID)
+    public function DeletePost($postID)
     {
 	//Returns a DeletePostView with data from the Posts table.
-	$postarray = $this->ViewPostsByID($blogID,$postID);
+	$postarray = $this->ViewPostsByID($postID);
 	return new Presentation_View_DeletePostView($postarray[0]);
     }
 
+    //TODO: DOES MYSQL AUTOSHIFT POSTIDS?
+    //(IF TWO PEOPLE DELETE THE SAME ID AT ONCE, DO THEY END UP DELETING TWO POSTS?)
     public function ProcessDeletePost($postView)
     {
-	$blogID = $postView->GetBlogID();
 	$postID = $postView->GetPostID();
 
 	//Updates the Posts table with the new data.
-	$query = 'delete from [0] where BlogID=[1] and PostID=[2]';
-	$arguments = array($this->TABLE, $blogID, $postID);
+	$query = 'delete from [0] where PostID=[1]';
+	$arguments = array($this->TABLE, $postID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Delete($query, $arguments);
     }
 
-    public function ViewPostsByID($blogID, $postID)
+    public function ViewPostsByID($postID, $hideprivate)
     {
-	//Returns a ViewPostView with data from the Posts table.
-	$query = 'select * from [0] where BlogID=[1] and PostID=[2] order by Timestamp desc';
-        $arguments = array($this->TABLE, $blogID, $postID);
+	//Returns a ViewPostCollectionView with data from the Posts table.
+	$extras = '';
+	if ($hideprivate)
+	{
+	    $extras = 'and Public=true ';
+	}
+
+	$query = 'select * from [0] where PostID=[1] '.$extras.'order by Timestamp desc';
+        $arguments = array($this->TABLE, $postID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-        $compositePosts = $this->SQLResultsToCompositePostViews($response);
-	return new Presentation_View_ViewPostView($compositePosts);
+        $compositePosts = $this->SQLResultsToViewPostViews($response);
+	return new Presentation_View_ViewPostCollectionView($compositePosts);
     }
 
-    public function ViewPostsByRecentCount($blogID, $postCount)
+    public function ViewPostsByRecentCount($blogID, $postCount, $hideprivate)
     {
-	//Returns a ViewPostView with data from the Posts table.
-	$query = 'select * from [0] where BlogID=[1] order by Timestamp desc limit [2]';
+	//Returns a ViewPostCollectionView with data from the Posts table.
+	$extras = '';
+	if ($hideprivate)
+	{
+	    $extras = 'and Public=true ';
+	}
+
+	$query = 'select * from [0] where BlogID=[1] '.$extras.'order by Timestamp desc limit [2]';
         $arguments = array($this->TABLE, $blogID, $postCount);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-        $compositePosts = $this->SQLResultsToCompositePostViews($response);
-	return new Presentation_View_ViewPostView($compositePosts);
+        $compositePosts = $this->SQLResultsToViewPostViews($response);
+	return new Presentation_View_ViewPostCollectionView($compositePosts);
     }
 
-    public function ViewPostsByDaysOld($blogID, $daysOld)
+    public function ViewPostsByDaysOld($blogID, $daysOld, $hideprivate)
     {
-	//Returns a ViewPostView with data from the Posts table.
-	$query = 'select * from [0] where BlogID=[1] and Timestamp >= date_sub(curdate(),interval [2] day) order by Timestamp desc';
+	//Returns a ViewPostCollectionView with data from the Posts table.
+	$extras = '';
+	if ($hideprivate)
+	{
+	    $extras = 'and Public=true ';
+	}
+
+	$query = 'select * from [0] where BlogID=[1] '.$extras.'and Timestamp >= date_sub(curdate(),interval [2] day) order by Timestamp desc';
 	
 	$arguments = array($this->TABLE, $blogID, $daysOld);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-        $compositePosts = $this->SQLResultsToCompositePostViews($response);
-	return new Presentation_View_ViewPostView($compositePosts);
+        $compositePosts = $this->SQLResultsToViewPostViews($response);
+	return new Presentation_View_ViewPostCollectionView($compositePosts);
     }
 
-    public function ViewPostsByMonth($blogID, $year, $month)
+    public function ViewPostsByMonth($blogID, $year, $month, $hideprivate)
     {
-	//Returns a ViewPostView with data from the Posts table.
-	if (strlen($year) != 4)
-	{
-	    throw new Exception('Year must be 4 digits.');
-	}
+	//Returns a ViewPostCollectionView with data from the Posts table.
+	$this->CheckTimes($year,$month,1);
 
 	$followingmonth = ($month%12)+1;
 	if ($followingmonth == 1)
@@ -145,50 +150,80 @@ class BusinessLogic_Post_PostDataAccess
 	{
 	    $followingyear = $year;
 	}
-	if (strlen($month) < 2)
+
+	$month = str_pad($month, 2, '0', STR_PAD_LEFT);
+	$year = str_pad($year, 4, '0', STR_PAD_LEFT);
+	$followingmonth = str_pad($followingmonth, 2, '0', STR_PAD_LEFT);
+	$followingyear = str_pad($followingyear, 4, '0', STR_PAD_LEFT);
+
+	$begdate = $year.$month.'01';
+	$enddate = $followingyear.$followingmonth.'01';
+
+	$extras = '';
+	if ($hideprivate)
 	{
-	    $month = '0'+$month;
+	    $extras = 'and Public=true ';
 	}
 
-	$query = 'select Timestamp from [0] where BlogID=[1] and Timestamp >= [2][3]01 and Timestamp < [4][5]01';
+	$query = 'select Timestamp from [0] where BlogID=[1] '.$extras.'and Timestamp >= [2] and Timestamp < [3]';
 
-	$arguments = array($this->TABLE, $blogID, $year, $month, $followingyear, $followingmonth);
+	$arguments = array($this->TABLE, $blogID, $begdate, $enddate);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-	$compositePosts = $this->SQLResultsToCompositePostViews($response);
-	return new Presentation_View_ViewPostView($compositePosts);
+	$compositePosts = $this->SQLResultsToViewPostViews($response);
+	return new Presentation_View_ViewPostCollectionView($compositePosts);
     }
 
-    public function ViewPostsByDay($blogID, $year, $month, $date)
+    public function ViewPostsByDay($blogID, $year, $month, $date, $hideprivate)
     {
-	//Returns a ViewPostView with data from the Posts table.
-	if (strlen($year) != 4)
+	//Returns a ViewPostCollectionView with data from the Posts table.
+	$this->CheckTimes($year,$month,$date);
+
+	$begtime = $year.$month.$date.'000000';
+	$endtime = $year.$month.$date.'235959';
+
+	$extras = '';
+	if ($hideprivate)
 	{
-	    throw new Exception('Year must be 4 digits.');
+	    $extras = 'and Public=true ';
 	}
 
-	$begtime = '000000';
-	$endtime = '235959';
+	$query = 'select Timestamp from [0] where BlogID=[1] '.$extras.'and Timestamp >= [2] and Timestamp <= [3]';
 
-	$query = 'select Timestamp from [0] where BlogID=[1] and Timestamp >= [2][3][4]'.$begtime.' and Timestamp <= [2][3][4]'.$endtime.'';
-
-	$arguments = array($this->TABLE, $blogID, $year, $month, $date);
+	$arguments = array($this->TABLE, $blogID, $begtime, $endtime);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
 	$response = $DataAccess->Select($query, $arguments);
 
-	$compositePosts = $this->SQLResultsToCompositePostViews($response);
-	return new Presentation_View_ViewPostView($compositePosts);
+	$compositePosts = $this->SQLResultsToViewPostViews($response);
+	return new Presentation_View_ViewPostCollectionView($compositePosts);
     }
 
-    public function GetPostAuthorID($blogID, $postID)
+    private function CheckTimes($year,$month,$date)
+    {
+	//Throws if year/month/day are out of range.
+	if (strlen($year) != 4)
+	{
+	    throw new Exception('Year must be 4 digits.');
+	}
+	elseif ($month > 12 or $month < 1)
+	{
+	    throw new Exception('Month must be greater than 0/less than 13');
+	}
+	elseif ($date > 31 or $date < 1)
+	{
+	    throw new Exception('Day must be greater than 0/less than 32');
+	}
+    }
+
+    public function GetPostAuthorID($postID)
     {
 	//Returns the authorid of a given post within this blog.
 	//Used by PostSecurity to determine if an Author can mess with a post.
-	$query = 'select UserID from [0] where BlogID=[1] and PostID=[2] order by Timestamp desc';
-	$arguments = array($this->TABLE, $blogID, $postID);
+	$query = 'select UserID from [0] where PostID=[1] order by Timestamp desc';
+	$arguments = array($this->TABLE, $postID);
 
 	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
 	$response = $DataAccess->Select($query, $arguments);
@@ -197,7 +232,7 @@ class BusinessLogic_Post_PostDataAccess
 	return $response;
     }
 
-    private function SQLResultsToCompositePostViews($results)
+    private function SQLResultsToViewPostViews($results)
     {
 	if (count($results) < 1)
 	{
@@ -207,8 +242,8 @@ class BusinessLogic_Post_PostDataAccess
 	//go through each row and make a postview from it:
 	foreach ($results as $key=>$value)
 	{
-	    //TODO: make sure that "public" is being sent as a boolean:
-	    $returnme[$key] = new Presentation_View_CompositePostView($value['BlogID'], $value['PostID'],
+	    //TODO: make sure that "public" is being sent as a boolean (might be an int: 0 or 1):
+	    $returnme[$key] = new Presentation_View_ViewPostView($value['BlogID'], $value['PostID'],
 								      $value['UserID'], $value['Title'],
 								      $value['Public'], $value['Timestamp'],
 								      $value['Content']);
