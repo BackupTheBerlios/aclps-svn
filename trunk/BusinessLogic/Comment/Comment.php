@@ -93,6 +93,7 @@ class BusinessLogic_Comment_Comment
     {
 	//Calls the CommentDataAccess class and returns a URL to the location of the comments.
 	//TODO
+	return "Link to comments here";
     }
 
     public function HandleRequest()
