@@ -9,11 +9,11 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
     private $authorID;
     private $authorName;
     private $title;
-    private $public;
     private $timestamp;
+    private $controls;
     private $content;
 
-    public function __construct($blogID, $postID, $commentID, $authorID, $title, $public, $timestamp, $content)
+    public function __construct($blogID, $postID, $commentID, $authorID, $title, $timestamp, $content)
     {
 	$this->blogID = $blogID;
 	$this->postID = $postID;
@@ -21,16 +21,30 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
 	$this->authorID = $authorID;
 	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($this->authorID);
 	$this->title = $title;
-	$this->public = $public;
 	//TODO: perhaps some sort of checking on the timestamp?
 	$this->timestamp = $timestamp;
 	$this->content = $content;
+
+	$this->controls = '';
+    }
+
+    public function SetControls($bool)
+    {
+	if ($bool)
+	{
+	    $url = '';//TODO
+	    $this->controls = '<div id="commentcontrols"><a href="'.$url.'">Edit Comment</a> <a href="'.$url.'">Delete Comment</a></div>';
+	}
+	else
+	{
+	    $this->controls = '';
+	}
     }
 
     public function Display()
     {
-	//TODO: make this pretty
-	$displaystr = '<div id="commenttitle">'.$this->title.'</div>'.
+	$displaystr = $this->controls.
+	    '<div id="commenttitle">'.$this->title.'</div>'.
 	    '<div id="commentauthor">'.$this->authorName.'</div>'.
 	    '<div id="commenttime">'.$this->timestamp.'</div>'.
 	    '<div id="commentcontent">'.$this->content.'</div>';
@@ -92,23 +106,6 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
 	return "&nbsp;";
     }
 
-    public function SetPublic($public)
-    {
-	if (!is_bool($public))
-	{
-	    throw new Exception("Public/private status must be a boolean value.");
-	}
-	$this->public = $public;
-    }
-    public function GetPublic()
-    {
-	if (!isset($this->public))
-	{
-	    throw new Exception("Public/private status must always be set.");
-	}
-	return $this->public;
-    }
-
     public function SetTimestamp($aTimestamp)
     {
 	//TODO: perhaps some sort of checking on the new timestamp?
@@ -148,7 +145,7 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
     {
 	if (!isset($this->blogID))
 	{
-	    return new Exception("PlogID must always be set.");
+	    return new Exception("BlogID must always be set.");
 	}
 	return $this->blogID;
     }

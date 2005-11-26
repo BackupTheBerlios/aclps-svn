@@ -19,9 +19,9 @@ class Presentation_View_ViewCommentCollectionView extends Presentation_View_View
 	if (is_array($this->comments))
 	{
 	    $ret = "";
-	    foreach($this->comments as $key=>$value)
+	    foreach($this->comments as $value)
 	    {
-		//TODO: If there's anything that should go between comments (newline or something), add it here
+		//If there's anything that should go between posts (newline or something), add it here
 		$ret = $ret.'<p id="comment">'.$value->Display()."</p>\n";
 	    }
 	    return $ret;
@@ -36,23 +36,9 @@ class Presentation_View_ViewCommentCollectionView extends Presentation_View_View
         }
     }
 
-    public function AddView($comment)
+    public function GetComments()
     {
-	$this->comments[] = $comment;
-    }
-
-    public function DeleteView($comment)
-    {
-	foreach($this->comments as $key=>$value)
-	{
-	    if ($value->GetCommentID() == $comment->GetCommentID() and
-		$value->GetPostID() == $comment->GetPostID() and
-		$value->GetBlogID() == $comment->GetBlogID())
-	    {
-		unset($this->comments[$key]);
-		break;
-	    }
-	}
+	return $this->comments;
     }
 }
 

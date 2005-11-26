@@ -77,64 +77,52 @@ class BusinessLogic_Post_Post
 	    throw new Exception("Insufficient permissions.");
 	}
 	BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessDeletePost($postView);
+	BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessDeleteAllComments($postView);
     }
 
     public function ViewPostsByID($blogID, $postID, $userID)
     {
 	//Calls the PostSecurity class to determine if the user can view a post. If so, PostDataAccess is called and a ViewPostCollectionView is returned. Otherwise, an exception is thrown.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByID($blogID,$userID);
-	$postView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByID($postID);
-	return $postView;
+	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByID($postID);
+	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission);
+	return $postCollectionView;
     }
 
     public function ViewPostsByRecentCount($blogID, $count, $userID)
     {
 	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByRecentCount($blogID,$userID);
-	$postView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByRecentCount($blogID,$count);
-	return $postView;
+	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByRecentCount($blogID,$count);
+	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission);
+	return $postCollectionView;
     }
 
     public function ViewPostsByDaysOld($blogID, $daysOld, $userID)
     {
 	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByDaysOld($blogID,$userID);
-	$postView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByDaysOld($blogID,$daysOld);
-	return $postView;
+	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByDaysOld($blogID,$daysOld);
+	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission);
+	return $postCollectionView;
     }
 
     public function ViewPostsByMonth($blogID, $year, $month, $userID)
     {
 	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByMonth($blogID,$userID);
-	$postView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByMonth($blogID,$year,$month);
-	return $postView;
+	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByMonth($blogID,$year,$month);
+	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission);
+	return $postCollectionView;
     }
 
     public function ViewPostsByDay($blogID, $year, $month, $date, $userID)
     {
 	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByDay($blogID,$userID);
-	$postView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByDay($blogID,$year,$month,$date);
-	return $postView;
-    }
-
-    private function AddControls($postView,$permission,$userID) {
-	//Depending on the user's permission level, filters out private posts
-	//or adds controls to posts that should have them.
-	if ($permission == "owner" or $permission == "editor")
-	{
-	    $postView->AddControlsToAllPosts();
-	}
-	elseif ($permission == "author")
-	{
-	    $postView->AddControlsToSomePosts($userID);
-	}
-	else
-	{
-	    $postView->RemovePrivatePosts();
-	}
-	return $postView;
+	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByDay($blogID,$year,$month,$date);
+	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission);
+	return $postCollectionView;
     }
 
     public function HandleRequest()

@@ -24,9 +24,9 @@ class BusinessLogic_Comment_CommentDataAccess
     public function NewComment($blogID, $postID, $userID)
     {
 	//Creates a new empty comment and returns it.
-	//$blogID, $postID, $commentID, $authorID, $title, $public, $timestamp, $content
+	//$blogID, $postID, $commentID, $authorID, $title, $timestamp, $content
 	$newCommentData = new Presentation_View_ViewCommentView($blogID, $postID, 0, $userID, 
-								'', true, 0, '');
+								'', 0, '');
 	return new Presentation_View_NewCommentView($newCommentData);
     }
 
@@ -65,17 +65,28 @@ class BusinessLogic_Comment_CommentDataAccess
 	return new Presentation_View_DeleteCommentView($commentarray[0]);
     }
 
-    public function ProcessDeleteComment($postView)
+    public function ProcessDeleteComment($commentView)
     {
+	//Updates the Comments table with the new data.
 	$commentID = $commentView->GetCommentID();
 
-	//Updates the Comments table with the new data.
 	$query = 'delete from [0] where CommentID=[1]';
 	$arguments = array($this->TABLE, $commentID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Delete($query, $arguments);
     }
+
+    public function ProcessDeleteAllComments($postView)
+    {
+	//Deletes all comments associated with this post.
+	$postID = $postView->GetPostID();
+
+	$query = 'delete from [0] where PostID=[1]';
+	$arguments = array($this->TABLE, $postID);
+
+	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
+	$response = $DataAccess->Delete($query,$arguments);
 
     public function ViewComments($blogID, $postID)
     {
@@ -103,6 +114,25 @@ class BusinessLogic_Comment_CommentDataAccess
 	return new Presentation_View_ViewCommentCollectionView($comments);
     }
 
+    public function GetCommentCounts($postIDs)
+    {
+	//Given an array of postIDs to look at, returns an array of comment counts in the same array indices.
+	//TODO: how bad is having a lot of select statements like this?
+	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
+	$returnme = array();
+	$arguments = array($this->TABLE,20);//a little optimization: just replace the 2nd index each loop
+	foreach($postIDs as $key=>$value)
+	{
+	    $query = 'select COUNT(commentID) from [0] where PostID=[1]';
+	    $arguments[1] = $postIDs[$key];
+	    $response = $DataAccess->Select($query, $arguments);
+	    
+	    //TODO: is this an int?:
+	    $returnme[$key] = $response;
+	}
+	return $returnme;
+    }
+
     private function SQLResultsToViewCommentViews($results)
     {
 	if (count($results) < 1)
@@ -116,8 +146,8 @@ class BusinessLogic_Comment_CommentDataAccess
 	    //TODO: make sure that "public" is being sent as a boolean:
 	    $returnme[$key] = new Presentation_View_ViewCommentView($value['BlogID'], $value['PostID'],
 								    $value['CommentID'], $value['Author'],
-								    $value['Title'], $value['Public'], 
-								    $value['Timestamp'], $value['Content']);
+								    $value['Title'], $value['Timestamp'],
+								    $value['Content']);
 	}
 	return $returnme;
     }

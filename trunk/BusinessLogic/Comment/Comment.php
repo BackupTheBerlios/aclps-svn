@@ -74,21 +74,22 @@ class BusinessLogic_Comment_Comment
 	if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->ProcessDeleteComment($blogID,$userID)) {
 	    throw new Exception("Insufficient permissions.");
 	}
-	BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessDeleteComment($commentView);
+	BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessDeleteComment($commentCollectionView);
     }
 
-    public function ViewComments($blogID, $postID)
+    public function ViewComments($blogID, $postID, $userID)
     {
 	//Calls the CommentDataAccess class and returns a ViewCommentsView.
 	$permission = BusinessLogic_Comment_CommentSecurity::GetInstance()->ViewComments($blogID,$userID);
 	if (!$permission) {
 	    throw new Exception("Insufficient permissions.");
 	}
-	$commentView = BusinessLogic_Comment_CommentDataAccess::GetInstance()->ViewComments($blogID,$postID);
-	return $commentView;
+	$commentCollectionView = BusinessLogic_Comment_CommentDataAccess::GetInstance()->ViewComments($blogID,$postID);
+	BusinessLogic_Comment_CommentSecurity::GetInstance()->ActivateControls($commentCollectionView,$blogID,$userID);
+	return $commentCollectionView;
     }
 
-    public function ViewLinkToComments($blogID, $postID)
+    public function ViewLinkToComments($blogID, $postID, $userID)
     {
 	//Calls the CommentDataAccess class and returns a URL to the location of the comments.
 	//TODO

@@ -12,6 +12,33 @@ class Presentation_View_ViewPostCollectionView extends Presentation_View_View
 	    throw new Exception("ViewPostCollectionView must be passed an array of ViewPostViews");
 	}
 	$this->posts = $posts;
+
+	$this->SetCommentCounts();
+	try
+	{
+	    $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
+	    $blogID = $this->posts[0]->GetBlogID();
+	    $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
+	    $this->ActivateControls($permission,$userID);
+	} catch (Exception $e) {
+	    //dont activate any controls, since user isn't logged in
+	}
+    }
+
+    private function SetCommentCounts() {
+	//Sets the comment counts for each post in this collection.
+	foreach($posts as $key => $value)
+	{
+	    $postIDs[$key] = $value->GetPostID();
+	}
+
+	$commentCounts = BusinessLogic_Comment_CommentDataAccess::GetInstance()->GetCommentCounts($postIDs);
+
+	foreach($posts as $key => $value)
+	{
+	    $value->SetCommentCount($commentCounts[$key]);
+	}
+	    
     }
 
     public function Display()
@@ -19,9 +46,9 @@ class Presentation_View_ViewPostCollectionView extends Presentation_View_View
 	if (is_array($this->posts))
 	{
 	    $ret = "";
-	    foreach($this->posts as $key=>$value)
+	    foreach($this->posts as $value)
 	    {
-		//TODO: If there's anything that should go between posts (newline or something), add it here
+		//If there's anything that should go between posts (newline or something), add it here
 		$ret = $ret.'<p id="post">'.$value->Display()."</p>\n";
 	    }
 	    return $ret;
@@ -36,22 +63,9 @@ class Presentation_View_ViewPostCollectionView extends Presentation_View_View
         }
     }
 
-    public function AddView($post)
+    public function GetPosts()
     {
-	$this->posts[] = $post;
-    }
-
-    public function DeleteView($post)
-    {
-	foreach($this->posts as $key=>$value)
-	{
-	    if ($value->GetPostID() == $post->GetPostID() and
-		$value->GetBlogID() == $post->GetBlogID())
-	    {
-		unset($this->posts[$key]);
-		break;
-	    }
-	}
+	return $this->posts;
     }
 }
 

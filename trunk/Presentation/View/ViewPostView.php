@@ -6,33 +6,59 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     private $blogID;
     private $postID;
     private $authorID;
-    private $authorName;
-    private $title;
     private $public;
+
+    private $title;
+    private $authorName;
     private $timestamp;
+    private $controls;
+    private $commentlink;
     private $content;
 
-    public function __construct($blogID, $postID, $author, $title, $public, $timestamp, $content)
+    public function __construct($blogID, $postID, $authorID, $title, $public, $timestamp, $content)
     {
 	$this->blogID = $blogID;
 	$this->postID = $postID;
-	$this->authorID = $author;
-	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($this->authorID);
+	$this->authorID = $authorID;
+	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($authorID);
 	$this->title = $title;
 	$this->public = $public;
 	//TODO: perhaps some sort of checking on the timestamp?
 	$this->timestamp = $timestamp;
 	$this->content = $content;
+
+	$this->controls = '';
+	$this->commentlink = '';
+    }
+
+    public function SetControls($bool)
+    {
+	if ($bool)
+	{
+	    $url = '';//TODO
+	    $this->controls = '<div id="postcontrols"><a href="'.$url.'">Edit Post</a> <a href="'.$url.'">Delete Post</a></div>';
+	}
+	else
+	{
+	    $this->controls = '';
+	}
+    }
+
+    public function SetCommentCount($commentcount)
+    {
+	//Set by the PostCollectionView in its contructor on all posts.
+	$url = '';//TODO
+	$this->commentlink = '<a href="'.$url.'">Comments ('.$commentcount.')</a>';
     }
 
     public function Display()
     {
-	$commentlink = BusinessLogic_Comment_Comment::ViewLinkToComments($this->blogID,$this->postID);
-	$displaystr = '<div id="posttitle">'.$this->title.'</div>'.
+	$displaystr = $this->controls.
+	    '<div id="posttitle">'.$this->title.'</div>'.
 	    '<div id="postauthor">'.$this->authorName.'</div>'.
 	    '<div id="posttime">'.$this->timestamp.'</div>'.
 	    '<div id="postcontent">'.$this->content.'</div>'.
-	    '<div id="postcommentlink">'.$commentlink.'</div>';
+	    '<div id="postcommentlink">'.$this->commentlink.'</div>';
 	return $displaystr;
     }
 
@@ -42,9 +68,9 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 	return "THIS SHOULD BE A PRETTY FORM!<br />Title ".$this->title."<br />Content: ".$this->content;
     }
 
-    public function DisplayAsSingle()
+    public function DisplayWithComments()
     {
-	//TODO
+	//TODO: same as display, but also showing comments rather than the commentlink
     }
 
     public function SetContent($aContent)
@@ -60,11 +86,6 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 	return "&nbsp;";
     }
 
-    public function SetAuthorID($aAuthor)
-    {
-	$this->authorID = $aAuthor;
-	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($aAuthor);
-    }
     public function GetAuthorID()
     {
 	if (isset($this->authorID))

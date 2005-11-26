@@ -22,13 +22,13 @@ class BusinessLogic_Comment_CommentSecurity
     {
 	//Returns false if the user has privilege {Nobody}. Otherwise, true.
 	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
-	if ($permission != "nobody")
+	if ($permission == "Nobody")
 	{
-	    return true;
+	    return false;
 	}
 	else
 	{
-	    return false;
+	    return true;
 	}
     }
     public function ProcessNewComment($blogID, $userID)
@@ -40,13 +40,13 @@ class BusinessLogic_Comment_CommentSecurity
     {
 	//Returns true if the user has privilege {Editor, Owner}.
 	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
-	if ($permission == "owner" or $permission == "editor")
+	if ($permission == "Nobody" or $permission == "Author")
 	{
-	    return true;
+	    return false;
 	}
 	else
 	{
-	    return false;
+	    return true;
 	}
     }
 
@@ -59,13 +59,13 @@ class BusinessLogic_Comment_CommentSecurity
     {
 	//Returns true if the user has privilege {Editor, Owner}.
 	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
-	if ($permission == "owner" or $permission == "editor")
+	if ($permission == "Nobody" or $permission == "Author")
 	{
-	    return true;
+	    return false;
 	}
 	else
 	{
-	    return false;
+	    return true;
 	}
     }
     public function ProcessDeleteComment($blogID, $userID)
@@ -83,6 +83,36 @@ class BusinessLogic_Comment_CommentSecurity
     {
 	//Returns true.
 	return true;
+    }
+
+    private function ActivateControls($commentCollectionView,$blogID,$userID) {
+	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
+	//Depending on the user's permission level, adds controls to posts that should have them.
+	if ($permission == "Nobody")
+	{
+	    return;
+	}
+	elseif ($permission == "Author")
+	{
+	    foreach($commentCollectionView->GetComments() as $key => $value)
+	    {
+		if ($value->GetAuthorID() == $userID)
+		{
+		    $value->SetControls(true);
+		}
+		else
+		{
+		    $value->SetControls(false);
+		}
+	    }
+	}
+	else
+	{
+	    foreach($commentCollectionView->GetComments() as $key => $value)
+	    {
+		$value->SetControls(true);
+	    }
+	}
     }
 }
 
