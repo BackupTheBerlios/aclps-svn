@@ -1,23 +1,39 @@
 <?php
 
-  //this class represents a collection of posts, and can display them
+  //this class represents a collection (array, to be specific) of posts, and can display them
 class Presentation_View_ViewPostView extends Presentation_View_View
 {
     private $posts;
     
     public function __construct($posts)
     {
+	if (!is_array($posts))
+	{
+	    throw new Exception("ViewPostView must be passed an array of CompositePostViews");
+	}
 	$this->posts = $posts;
     }
 
     public function Display()
     {
-	foreach($this->posts as $key=>$value)
+	if (is_array($this->posts))
 	{
-	    print $value->Display();
-	    //TODO: If there's anything that should go between posts (newline or something), add it here
-	    print '<br />';
+	    $ret = "";
+	    foreach($this->posts as $key=>$value)
+	    {
+		//TODO: If there's anything that should go between posts (newline or something), add it here
+		$ret = $ret.'<p>'.$value->Display()."</p>\n";
+	    }
+	    return $ret;
 	}
+	elseif (!isset($this->posts))
+	{
+	    return 'No Posts';
+	}
+	else
+	{
+            throw new Exception("Contents of ViewPostView must either be an array or unset.");
+        }
     }
 
     public function AddView($post)
@@ -31,6 +47,18 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 	{
 	    if ($value->GetPostID() == $post->GetPostID() and
 		$value->GetBlogID() == $post->GetBlogID())
+	    {
+		unset($this->posts[$key]);
+		break;
+	    }
+	}
+    }
+
+    public function RemovePrivatePosts()
+    {
+	foreach($this->posts as $key=>$value)
+	{
+	    if (!$value->GetPublic())
 	    {
 		unset($this->posts[$key]);
 		break;

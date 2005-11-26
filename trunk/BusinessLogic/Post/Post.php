@@ -19,7 +19,8 @@ class BusinessLogic_Post_Post
 	if (!BusinessLogic_Post_PostSecurity::GetInstance()->NewPost($blogID,$userID)) {
 	    throw new Exception("Insufficient permissions.");
 	}
-	//TODO
+	$post = BusinessLogic_Post_PostDataAccess::GetInstance()->NewPost($blogID);
+	//TODO: set post author (derived from userid) and return post
     }
 
     public function ProcessNewPost($postView, $userID)
@@ -29,7 +30,7 @@ class BusinessLogic_Post_Post
 	if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessNewPost($blogID,$userID)) {
 	    throw new Exception("Insufficient permissions.");
 	}
-	//TODO
+	BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessNewPost($postView);
     }
 
     public function EditPost($blogID, $postID, $userID)
@@ -38,7 +39,7 @@ class BusinessLogic_Post_Post
 	if (!BusinessLogic_Post_PostSecurity::GetInstance()->EditPost($blogID,$userID)) {
 	    throw new Exception("Insufficient permissions.");
 	}
-	//TODO
+	return BusinessLogic_Post_PostDataAccess::GetInstance()->EditPost($blogID,$postID);
     }
 
     public function ProcessEditPost($postView, $userID)
@@ -48,7 +49,7 @@ class BusinessLogic_Post_Post
 	if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessEditPost($blogID,$userID)) {
 	    throw new Exception("Insufficient permissions.");
 	}
-	//TODO
+	BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessEditPost($postView);
     }
 
     public function DeletePost($blogID, $postID, $userID)
@@ -57,52 +58,77 @@ class BusinessLogic_Post_Post
 	if (!BusinessLogic_Post_PostSecurity::GetInstance()->DeletePost($blogID,$userID)) {
 	    throw new Exception("Insufficient permissions.");
 	}
-	//TODO
+	return BusinessLogic_Post_PostDataAccess::GetInstance()->DeletePost($blogID,$postID);
     }
 
     public function ProcessDeletePost($postView, $userID)
     {
-	//Calls PostSecurity to determine if the user can delete a post. If so, it will process the form data in DeletePostView and call PostDataAccess.ProcessDeletePost() to commit the new data to storage. Otherwise, an exception is thrown.
+	//Calls PostSecurity to determine if the user can delete a post. If so, it will call PostDataAccess.ProcessDeletePost() to delete the post. Otherwise, an exception is thrown.
 	$blogID = $postView->GetBlogID();
 	if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessDeletePost($blogID,$userID)) {
 	    throw new Exception("Insufficient permissions.");
 	}
-	//TODO
+	BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessDeletePost($postView);
     }
 
     public function ViewPostsByID($blogID, $postID, $userID)
     {
-	//Calls the PostSecurity class to determine if the user can view a post. If so, PostDataAccess is called and a ViewPostCollectionView is returned. Otherwise, an exception is thrown.
+	//Calls the PostSecurity class to determine if the user can view a post. If so, PostDataAccess is called and a ViewPostView is returned. Otherwise, an exception is thrown.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByID($blogID,$userID);
-	//TODO
+	$postView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByID($blogID,$postID);
+	if ($permission == "nobody")
+	{
+	    $postView->RemovePrivatePosts();
+	}
+	return $postView;
     }
 
     public function ViewPostsByRecentCount($blogID, $count, $userID)
     {
-	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
+	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByRecentCount($blogID,$userID);
-	//TODO
+	$postView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByRecentCount($blogID,$count);
+	if ($permission == "nobody")
+	{
+	    $postView->RemovePrivatePosts();
+	}
+	return $postView;
     }
 
-    public function ViewPostsByDaysOld($blogID, $ageInDays, $userID)
+    public function ViewPostsByDaysOld($blogID, $daysOld, $userID)
     {
-	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
+	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByDaysOld($blogID,$userID);
-	//TODO
+	$postView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByDaysOld($blogID,$daysOld);
+	if ($permission == "nobody")
+	{
+	    $postView->RemovePrivatePosts();
+	}
+	return $postView;
     }
 
     public function ViewPostsByMonth($blogID, $year, $month, $userID)
     {
-	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
+	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByMonth($blogID,$userID);
-	//TODO
+	$postView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByMonth($blogID,$year,$month);
+	if ($permission == "nobody")
+	{
+	    $postView->RemovePrivatePosts();
+	}
+	return $postView;
     }
 
-    public function ViewPostsByDay($blogID, $year, $month, $day, $userID)
+    public function ViewPostsByDay($blogID, $year, $month, $date, $userID)
     {
-	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
+	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByDay($blogID,$userID);
-	//TODO
+	$postView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByDay($blogID,$year,$month,$date);
+	if ($permission == "nobody")
+	{
+	    $postView->RemovePrivatePosts();
+	}
+	return $postView;
     }
 
     public function HandleRequest()

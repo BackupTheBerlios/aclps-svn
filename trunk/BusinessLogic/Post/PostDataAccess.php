@@ -23,6 +23,22 @@ class BusinessLogic_Post_PostSecurity
 	return $_SESSION['BusinessLogic_Post_PostDataAccess'];
     }
 
+    public function NewPost($blogID)
+    {
+	//Creates a new empty post with the proper postID contained within.
+	$query = 'select MAX(PostID) from [0] where BlogID=\'[1]\'';
+	$arguments = array($this->TABLE, $blogID);
+
+	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
+	//TODO: what kind of value does this return? int? string? Make sure it's an int:
+	$response = $DataAccess->Select($query, $arguments);
+	print 'DEBUG!:'
+	print_r($response);
+
+	$newPostData = new Presentation_View_CompositePostView($blogID, ++$response);
+	return new Presentation_View_NewPostView($newPostData);
+    }
+
     public function ProcessNewPost($postView)
     {
 	//Inserts data into the Posts table.
@@ -38,7 +54,8 @@ class BusinessLogic_Post_PostSecurity
     public function EditPost($blogID, $postID)
     {
 	//Returns an EditPostView with data from the Posts table.
-	//TODO: create editpostview then get back to this
+	$postarray = $this->ViewPostsByID($blogID,$postID);
+	return new Presentation_View_EditPostView($postarray[0]);
     }
 
     public function ProcessEditPost($postView)
@@ -55,11 +72,15 @@ class BusinessLogic_Post_PostSecurity
     public function DeletePost($blogID, $postID)
     {
 	//Returns a DeletePostView with data from the Posts table.
-	//TODO: create deletepostview then get back to this
+	$postarray = $this->ViewPostsByID($blogID,$postID);
+	return new Presentation_View_DeletePostView($postarray[0]);
     }
 
-    public function ProcessDeletePost($blogID, $postID)
+    public function ProcessDeletePost($postView)
     {
+	$blogID = $postView->GetBlogID();
+	$postID = $postView->GetPostID();
+
 	//Updates the Posts table with the new data.
 	$query = 'delete from \'[0]\' where BlogID=\'[1]\' and PostID=\'[2]\'';
 	$arguments = array($this->TABLE, $blogID, $postID);
@@ -70,45 +91,33 @@ class BusinessLogic_Post_PostSecurity
 
     public function ViewPostsByID($blogID, $postID)
     {
-	//Returns an array of CompositePostViews with data from the Posts table.
+	//Returns a ViewPostView with data from the Posts table.
 	$query = 'select * from \'[0]\' where BlogID=\'[1]\' and PostID=\'[2]\' order by Timestamp desc';
         $arguments = array($this->TABLE, $blogID, $postID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-        return $this->SQLResultsToCompositePostViews($response);
-    }
-
-    public function GetPostAuthorID($blogID, $postID)
-    {
-	//Returns the author of a given post within this blog.
-	//Used by PostSecurity to determine if an Author can mess with a post.
-	$query = 'select Author from \'[0]\' where BlogID=\'[1]\' and PostID=\'[2]\' order by Timestamp desc';
-	$arguments = array($this->TABLE, $blogID, $postID);
-
-	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
-	$response = $DataAccess->Select($query, $arguments);
-
-	//TODO: what kind of value does this return? int? string? Make it an int
-	return $response;
+        $compositePosts = $this->SQLResultsToCompositePostViews($response);
+	return new ViewPostView($compositePosts);
     }
 
     public function ViewPostsByRecentCount($blogID, $postCount)
     {
-	//Returns an array of CompositePostViews with data from the Posts table.
+	//Returns a ViewPostView with data from the Posts table.
 	$query = 'select * from \'[0]\' where BlogID=\'[1]\' order by Timestamp desc limit \'[2]\'';
         $arguments = array($this->TABLE, $blogID, $postCount);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-        return $this->SQLResultsToCompositePostViews($response);
+        $compositePosts = $this->SQLResultsToCompositePostViews($response);
+	return new ViewPostView($compositePosts);
     }
 
     public function ViewPostsByDaysOld($blogID, $daysOld)
     {
-	//Returns an array of CompositePostViews with data from the Posts table.
+	//Returns a ViewPostView with data from the Posts table.
 	$query = 'select * from \'[0]\' where BlogID=\'[1]\' and Timestamp >= date_sub(curdate(),interval [2] day) order by Timestamp desc';
 	
 	$arguments = array($this->TABLE, $blogID, $daysOld);
@@ -116,12 +125,13 @@ class BusinessLogic_Post_PostSecurity
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-        return $this->SQLResultsToCompositePostViews($response);
+        $compositePosts = $this->SQLResultsToCompositePostViews($response);
+	return new ViewPostView($compositePosts);
     }
 
     public function ViewPostsByMonth($blogID, $year, $month)
     {
-	//Returns an array of CompositePostViews with data from the Posts table.
+	//Returns a ViewPostView with data from the Posts table.
 	if (strlen($year) != 4)
 	{
 	    throw new Exception('Year must be 4 digits.');
@@ -148,12 +158,13 @@ class BusinessLogic_Post_PostSecurity
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-	return $this->SQLResultsToCompositePostViews($response);
+	$compositePosts = $this->SQLResultsToCompositePostViews($response);
+	return new ViewPostView($compositePosts);
     }
 
     public function ViewPostsByDay($blogID, $year, $month, $date)
     {
-	//Returns an array of CompositePostViews with data from the Posts table.
+	//Returns a ViewPostView with data from the Posts table.
 	if (strlen($year) != 4)
 	{
 	    throw new Exception('Year must be 4 digits.');
@@ -169,7 +180,24 @@ class BusinessLogic_Post_PostSecurity
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
 	$response = $DataAccess->Select($query, $arguments);
 
-	return $this->SQLResultsToCompositePostViews($response);
+	$compositePosts = $this->SQLResultsToCompositePostViews($response);
+	return new ViewPostView($compositePosts);
+    }
+
+    public function GetPostAuthorID($blogID, $postID)
+    {
+	//Returns the authorid of a given post within this blog.
+	//Used by PostSecurity to determine if an Author can mess with a post.
+	$query = 'select Author from \'[0]\' where BlogID=\'[1]\' and PostID=\'[2]\' order by Timestamp desc';
+	$arguments = array($this->TABLE, $blogID, $postID);
+
+	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
+	$response = $DataAccess->Select($query, $arguments);
+
+	//TODO: what kind of value does this return? int? string? Make sure it's an int
+	print 'DEBUG!:';
+	print_r($response);
+	return $response;
     }
 
     private function SQLResultsToCompositePostViews($results)
@@ -182,11 +210,15 @@ class BusinessLogic_Post_PostSecurity
 	//go through each row and make a postview from it:
 	foreach ($results as $key=>$value)
 	{
+	    print 'DEBUG!:';
+	    print_r($value);
+	    //TODO: make sure that "public" is being sent as a boolean:
 	    $returnme[$key] = new Presentation_View_CompositePostView($value['BlogID'], $value['PostID'],
 								      $value['Author'], $value['Title'],
-								      $value['Timestamp'], $value['Content']);
+								      $value['Public'], $value['Timestamp'],
+								      $value['Content']);
 	}
-	return $returnme
+	return $returnme;
     }
 }
 
