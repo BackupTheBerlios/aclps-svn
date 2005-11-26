@@ -132,25 +132,25 @@ class BusinessLogic_Post_Post
 	switch($request)
 	{
 	case 'ViewPost':
-	    //TODO
+	    //TODO postID
 	    break;
 	case 'NewPost':
-	    //TODO
+	    //TODO blogID
 	    break;
 	case 'ProcessNewPost':
-	    //TODO
+	    //TODO ??
 	    break;
 	case 'EditPost':
-	    //TODO
+	    //TODO postID
 	    break;
 	case 'ProcessEditPost':
-	    //TODO
+	    //TODO ??
 	    break;
 	case 'DeletePost':
-	    //TODO
+	    //TODO postID
 	    break;
 	case 'ProcessDeletePost':
-	    //TODO
+	    //TODO ??
 	    break;
 	default:
 	    BusinessLogic_Comment_Comment::GetInstance()->HandleRequest();

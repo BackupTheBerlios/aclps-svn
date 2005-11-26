@@ -67,7 +67,7 @@ class BusinessLogic_Blog_Blog
 	    //TODO
 	    break;
 	default:
-	    $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->HandleRequest());
+	    $aViewBlogView->SetContent(BusinessLogic_User_User::GetInstance()->HandleRequest());
 	}
 
 	return $aViewBlogView;
