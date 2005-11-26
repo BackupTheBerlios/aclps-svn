@@ -9,7 +9,7 @@ class Presentation_View_NewCommentView extends Presentation_View_View
     {
 	if (is_array($comment))
 	{
-	    throw new Exception("NewCommentViews only support a single CompositeCommentView");
+	    throw new Exception("NewCommentViews only support a single ViewCommentView");
 	}
 	$this->comment = $comment;
     }

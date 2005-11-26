@@ -9,7 +9,7 @@ class Presentation_View_DeleteCommentView extends Presentation_View_View
     {
 	if (is_array($comment))
 	{
-	    throw new Exception("DeleteCommentViews only support a single CompositeCommentView");
+	    throw new Exception("DeleteCommentViews only support a single ViewCommentView");
 	}
 	$this->comment = $comment;
     }

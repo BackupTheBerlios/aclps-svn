@@ -1,7 +1,7 @@
 <?php
 
   //this class represents a single comment's data, and can display it.
-class Presentation_View_CompositeCommentView extends Presentation_View_View
+class Presentation_View_ViewCommentView extends Presentation_View_View
 {
     private $blogID;
     private $postID;

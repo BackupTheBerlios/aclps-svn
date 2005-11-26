@@ -1,7 +1,7 @@
 <?php
 
   //this class represents a collection (array, to be specific) of comments, and can display them
-class Presentation_View_ViewCommentView extends Presentation_View_View
+class Presentation_View_ViewCommentCollectionView extends Presentation_View_View
 {
     private $comments;
     
@@ -9,7 +9,7 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
     {
 	if (!is_array($comments))
 	{
-	    throw new Exception("ViewCommentView must be passed an array of CompositeCommentViews");
+	    throw new Exception("ViewCommentCollectionView must be passed an array of ViewCommentViews");
 	}
 	$this->comments = $comments;
     }
@@ -32,7 +32,7 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
 	}
 	else
 	{
-            throw new Exception("Contents of ViewCommentView must either be an array or unset.");
+            throw new Exception("Contents of ViewCommentCollectionView must either be an array or unset.");
         }
     }
 

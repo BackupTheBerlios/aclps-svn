@@ -1,7 +1,7 @@
 <?php
 
   //this class represents a single post's data, and can display it.
-class Presentation_View_CompositePostView extends Presentation_View_View
+class Presentation_View_ViewPostView extends Presentation_View_View
 {
     private $blogID;
     private $postID;

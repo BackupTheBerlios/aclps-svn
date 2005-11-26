@@ -9,7 +9,7 @@ class Presentation_View_DeletePostView extends Presentation_View_View
     {
 	if (is_array($post))
 	{
-	    throw new Exception("DeletePostViews only support a single CompositePostView");
+	    throw new Exception("DeletePostViews only support a single ViewPostView");
 	}
 	$this->post = $post;
     }

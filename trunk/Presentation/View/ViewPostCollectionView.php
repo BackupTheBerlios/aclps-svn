@@ -1,7 +1,7 @@
 <?php
 
   //this class represents a collection (array, to be specific) of posts, and can display them
-class Presentation_View_ViewPostView extends Presentation_View_View
+class Presentation_View_ViewPostCollectionView extends Presentation_View_View
 {
     private $posts;
     
@@ -9,7 +9,7 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     {
 	if (!is_array($posts))
 	{
-	    throw new Exception("ViewPostView must be passed an array of CompositePostViews");
+	    throw new Exception("ViewPostCollectionView must be passed an array of ViewPostViews");
 	}
 	$this->posts = $posts;
     }
@@ -32,7 +32,7 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 	}
 	else
 	{
-            throw new Exception("Contents of ViewPostView must either be an array or unset.");
+            throw new Exception("Contents of ViewPostCollectionView must either be an array or unset.");
         }
     }
 

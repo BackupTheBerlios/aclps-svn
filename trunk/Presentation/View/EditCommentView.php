@@ -9,7 +9,7 @@ class Presentation_View_EditCommentView extends Presentation_View_View
     {
 	if (is_array($comment))
 	{
-	    throw new Exception("EditCommentViews only support a single CompositeCommentView");
+	    throw new Exception("EditCommentViews only support a single ViewCommentView");
 	}
 	$this->comment = $comment;
     }
