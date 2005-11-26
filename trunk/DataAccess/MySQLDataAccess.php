@@ -12,7 +12,7 @@ class DataAccess_MySQLDataAccess implements DataAccess_DataAccess
 
     private $connections;
 
-    function __construct($dbHost, $dbName, $dbUser, $dbPassword)
+    private function __construct($dbHost, $dbName, $dbUser, $dbPassword)
     {
 	$this->dbHost = $dbHost;
 	$this->dbName = $dbName;
