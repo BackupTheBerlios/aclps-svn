@@ -1,5 +1,7 @@
 <?php
 
+    session_start();
+
     //CHANGE '\' to '/'
 
     function __autoload($className)

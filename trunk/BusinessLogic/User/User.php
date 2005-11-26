@@ -2,77 +2,90 @@
 
 class BusinessLogic_User_User
 {
-    private function __construct()
+    private $userInfo;
+    private $permissions;
+    
+    private function __construct($userInfo,$permissions)
     {
-	//Do Nothing
+        $this->userInfo = $userInfo;
+    	$this->permissions = $permissions;
     }
 
     static public function GetInstance()
     {
-	if (isset($_SESSION['BusinessLogic_User_User']))
-	{
+    	if (!isset($_SESSION['BusinessLogic_User_User']))
+	    {
+            $userInfo = BusinessLogic_User_UserDataAccess::GetInstance()->GetUserInfo;
+            $permissions = BusinessLogic_User_UserDataAccess::GetInstance()->GetPermissions;
+	        $_SESSION['BusinessLogic_User_User'] = new BusinessLogic_User_User($userInfo, $permissions);
+   	    }
+   	    
 	    return $_SESSION['BusinessLogic_User_User'];
-	}
-	else
-	{
-	    $_SESSION['BusinessLogic_User_User'] = new BusinessLogic_User_User();
-	    return $_SESSION['BusinessLogic_User_User'];
-	}
     }
 
     public function HandleRequest()
     {
-	//Checks $_GET['action'] to see if the action belongs to the Post class. If so, the appropriate function is called. Otherwise, dies, as there is no further link in the CHAIN OF RESPONSIBILITY
-	$request = $_GET['Action'];
-	switch($request)
-	{
-	    //TODO: add actions here, if any
-	default:
-	    die('Unknown Request.');
-	}
+        $request = $_GET['Action'];
+        switch($request)
+    	{
+            case 'EditUserData':
+                return $this->EditUserData();
+                break;
+            case 'ProcessEditUserData':
+                return $this->ProcessEditUserData();
+                break;
+            case 'ViewRegister':
+                return $this->ViewRegister();
+                break;
+            case 'ProcessRegister':
+                return $this->ProcessRegister();
+                break;
+            case 'ViewSignIn':
+                return $this->ViewSignIn();
+                break;
+            case 'ProcessSignIn':
+                return $this->ProcessSignIn();
+                break;
+            case 'ProcessSignOut':
+                return $this->ProcessSignOut();
+                break;
+        	default:
+    	       return BusinessLogic_Post_Post::GetInstance()->HandleRequest();
+    	}
     }
+    
+    //**********************************
+    //ACTION FUNCTIONS
+    //**********************************
 
     public function EditUserData()
     {
-	//Returns an EditUserDataView.
-	//TODO
+        if ($this->CheckSignedIn())
+        {
+            return new EditUserDataView($this->userInfo);
+        }
+        else
+        {
+            return new Exception('User is not signed in.');
+        }
     }
 
     public function ProcessEditUserData()
     {
-	//Processes the form data in EditUserDataView and modifies the Users table.
-	//TODO
+	   //Processes the form data in EditUserDataView and modifies the Users table.
+	   //TODO
     }
-
-    public function ViewSignIn()
-    {
-	//Returns a ViewSignInView if the user is not signed in.
-	//TODO
-    }
-
-    public function ProcessSignIn()
-    {
-	//Processes the form data in ViewSignInView and authenticates the user. Signs In the user if the credentials are valid.
-	//TODO
-    }
-
-    private function GetPasshash($string)
-    {
-	//Encrypts a password into a hash, returns the hash.
-	//The database stores these hashes, so compare what this returns against that when verifying a user.
-	return crypt($string,$string); //Use string itself as the salt
-    }
-
-    public function ProcessSignOut()
-    {
-	//Sets $_SESSION = array(). Confirms sign out by returning ViewSignOutView
-	//TODO
-    }
-
+    
     public function ViewRegister()
     {
-	//Returns a ViewRegisterView
-	//TODO
+        if (BusinessLogic_User_UserSecurity::GetInstance()->ViewRegister())
+        {
+            return new ViewRegisterView();
+        }
+        else
+        {
+            return new Exception('You are not allowed to register at this time.');
+        }
     }
 
     public function ProcessRegister()
@@ -81,18 +94,85 @@ class BusinessLogic_User_User
 	//TODO
     }
 
-    public static function ConvertUIDToName($userID)
+    public function ViewSignIn()
     {
-	//Given a userID, returns the user's name
-	//TODO
-	return 'username';
+        if (BusinessLogic_User_UserSecurity::GetInstance()->ViewSignIn())
+        {
+            return new ViewSignInView();
+        }
+        else
+        {
+            return new Exception('You are not allowed to Sign In at this time.');
+        }
     }
 
-    public function UserPermission($blogID)
+    public function ProcessSignIn()
     {
-	//Returns the permission level for this user ("owner"=80, "editor"=40, "author"=20 or "nobody"=0)
+	//Processes the form data in ViewSignInView and authenticates the user. Signs In the user if the credentials are valid.
 	//TODO
-	return 'nobody';
+    }
+
+    public function ProcessSignOut()
+    {
+        //Destroy session
+        $_SESSION = array();
+        session_destroy();
+        
+        //Return to index
+        header("Location: http://cs411.beoba.net/ACLPS/");
+        exit;
+    }
+
+    //**********************************
+    //NON-ACTION FUNCTIONS
+    //**********************************
+    
+    public function GetUserID()
+    {
+        if ($this->CheckSignedIn())
+        {
+            return $this->userInfo['UserID'];
+        }
+        else
+        {
+            return new Exception('User is not signed in.');
+        }
+    }
+
+    public function GetUserName()
+    {
+        if ($this->CheckSignedIn())
+        {
+            return $this->userInfo['UserName'];
+        }
+        else
+        {
+            return new Exception('User is not signed in.');
+        }
+    }
+
+    public function GetPermissionForBlog($blogID)
+    {
+        if (isset($this->permissions[$blogID]))
+        {
+            return $this->permissions[$blogID];
+        }
+        else
+        {
+            return 'Nobody';
+        }
+    }
+    
+    private function CheckSignedIn()
+    {
+      if (isset($this->userInfo['UserID']))
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
     }
 }
 
