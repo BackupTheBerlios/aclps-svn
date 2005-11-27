@@ -31,5 +31,5 @@
 <center>{$footerImage}</center>
 </div>
 
-</body
+</body>
 </html>
