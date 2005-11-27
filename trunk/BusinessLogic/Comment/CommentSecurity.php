@@ -18,10 +18,10 @@ class BusinessLogic_Comment_CommentSecurity
 	return $_SESSION['BusinessLogic_Post_PostSecurity'];
     }
 
-    public function NewComment($blogID, $userID)
+    public function NewComment($blogID)
     {
 	//Returns false if the user has privilege {Nobody}. Otherwise, true.
-	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
+	$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
 	if ($permission == "Nobody")
 	{
 	    return false;
@@ -31,15 +31,15 @@ class BusinessLogic_Comment_CommentSecurity
 	    return true;
 	}
     }
-    public function ProcessNewComment($blogID, $userID)
+    public function ProcessNewComment($blogID)
     {
-	return $this->NewComment($blogID, $userID);
+	return $this->NewComment($blogID);
     }
 
-    public function EditComment($blogID, $userID)
+    public function EditComment($blogID)
     {
 	//Returns true if the user has privilege {Editor, Owner}.
-	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
+	$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
 	if ($permission == "Nobody" or $permission == "Author")
 	{
 	    return false;
@@ -50,15 +50,15 @@ class BusinessLogic_Comment_CommentSecurity
 	}
     }
 
-    public function ProcessEditComment($blogID, $userID)
+    public function ProcessEditComment($blogID)
     {
-	return $this->EditComment($blogID, $userID);
+	return $this->EditComment($blogID);
     }
 
-    public function DeleteComment($blogID, $userID)
+    public function DeleteComment($blogID)
     {
 	//Returns true if the user has privilege {Editor, Owner}.
-	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
+	$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
 	if ($permission == "Nobody" or $permission == "Author")
 	{
 	    return false;
@@ -68,25 +68,20 @@ class BusinessLogic_Comment_CommentSecurity
 	    return true;
 	}
     }
-    public function ProcessDeleteComment($blogID, $userID)
+    public function ProcessDeleteComment($blogID)
     {
-	return $this->DeleteComment($blogID, $userID);
+	return $this->DeleteComment($blogID);
     }
 
-    public function ViewComments($blogID, $userID)
-    {
-	//Returns true.
-	return true;
-    }
-
-    public function ViewLinkToComments($blogID, $userID)
+    public function ViewComments($blogID)
     {
 	//Returns true.
 	return true;
     }
 
-    private function ActivateControls($commentCollectionView,$blogID,$userID) {
-	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
+    private function ActivateControls($commentCollectionView,$blogID)
+    {
+	$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
 	//Depending on the user's permission level, adds controls to posts that should have them.
 	if ($permission == "Nobody")
 	{
@@ -96,14 +91,7 @@ class BusinessLogic_Comment_CommentSecurity
 	{
 	    foreach($commentCollectionView->GetComments() as $key => $value)
 	    {
-		if ($value->GetAuthorID() == $userID)
-		{
-		    $value->SetControls(true);
-		}
-		else
-		{
-		    $value->SetControls(false);
-		}
+		$value->SetControls($value->GetAuthorID() == BusinessLogic_User_User::GetInstance()->GetUserID());
 	    }
 	}
 	else

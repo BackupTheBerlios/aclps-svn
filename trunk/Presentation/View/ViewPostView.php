@@ -15,14 +15,15 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     private $commentlink;
     private $content;
 
-    private $linkprefix=explode('?',$_SERVER['REQUEST_URI'], 2)[0];
+    private $linkprefix;
 
     public function __construct($blogID, $postID, $authorID, $title, $public, $timestamp, $content)
     {
+
 	$this->blogID = $blogID;
 	$this->postID = $postID;
 	$this->authorID = $authorID;
-	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($authorID); //TODO: make this function
+	$this->authorName = "arr";//BusinessLogic_User_User::ConvertUIDToName($authorID); //TODO: make this function
 	$this->title = $title;
 	$this->public = $public;
 	//TODO: perhaps some sort of checking on the timestamp?
@@ -31,6 +32,8 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 
 	$this->controls = '';
 	$this->commentlink = '';
+	$this->linkprefix = explode('?',$_SERVER['REQUEST_URI'], 2);
+	$this->linkprefix = $this->linkprefix[0];
     }
 
     public function SetControls($bool)
@@ -38,8 +41,8 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 	//Set by PostSecurity shortly after post creation, before it's returned to viewer
 	if ($bool)
 	{
-	    $editurl = $linkprefix.'?Action=EditPost&postID='.$this->postID;
-	    $newurl = $linkprefix.'?Action=DeletePost&postID='.$this->postID;
+	    $editurl = $linkprefix.'?Action=EditPost&blogID='.$this->blogID.'&postID='.$this->postID;
+	    $newurl = $linkprefix.'?Action=DeletePost&blogID='.$this->blogID.'&postID='.$this->postID;
 	    $this->controls = '<div id="postcontrols"><a href="'.$editurl.'">Edit Post</a> <a href="'.$newurl.'">Delete Post</a></div>';
 	}
 	else
@@ -51,7 +54,7 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     public function SetCommentCount($commentcount)
     {
 	//Set by the PostCollectionView in its contructor on all posts.
-	$url = $linkprefix.'?Action=ViewPost&postID='.$this->postID;
+	$url = $linkprefix.'?Action=ViewPost&blogID='.$this->blogID.'&postID='.$this->postID;
 	$this->commentlink = '<a href="'.$url.'">Comments ('.$commentcount.')</a>';
     }
 

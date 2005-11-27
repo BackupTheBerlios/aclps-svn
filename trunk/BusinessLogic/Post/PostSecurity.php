@@ -18,7 +18,7 @@ class BusinessLogic_Post_PostSecurity
 	return $_SESSION['BusinessLogic_Post_PostSecurity'];
     }
 
-    public function NewPost($blogID,$userID)
+    public function NewPost($blogID)
     {
 	//Returns true if the user has privilege {Author, Editor, Owner}. Otherwise, false.
 	$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
@@ -31,12 +31,12 @@ class BusinessLogic_Post_PostSecurity
 	    return false;
 	}
     }
-    public function ProcessNewPost($blogID,$userID)
+    public function ProcessNewPost($blogID)
     {
-	return $this->NewPost($blogID,$userID);
+	return $this->NewPost($blogID);
     }
 
-    public function EditPost($blogID, $postID, $userID)
+    public function EditPost($blogID, $postID)
     {
 	//Returns true if the user has privilege {Editor, Owner}. Returns true if the user has privilege Author and is the creator of the post. Otherwise, false.
 	$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
@@ -45,7 +45,8 @@ class BusinessLogic_Post_PostSecurity
 	    return false;
 	}
 	elseif ($permission == "Author" and 
-		$userID == BusinessLogic_Post_PostDataAccess::GetInstance()->GetPostAuthorID($postID))
+		BusinessLogic_User_User::GetInstance()->GetUserID() == 
+		BusinessLogic_Post_PostDataAccess::GetInstance()->GetPostAuthorID($postID))
 	{
 	    return true;
 	}
@@ -54,12 +55,12 @@ class BusinessLogic_Post_PostSecurity
 	    return true;
 	}
     }
-    public function ProcessEditPost($blogID, $postID, $userID)
+    public function ProcessEditPost($blogID, $postID)
     {
-	return $this->EditPost($blogID, $postID, $userID);
+	return $this->EditPost($blogID, $postID);
     }
 
-    public function DeletePost($blogID, $postID, $userID)
+    public function DeletePost($blogID, $postID)
     {
 	//Returns true if the user has privilege {Editor, Owner}. Returns true if the user has privilege Author and is the creator of the post. Otherwise, false.
 	$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
@@ -68,7 +69,8 @@ class BusinessLogic_Post_PostSecurity
 	    return false;
 	}
 	elseif ($permission == "Author" and 
-		$userID == BusinessLogic_Post_PostDataAccess::GetInstance()->GetPostAuthorID($postID))
+		BusinessLogic_User_User::GetInstance()->GetUserID() ==
+		BusinessLogic_Post_PostDataAccess::GetInstance()->GetPostAuthorID($postID))
 	{
 	    return true;
 	}
@@ -77,39 +79,39 @@ class BusinessLogic_Post_PostSecurity
 	    return true;
 	}
     }
-    public function ProcessDeletePost($blogID, $postID, $userID)
+    public function ProcessDeletePost($blogID, $postID)
     {
-	return $this->DeletePost($blogID, $postID, $userID);
+	return $this->DeletePost($blogID, $postID);
     }
 
-    private function ViewPost($blogID,$userID)
+    private function ViewPost($blogID)
     {
 	//Returns the user's permission level and whether hidden posts should be hidden (in an array of that order).
-	return BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
+	$permissionlabel = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
 	return array($permissionlabel,($permissionlabel == "Nobody"));
     }
-    public function ViewPostsByID($blogID,$userID)
+    public function ViewPostsByID($blogID)
     {
-	return $this->ViewPost($blogID,$userID);
+	return $this->ViewPost($blogID);
     }
-    public function ViewPostsByRecentCount($blogID,$userID)
+    public function ViewPostsByRecentCount($blogID)
     {
-	return $this->ViewPost($blogID,$userID);
+	return $this->ViewPost($blogID);
     }
-    public function ViewPostsByDaysOld($blogID,$userID)
+    public function ViewPostsByDaysOld($blogID)
     {
-	return $this->ViewPost($blogID,$userID);
+	return $this->ViewPost($blogID);
     }
-    public function ViewPostsByMonth($blogID,$userID)
+    public function ViewPostsByMonth($blogID)
     {
-	return $this->ViewPost($blogID,$userID);
+	return $this->ViewPost($blogID);
     }
-    public function ViewPostsByDay($blogID,$userID)
+    public function ViewPostsByDay($blogID)
     {
-	return $this->ViewPost($blogID,$userID);
+	return $this->ViewPost($blogID);
     }
 
-    private function ActivateControls($postCollectionView,$blogID,$userID,$permission) {
+    public function ActivateControls($postCollectionView,$blogID,$permission) {
 	//Depending on the user's permission level, adds controls to posts that should have them.
 	if ($permission == "Nobody")
 	{
@@ -119,14 +121,7 @@ class BusinessLogic_Post_PostSecurity
 	{
 	    foreach($postCollectionView->GetPosts() as $key => $value)
 	    {
-		if ($value->GetAuthorID() == $userID)
-		{
-		    $value->SetControls(true);
-		}
-		else
-		{
-		    $value->SetControls(false);
-		}
+		$value->SetControls($value->GetAuthorID() == BusinessLogic_User_User::GetInstance()->GetUserID());
 	    }
 	}
 	else

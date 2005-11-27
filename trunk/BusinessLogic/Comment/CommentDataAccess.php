@@ -21,12 +21,12 @@ class BusinessLogic_Comment_CommentDataAccess
 	return $_SESSION['BusinessLogic_Comment_CommentDataAccess'];
     }
 
-    public function NewComment($blogID, $postID, $userID)
+    public function NewComment($blogID, $postID)
     {
 	//Creates a new empty comment and returns it.
 	//$blogID, $postID, $commentID, $authorID, $title, $timestamp, $content
-	$newCommentData = new Presentation_View_ViewCommentView($blogID, $postID, 0, $userID, 
-								'', 0, '');
+	$userID = BusinessLogic_User_User::GetInstance()->GetUserID();
+	$newCommentData = new Presentation_View_ViewCommentView($blogID, $postID, 0, $userID, '', 0, '');
 	return new Presentation_View_NewCommentView($newCommentData);
     }
 
@@ -87,6 +87,7 @@ class BusinessLogic_Comment_CommentDataAccess
 
 	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
 	$response = $DataAccess->Delete($query,$arguments);
+    }
 
     public function ViewComments($blogID, $postID)
     {
@@ -117,19 +118,41 @@ class BusinessLogic_Comment_CommentDataAccess
     public function GetCommentCounts($postIDs)
     {
 	//Given an array of postIDs to look at, returns an array of comment counts in the same array indices.
-	//TODO: how bad is having a lot of select statements like this?
 	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
-	$returnme = array();
-	$arguments = array($this->TABLE,20);//a little optimization: just replace the 2nd index each loop
+	$arguments = array($this->TABLE);
+	
+	$insertme = '0';
 	foreach($postIDs as $key=>$value)
 	{
-	    $query = 'select COUNT(commentID) from [0] where PostID=[1]';
-	    $arguments[1] = $postIDs[$key];
-	    $response = $DataAccess->Select($query, $arguments);
-	    
-	    //TODO: is this an int?:
-	    $returnme[$key] = $response[0];
+	    $insertme = $insertme.' or PostID=['.($key+1).']';
+	    array_push($arguments, $value);
 	}
+	$query = 'select count(CommentID),PostID from Comments where '.$insertme.' group by PostID';
+	$response = $DataAccess->Select($query, $arguments);
+
+	$returnme = array();
+	//extract contents of response:
+	foreach($postIDs as $key=>$postID)
+	{
+	    foreach($response as $responsekey=>$responsedata)
+	    {
+		if ($responsedata['PostID'] == $postID)
+		{
+		    $returnme[$key] = $responsedata['count(CommentID)'];
+		    unset($response[$responsekey]);
+		    break;
+		}
+	    }
+	}
+	//fill in 0's for slots that aren't currently filled:
+	foreach($postIDs as $key=>$value)
+	{
+	    if (!isset($returnme[$key]))
+	    {
+		$returnme[$key] = 0;
+	    }
+	}
+
 	return $returnme;
     }
 

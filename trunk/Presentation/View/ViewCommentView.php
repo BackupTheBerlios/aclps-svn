@@ -13,7 +13,7 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
     private $controls;
     private $content;
 
-    private $linkprefix=explode('?',$_SERVER['REQUEST_URI'], 2)[0];
+    private $linkprefix;
 
     public function __construct($blogID, $postID, $commentID, $authorID, $title, $timestamp, $content)
     {
@@ -21,13 +21,15 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
 	$this->postID = $postID;
 	$this->commentID = $commentID;
 	$this->authorID = $authorID;
-	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($this->authorID);//TODO: make this function
+	$this->authorName = "arr";//BusinessLogic_User_User::ConvertUIDToName($this->authorID);//TODO: make this function
 	$this->title = $title;
 	//TODO: perhaps some sort of checking on the timestamp?
 	$this->timestamp = $timestamp;
 	$this->content = $content;
 
 	$this->controls = '';
+	$this->linkprefix = explode('?',$_SERVER['REQUEST_URI'], 2);
+	$this->linkprefix = $this->linkprefix[0];
     }
 
     public function SetControls($bool)

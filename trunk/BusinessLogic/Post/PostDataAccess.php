@@ -21,10 +21,11 @@ class BusinessLogic_Post_PostDataAccess
 	return $_SESSION['BusinessLogic_Post_PostDataAccess'];
     }
 
-    public function NewPost($blogID,$userID)
+    public function NewPost($blogID)
     {
 	//Creates a new empty post and returns it.
 	//$blogID, $postID, $authorID, $title, $public, $timestamp, $content
+	$userID = BusinessLogic_User_User::GetInstance()->GetUserID();
 	$newPostData = new Presentation_View_ViewPostView($blogID, 0, $userID, '', true, 0, '');
 	return new Presentation_View_NewPostView($newPostData);
     }
@@ -243,7 +244,6 @@ class BusinessLogic_Post_PostDataAccess
 	foreach ($results as $key=>$value)
 	{
 	    //TODO: make sure that "public" is being sent as a boolean (might be an int: 0 or 1):
-	    print 'rofl '.$value['Public'];
 	    $returnme[$key] = new Presentation_View_ViewPostView($value['BlogID'], $value['PostID'],
 								      $value['UserID'], $value['Title'],
 								      $value['Public'], $value['Timestamp'],

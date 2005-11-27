@@ -14,27 +14,18 @@ class Presentation_View_ViewPostCollectionView extends Presentation_View_View
 	$this->posts = $posts;
 
 	$this->SetCommentCounts();
-	try
-	{
-	    $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
-	    $blogID = $this->posts[0]->GetBlogID();
-	    $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
-	    $this->ActivateControls($permission,$userID);
-	} catch (Exception $e) {
-	    //dont activate any controls, since user isn't logged in
-	}
     }
 
     private function SetCommentCounts() {
 	//Sets the comment counts for each post in this collection.
-	foreach($posts as $key => $value)
+	foreach($this->posts as $key => $value)
 	{
 	    $postIDs[$key] = $value->GetPostID();
 	}
 
 	$commentCounts = BusinessLogic_Comment_CommentDataAccess::GetInstance()->GetCommentCounts($postIDs);
 
-	foreach($posts as $key => $value)
+	foreach($this->posts as $key => $value)
 	{
 	    $value->SetCommentCount($commentCounts[$key]);
 	}
