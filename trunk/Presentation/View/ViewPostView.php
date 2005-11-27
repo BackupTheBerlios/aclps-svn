@@ -13,6 +13,7 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     private $timestamp;
     private $controls;
     private $commentlink;
+    private $commentcontent;
     private $content;
 
     private $linkprefix;
@@ -31,7 +32,6 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 	$this->content = $content;
 
 	$this->controls = '';
-	$this->commentlink = '';
 	$this->linkprefix = explode('?',$_SERVER['REQUEST_URI'], 2);
 	$this->linkprefix = $this->linkprefix[0];
     }
@@ -60,24 +60,29 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 
     public function Display()
     {
-	$displaystr = $this->controls.
+	$displaystr = '<div id="post">'.
+	    $this->controls.
 	    '<div id="posttitle">'.$this->title.'</div>'.
 	    '<div id="postauthor">'.$this->authorName.'</div>'.
 	    '<div id="posttime">'.$this->timestamp.'</div>'.
-	    '<div id="postcontent">'.$this->content.'</div>'.
-	    '<div id="postcommentlink">'.$this->commentlink.'</div>';
+	    '<div id="postcontent">'.$this->content.'</div>';
+	if (isset($this->commentcontent))
+	{
+	    $displaystr = $displaystr.
+		'<p id="commentlabel">Comments:</p>'.
+		$this->commentcontent->Display();
+	}
+	elseif (isset($this->commentlink))
+	{
+	    $displaystr = $displaystr.'<div id="postcommentlink">'.$this->commentlink.'</div>';
+	}
+	$displaystr = $displaystr.'</div>';
 	return $displaystr;
     }
 
-    public function DisplayAsForm()
+    public function SetBottomContent($view)
     {
-	//TODO: make this a pretty form
-	return "THIS SHOULD BE A PRETTY FORM!<br />Title ".$this->title."<br />Content: ".$this->content;
-    }
-
-    public function DisplayWithComments()
-    {
-	//TODO: same as normal display, but also showing comments rather than the commentlink
+	$this->commentcontent = $view;
     }
 
     public function SetContent($aContent)

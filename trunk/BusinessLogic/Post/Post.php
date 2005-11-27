@@ -84,9 +84,10 @@ class BusinessLogic_Post_Post
     {
 	//Calls the PostSecurity class to determine the user's permissions. If so, PostDataAccess is called and a ViewPostCollectionView is returned. Otherwise, an exception is thrown.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByID($blogID);
-	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByID($blogID,$postID,$permission[1]);
-	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$permission[0]);
-	return $postCollectionView;
+	$postCommentView = BusinessLogic_Comment_Comment::GetInstance()->ViewComments($blogID,$postID);
+	$postView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByID($blogID,$postID,$postCommentView,$permission[1]);
+	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControlsSingle($postView,$blogID,$permission[0]);
+	return $postView;
     }
 
     public function ViewPostsByRecentCount($blogID, $count)

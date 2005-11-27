@@ -121,7 +121,8 @@ class BusinessLogic_Post_PostSecurity
 	{
 	    foreach($postCollectionView->GetPosts() as $key => $value)
 	    {
-		$value->SetControls($value->GetAuthorID() == BusinessLogic_User_User::GetInstance()->GetUserID());
+		$value->SetControls($value->GetAuthorID() ==
+				    BusinessLogic_User_User::GetInstance()->GetUserID());
 	    }
 	}
 	else
@@ -130,6 +131,23 @@ class BusinessLogic_Post_PostSecurity
 	    {
 		$value->SetControls(true);
 	    }
+	}
+    }
+
+    public function ActivateControlsSingle($postView,$blogID,$permission) {
+	//Same as above, except for a single ViewPostView rather than a ViewPostCollectionView.
+	if ($permission == "Nobody")
+	{
+	    return;
+	}
+	elseif ($permission == "Author")
+	{
+	    $postCollectionView->SetControls($postCollectionView->GetAuthorID() ==
+					     BusinessLogic_User_User::GetInstance()->GetUserID());
+	}
+	else
+	{
+	    $postCollectionView->SetControls(true);
 	}
     }
 }

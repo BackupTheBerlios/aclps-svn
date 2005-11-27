@@ -18,12 +18,14 @@ class Presentation_View_ViewCommentCollectionView extends Presentation_View_View
     {
 	if (is_array($this->comments))
 	{
-	    $ret = "";
+	    $ret = '<div id="commentcollection">';
 	    foreach($this->comments as $value)
 	    {
 		//If there's anything that should go between posts (newline or something), add it here
 		$ret = $ret.'<p id="comment">'.$value->Display()."</p>\n";
 	    }
+	    $ret = $ret.'<p>TODO: NEEDS A newcomment FORM</p>';
+	    $ret = $ret.'</div>';
 	    return $ret;
 	}
 	elseif (!isset($this->comments))

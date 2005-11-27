@@ -79,9 +79,9 @@ class BusinessLogic_Post_PostDataAccess
         $response = $DataAccess->Delete($query, $arguments);
     }
 
-    public function ViewPostsByID($blogID, $postID, $hideprivate)
+    public function ViewPostsByID($blogID, $postID, $commentView, $hideprivate)
     {
-	//Returns a ViewPostCollectionView with data from the Posts table.
+	//Returns a ViewPostView with data from the Posts table.
 	//(blogid MUST be here to prevent someone from sneaking into a post through another blog that they better access to)
 	$extras = '';
 	if ($hideprivate)
@@ -96,7 +96,10 @@ class BusinessLogic_Post_PostDataAccess
         $response = $DataAccess->Select($query, $arguments);
 
         $compositePosts = $this->SQLResultsToViewPostViews($response);
-	return new Presentation_View_ViewPostCollectionView($compositePosts);
+
+	//This is a single post, so add comments to the bottom:
+	$compositePosts[0]->SetBottomContent($commentView);
+	return $compositePosts[0];
     }
 
     public function ViewPostsByRecentCount($blogID, $postCount, $hideprivate)

@@ -13,9 +13,9 @@ class BusinessLogic_Comment_CommentSecurity
     {
 	if (!isset($_SESSION['BusinessLogic_Comment_CommentSecurity']))
 	{
-	    $_SESSION['BusinessLogic_Post_PostSecurity'] = new BusinessLogic_Post_PostSecurity();
+	    $_SESSION['BusinessLogic_Comment_CommentSecurity'] = new BusinessLogic_Comment_CommentSecurity();
 	}
-	return $_SESSION['BusinessLogic_Post_PostSecurity'];
+	return $_SESSION['BusinessLogic_Comment_CommentSecurity'];
     }
 
     public function NewComment($blogID)
@@ -79,7 +79,7 @@ class BusinessLogic_Comment_CommentSecurity
 	return true;
     }
 
-    private function ActivateControls($commentCollectionView,$blogID)
+    public function ActivateControls($commentCollectionView,$blogID)
     {
 	$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
 	//Depending on the user's permission level, adds controls to posts that should have them.
