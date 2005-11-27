@@ -5,7 +5,7 @@
 <body>
 
 <div id="topbar">
-{$topbar}
+{$topBar}
 </div>
 
 <div id="image">

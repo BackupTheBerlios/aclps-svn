@@ -24,7 +24,8 @@ class Presentation_Viewer
 	$smarty->config_dir = $this->CO_DIR;
 	$smarty->cache_dir = $this->CA_DIR;
 	$smarty->compile_dir = $this->COM_DIR;
-							    
+
+    $smarty->assign('topBar', $aView->DisplayTopBar());
 	$smarty->assign('headerImage', $aView->DisplayHeaderImage());
 	$smarty->assign('footerImage', $aView->DisplayFooterImage());
 	$smarty->assign('content', $aView->DisplayContent());

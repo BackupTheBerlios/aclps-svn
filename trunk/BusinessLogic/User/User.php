@@ -5,19 +5,16 @@ class BusinessLogic_User_User
     private $userInfo;
     private $permissions;
     
-    private function __construct($userInfo,$permissions)
+    private function __construct()
     {
-        $this->userInfo = $userInfo;
-    	$this->permissions = $permissions;
+        //Do Nothing
     }
 
     static public function GetInstance()
     {
     	if (!isset($_SESSION['BusinessLogic_User_User']))
 	    {
-            $userInfo = BusinessLogic_User_UserDataAccess::GetInstance()->GetUserInfo;
-            $permissions = BusinessLogic_User_UserDataAccess::GetInstance()->GetPermissions;
-	        $_SESSION['BusinessLogic_User_User'] = new BusinessLogic_User_User($userInfo, $permissions);
+	        $_SESSION['BusinessLogic_User_User'] = new BusinessLogic_User_User();
    	    }
    	    
 	    return $_SESSION['BusinessLogic_User_User'];
@@ -62,7 +59,7 @@ class BusinessLogic_User_User
     {
         if ($this->CheckSignedIn())
         {
-            return new EditUserDataView($this->userInfo);
+            return new Presentation_View_EditUserDataView($this->userInfo);
         }
         else
         {
@@ -80,7 +77,7 @@ class BusinessLogic_User_User
     {
         if (BusinessLogic_User_UserSecurity::GetInstance()->ViewRegister())
         {
-            return new ViewRegisterView();
+            return new Presentation_View_ViewRegisterView();
         }
         else
         {
@@ -98,7 +95,7 @@ class BusinessLogic_User_User
     {
         if (BusinessLogic_User_UserSecurity::GetInstance()->ViewSignIn())
         {
-            return new ViewSignInView();
+            return new Presentation_View_ViewSignInView();
         }
         else
         {
@@ -173,6 +170,11 @@ class BusinessLogic_User_User
       {
         return false;
       }
+    }
+    
+    public function GetTopBar()
+    {
+        return new Presentation_View_ViewTopBarView($this->CheckSignedIn());
     }
 }
 
