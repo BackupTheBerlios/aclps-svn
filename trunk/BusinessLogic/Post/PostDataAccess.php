@@ -78,17 +78,18 @@ class BusinessLogic_Post_PostDataAccess
         $response = $DataAccess->Delete($query, $arguments);
     }
 
-    public function ViewPostsByID($postID, $hideprivate)
+    public function ViewPostsByID($blogID, $postID, $hideprivate)
     {
 	//Returns a ViewPostCollectionView with data from the Posts table.
+	//(blogid MUST be here to prevent someone from sneaking into a post through another blog that they better access to)
 	$extras = '';
 	if ($hideprivate)
 	{
 	    $extras = 'and Public=true ';
 	}
 
-	$query = 'select * from [0] where PostID=[1] '.$extras.'order by Timestamp desc';
-        $arguments = array($this->TABLE, $postID);
+	$query = 'select * from [0] where PostID=[1] and BlogID=[2] '.$extras.'order by Timestamp desc';
+        $arguments = array($this->TABLE, $postID, $blogID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
@@ -220,7 +221,7 @@ class BusinessLogic_Post_PostDataAccess
 
     public function GetPostAuthorID($postID)
     {
-	//Returns the authorid of a given post within this blog.
+	//Returns the authorid of a given post.
 	//Used by PostSecurity to determine if an Author can mess with a post.
 	$query = 'select UserID from [0] where PostID=[1] order by Timestamp desc';
 	$arguments = array($this->TABLE, $postID);
@@ -228,8 +229,7 @@ class BusinessLogic_Post_PostDataAccess
 	$DataAccess = DataAccess_DataAccessFactory::GetInstance();
 	$response = $DataAccess->Select($query, $arguments);
 
-	//TODO: what kind of value does this return? int? string? Make sure it's an int
-	return $response;
+	return $response[0]['UserID'];
     }
 
     private function SQLResultsToViewPostViews($results)
@@ -243,6 +243,7 @@ class BusinessLogic_Post_PostDataAccess
 	foreach ($results as $key=>$value)
 	{
 	    //TODO: make sure that "public" is being sent as a boolean (might be an int: 0 or 1):
+	    print 'rofl '.$value['Public'];
 	    $returnme[$key] = new Presentation_View_ViewPostView($value['BlogID'], $value['PostID'],
 								      $value['UserID'], $value['Title'],
 								      $value['Public'], $value['Timestamp'],

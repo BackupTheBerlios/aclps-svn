@@ -128,7 +128,7 @@ class BusinessLogic_Comment_CommentDataAccess
 	    $response = $DataAccess->Select($query, $arguments);
 	    
 	    //TODO: is this an int?:
-	    $returnme[$key] = $response;
+	    $returnme[$key] = $response[0];
 	}
 	return $returnme;
     }
@@ -143,7 +143,6 @@ class BusinessLogic_Comment_CommentDataAccess
 	//go through each row and make a postview from it:
 	foreach ($results as $key=>$value)
 	{
-	    //TODO: make sure that "public" is being sent as a boolean:
 	    $returnme[$key] = new Presentation_View_ViewCommentView($value['BlogID'], $value['PostID'],
 								    $value['CommentID'], $value['Author'],
 								    $value['Title'], $value['Timestamp'],

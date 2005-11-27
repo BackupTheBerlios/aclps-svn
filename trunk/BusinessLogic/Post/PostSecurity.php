@@ -84,8 +84,9 @@ class BusinessLogic_Post_PostSecurity
 
     private function ViewPost($blogID,$userID)
     {
-	//Returns the privilege level of the user.
-	return BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
+	//Returns the user's permission level and whether hidden posts should be hidden (in an array of that order).
+	$permissionlabel = BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
+	return array($permissionlabel,($permissionlabel == "Nobody"));
     }
     public function ViewPostsByID($blogID,$userID)
     {

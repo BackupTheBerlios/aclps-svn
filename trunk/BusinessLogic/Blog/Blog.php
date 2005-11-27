@@ -21,7 +21,7 @@ class BusinessLogic_Blog_Blog
         if (!isset($_GET['blogID']))
        	{
             throw new Exception('Malformed Request-View Blog');
-        }
+	}
 
 	$aViewBlogView = $this->ViewBlog($_GET['blogID']);
 

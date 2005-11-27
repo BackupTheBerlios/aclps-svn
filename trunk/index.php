@@ -1,17 +1,21 @@
 <?php
 
-    session_start();
+print_r($_SESSION);
 
-    //CHANGE '\' to '/'
+session_start();
 
-    function __autoload($className)
-    {
-    	$path = str_replace('_', '/', $className);
-    	require_once("$path.php");
-    }
+//CHANGE '\' to '/'
 
-    $aFrontController = new Presentation_FrontController();
+//If you're getting weird file-not-found errors for a file that was recently moved in the code,
+//you need to clear the cs411.beoba.net cookie in your browser. - Nick
+function __autoload($className)
+{
+    $path = str_replace('_', '/', $className);
+    require_once("$path.php");
+}
 
-    $aFrontController->HandleRequest();
+$aFrontController = new Presentation_FrontController();
+
+$aFrontController->HandleRequest();
 
 ?>

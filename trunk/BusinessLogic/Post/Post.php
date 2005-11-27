@@ -82,46 +82,46 @@ class BusinessLogic_Post_Post
 
     public function ViewPostsByID($blogID, $postID, $userID)
     {
-	//Calls the PostSecurity class to determine if the user can view a post. If so, PostDataAccess is called and a ViewPostCollectionView is returned. Otherwise, an exception is thrown.
-	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByID($blogID,$userID);
-	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByID($postID);
-	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission);
+	//Calls the PostSecurity class to determine the user's permissions. If so, PostDataAccess is called and a ViewPostCollectionView is returned. Otherwise, an exception is thrown.
+	$hideprivate = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByID($blogID,$userID);
+	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByID($blogID,$postID,$permission[1]);
+	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission[0]);
 	return $postCollectionView;
     }
 
     public function ViewPostsByRecentCount($blogID, $count, $userID)
     {
-	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
+	//Calls the PostSecurity class to determine the user's permissions. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByRecentCount($blogID,$userID);
-	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByRecentCount($blogID,$count);
-	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission);
+	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByRecentCount($blogID,$count,$permission[1]);
+	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission[0]);
 	return $postCollectionView;
     }
 
     public function ViewPostsByDaysOld($blogID, $daysOld, $userID)
     {
-	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
+	//Calls the PostSecurity class to determine the user's permissions. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByDaysOld($blogID,$userID);
-	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByDaysOld($blogID,$daysOld);
-	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission);
+	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByDaysOld($blogID,$daysOld,$permission[1]);
+	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission[0]);
 	return $postCollectionView;
     }
 
     public function ViewPostsByMonth($blogID, $year, $month, $userID)
     {
-	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
+	//Calls the PostSecurity class to determine the user's permissions. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByMonth($blogID,$userID);
-	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByMonth($blogID,$year,$month);
-	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission);
+	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByMonth($blogID,$year,$month,$permission[1]);
+	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission[0]);
 	return $postCollectionView;
     }
 
     public function ViewPostsByDay($blogID, $year, $month, $date, $userID)
     {
-	//Calls the PostSecurity class to determine the user's privilege level. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
+	//Calls the PostSecurity class to determine the user's permissions. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
 	$permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByDay($blogID,$userID);
-	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByDay($blogID,$year,$month,$date);
-	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission);
+	$postCollectionView = BusinessLogic_Post_PostDataAccess::GetInstance()->ViewPostsByDay($blogID,$year,$month,$date,$permission[1]);
+	BusinessLogic_Post_PostSecurity::GetInstance()->ActivateControls($postCollectionView,$blogID,$userID,$permission[0]);
 	return $postCollectionView;
     }
 
@@ -129,28 +129,32 @@ class BusinessLogic_Post_Post
     {
 	//Checks $_GET['action'] to see if the action belongs to the Post class. If so, the appropriate function is called. Otherwise, Comment.HandleRequest() is called.
 	$request = $_GET['Action'];
+	$blogID = $_GET['BlogID'];
+	$userID = BusinessLogic_User_User::GetInstance()->GetUserID();
 	switch($request)
 	{
 	case 'ViewPost':
-	    //TODO postID
+	    //TODO postID or year month [date] or age or count (no options->count=10)
 	    break;
 	case 'NewPost':
-	    //TODO blogID
+	    return $this->NewPost($blogID,$userID);
 	    break;
 	case 'ProcessNewPost':
-	    //TODO ??
+	    //TODO ???
 	    break;
 	case 'EditPost':
-	    //TODO postID
+	    $postID = $_GET['PostID'];
+	    return $this->EditPost($blogID,$postID,$userID);
 	    break;
 	case 'ProcessEditPost':
-	    //TODO ??
+	    //TODO ???
 	    break;
 	case 'DeletePost':
-	    //TODO postID
+	    $postID = $_GET['PostID'];
+	    return $this->DeletePost($blogID,$postID,$userID);
 	    break;
 	case 'ProcessDeletePost':
-	    //TODO ??
+	    //TODO ???
 	    break;
 	default:
 	    BusinessLogic_Comment_Comment::GetInstance()->HandleRequest();

@@ -13,13 +13,15 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
     private $controls;
     private $content;
 
+    private $linkprefix=explode('?',$_SERVER['REQUEST_URI'], 2)[0];
+
     public function __construct($blogID, $postID, $commentID, $authorID, $title, $timestamp, $content)
     {
 	$this->blogID = $blogID;
 	$this->postID = $postID;
 	$this->commentID = $commentID;
 	$this->authorID = $authorID;
-	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($this->authorID);
+	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($this->authorID);//TODO: make this function
 	$this->title = $title;
 	//TODO: perhaps some sort of checking on the timestamp?
 	$this->timestamp = $timestamp;
@@ -32,7 +34,8 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
     {
 	if ($bool)
 	{
-	    $url = '';//TODO
+	    $editurl = $linkprefix.'?Action=EditComment&commentID='.$this->commentID;
+	    $deleteurl = $linkprefix.'?Action=DeleteComment&commentID='.$this->commentID;
 	    $this->controls = '<div id="commentcontrols"><a href="'.$url.'">Edit Comment</a> <a href="'.$url.'">Delete Comment</a></div>';
 	}
 	else
@@ -73,7 +76,7 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
     public function SetAuthorID($aAuthor)
     {
 	$this->authorID = $aAuthor;
-	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($aAuthor);
+	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($aAuthor);//TODO:make this function
     }
     public function GetAuthorID()
     {

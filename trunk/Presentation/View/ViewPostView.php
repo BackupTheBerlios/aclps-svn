@@ -15,12 +15,14 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     private $commentlink;
     private $content;
 
+    private $linkprefix=explode('?',$_SERVER['REQUEST_URI'], 2)[0];
+
     public function __construct($blogID, $postID, $authorID, $title, $public, $timestamp, $content)
     {
 	$this->blogID = $blogID;
 	$this->postID = $postID;
 	$this->authorID = $authorID;
-	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($authorID);
+	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($authorID); //TODO: make this function
 	$this->title = $title;
 	$this->public = $public;
 	//TODO: perhaps some sort of checking on the timestamp?
@@ -33,10 +35,12 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 
     public function SetControls($bool)
     {
+	//Set by PostSecurity shortly after post creation, before it's returned to viewer
 	if ($bool)
 	{
-	    $url = '';//TODO
-	    $this->controls = '<div id="postcontrols"><a href="'.$url.'">Edit Post</a> <a href="'.$url.'">Delete Post</a></div>';
+	    $editurl = $linkprefix.'?Action=EditPost&postID='.$this->postID;
+	    $newurl = $linkprefix.'?Action=DeletePost&postID='.$this->postID;
+	    $this->controls = '<div id="postcontrols"><a href="'.$editurl.'">Edit Post</a> <a href="'.$newurl.'">Delete Post</a></div>';
 	}
 	else
 	{
@@ -47,7 +51,7 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     public function SetCommentCount($commentcount)
     {
 	//Set by the PostCollectionView in its contructor on all posts.
-	$url = '';//TODO
+	$url = $linkprefix.'?Action=ViewPost&postID='.$this->postID;
 	$this->commentlink = '<a href="'.$url.'">Comments ('.$commentcount.')</a>';
     }
 
@@ -70,7 +74,7 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 
     public function DisplayWithComments()
     {
-	//TODO: same as display, but also showing comments rather than the commentlink
+	//TODO: same as normal display, but also showing comments rather than the commentlink
     }
 
     public function SetContent($aContent)

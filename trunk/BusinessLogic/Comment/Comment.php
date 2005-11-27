@@ -104,28 +104,30 @@ class BusinessLogic_Comment_Comment
     {
 	//Checks $_GET['action'] to see if the action belongs to the Comment class. If so, the appropriate function is called. Otherwise, User.HandleRequest() is called.
 	$request = $_GET['Action'];
+	$blogID = $_GET['BlogID'];
+	$userID = BusinessLogic_User_User::GetInstance()->GetUserID();
 	switch($request)
 	{
-	case 'ViewComment':
-	    //TODO
-	    break;
 	case 'NewComment':
-	    //TODO
+	    $postID = $_GET['PostID'];
+	    return $this->NewComment($postID,$blogID,$userID);
 	    break;
 	case 'ProcessNewComment':
-	    //TODO
+	    //TODO ???
 	    break;
 	case 'EditComment':
- 	    //TODO
+	    $commentID = $_GET['CommentID'];
+ 	    return $this->EditComment($blogID,$commentID,$userID);
 	    break;
 	case 'ProcessEditComment':
-	    //TODO
+	    //TODO ???
 	    break;
 	case 'DeleteComment':
-	    //TODO
+	    $commentID = $_GET['CommentID'];
+	    return $this->DeleteComment($blogID,$commentID,$userID);
 	    break;
 	case 'ProcessDeleteComment':
-	    //TODO
+	    //TODO ???
 	    break;
 	default:
 	    die('Unknown Request.');
