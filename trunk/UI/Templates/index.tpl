@@ -14,9 +14,7 @@
 
 <div id="container">
 	<div id="content">
-		<center>
-		{$content}	
-		</center>
+		{$content}
 	</div>
 
 	<div id="sidecontent">

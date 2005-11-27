@@ -170,7 +170,7 @@ class BusinessLogic_Post_PostDataAccess
 	    $extras = 'and Public=true ';
 	}
 
-	$query = 'select Timestamp from [0] where BlogID=[1] '.$extras.'and Timestamp >= [2] and Timestamp < [3]';
+	$query = 'select * from [0] where BlogID=[1] '.$extras.'and Timestamp >= [2] and Timestamp < [3]';
 
 	$arguments = array($this->TABLE, $blogID, $begdate, $enddate);
 
@@ -240,7 +240,7 @@ class BusinessLogic_Post_PostDataAccess
     {
 	if (count($results) < 1)
 	{
-	    return array();
+	    throw new Exception('No posts were found.');
 	}
 
 	//go through each row and make a postview from it:

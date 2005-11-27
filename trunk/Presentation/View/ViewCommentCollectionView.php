@@ -24,7 +24,7 @@ class Presentation_View_ViewCommentCollectionView extends Presentation_View_View
 		//If there's anything that should go between posts (newline or something), add it here
 		$ret = $ret.'<p id="comment">'.$value->Display()."</p>\n";
 	    }
-	    $ret = $ret.'<p>TODO: NEEDS A newcomment FORM</p>';
+	    $ret = $ret.'<p>TODO: needs newcomment form iff user can make comments</p>';
 	    $ret = $ret.'</div>';
 	    return $ret;
 	}

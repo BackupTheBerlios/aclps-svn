@@ -129,69 +129,75 @@ class BusinessLogic_Post_Post
     public function HandleRequest()
     {
 	//Checks $_GET['action'] to see if the action belongs to the Post class. If so, the appropriate function is called. Otherwise, Comment.HandleRequest() is called.
-	$request = $_GET['Action'];
-	$blogID = $_GET['blogID'];
-	switch($request)
+	try {
+	    $request = $_GET['Action'];
+	    $blogID = $_GET['blogID'];
+	    switch($request)
+	    {
+	    case 'ViewPost':
+		if (isset($_GET['postID']))
+		{
+		    return $this->ViewPostsByID($blogID,$_GET['postID']);
+		}
+		elseif (isset($_GET['date']))
+		{
+		    return $this->ViewPostsByDay($blogID,$_GET['year'],$_GET['month'],$_GET['date']);
+		}
+		elseif (isset($_GET['month']))
+		{
+		    return $this->ViewPostsByMonth($blogID,$_GET['year'],$_GET['month']);
+		}
+		elseif (isset($_GET['age']))
+		{
+		    $age = $_GET['age'];
+		    if ($age > 100)
+		    {
+			$age = 100;
+		    }
+		    return $this->ViewPostsByDaysOld($blogID,$age);
+		}
+		elseif (isset($_GET['count']))
+		{
+		    $count = $_GET['count'];
+		    if ($count > 100)
+		    {
+			$count = 100;
+		    }
+		    return $this->ViewPostsByRecentCount($blogID,$count);
+		}
+		else
+		{
+		    throw new Exception("Invalid view method specified.");
+		}
+		//TODO postID or year month [date] or age or count (no options->count=10)
+		break;
+	    case 'NewPost':
+		return $this->NewPost($blogID);
+		break;
+	    case 'ProcessNewPost':
+		//TODO ???
+		break;
+	    case 'EditPost':
+		$postID = $_GET['postID'];
+		return $this->EditPost($blogID,$postID);
+		break;
+	    case 'ProcessEditPost':
+		//TODO ???
+		break;
+	    case 'DeletePost':
+		$postID = $_GET['postID'];
+		return $this->DeletePost($blogID,$postID);
+		break;
+	    case 'ProcessDeletePost':
+		//TODO ???
+		break;
+	    default:
+		BusinessLogic_Comment_Comment::GetInstance()->HandleRequest();
+	    }
+	}
+	catch (Exception $err)
 	{
-	case 'ViewPost':
-	    if (isset($_GET['postID']))
-	    {
-		return $this->ViewPostsByID($blogID,$_GET['postID']);
-	    }
-	    elseif (isset($_GET['date']))
-	    {
-		return $this->ViewPostsByDay($blogID,$_GET['year'],$_GET['month'],$_GET['date']);
-	    }
-	    elseif (isset($_GET['month']))
-	    {
-		return $this->ViewPostsByMonth($blogID,$_GET['year'],$_GET['month']);
-	    }
-	    elseif (isset($_GET['age']))
-	    {
-		$age = $_GET['age'];
-		if ($age > 100)
-		{
-		    $age = 100;
-		}
-		return $this->ViewPostsByDaysOld($blogID,$age);
-	    }
-	    elseif (isset($_GET['count']))
-	    {
-		$count = $_GET['count'];
-		if ($count > 100)
-		{
-		    $count = 100;
-		}
-		return $this->ViewPostsByRecentCount($blogID,$count);
-	    }
-	    else
-	    {
-		throw new Exception("Invalid view method specified.");
-	    }
-	    //TODO postID or year month [date] or age or count (no options->count=10)
-	    break;
-	case 'NewPost':
-	    return $this->NewPost($blogID);
-	    break;
-	case 'ProcessNewPost':
-	    //TODO ???
-	    break;
-	case 'EditPost':
-	    $postID = $_GET['postID'];
-	    return $this->EditPost($blogID,$postID);
-	    break;
-	case 'ProcessEditPost':
-	    //TODO ???
-	    break;
-	case 'DeletePost':
-	    $postID = $_GET['postID'];
-	    return $this->DeletePost($blogID,$postID);
-	    break;
-	case 'ProcessDeletePost':
-	    //TODO ???
-	    break;
-	default:
-	    BusinessLogic_Comment_Comment::GetInstance()->HandleRequest();
+	    return new Presentation_View_ViewErrorView($err);
 	}
     }
 }
