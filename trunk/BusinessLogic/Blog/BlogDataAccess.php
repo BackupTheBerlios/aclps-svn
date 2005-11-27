@@ -39,6 +39,8 @@ class BusinessLogic_Blog_BlogDataAccess
         $aViewBlogView = new Presentation_View_ViewBlogView($blogID, $contentOptions, $row['HeaderImage'],
                                                             $row['FooterImage'], $row['Theme']);
                                                             
+        $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
+                                                            
         //TODO: ADD SIDE CONTENT
         
         return $aViewBlogView;

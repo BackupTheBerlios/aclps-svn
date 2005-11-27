@@ -21,7 +21,7 @@ class BusinessLogic_Post_PostSecurity
     public function NewPost($blogID,$userID)
     {
 	//Returns true if the user has privilege {Author, Editor, Owner}. Otherwise, false.
-	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
+	$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
 	if ($permission != "Nobody")
 	{
 	    return true;
@@ -39,7 +39,7 @@ class BusinessLogic_Post_PostSecurity
     public function EditPost($blogID, $postID, $userID)
     {
 	//Returns true if the user has privilege {Editor, Owner}. Returns true if the user has privilege Author and is the creator of the post. Otherwise, false.
-	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
+	$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
 	if ($permission == "Nobody")
 	{
 	    return false;
@@ -62,7 +62,7 @@ class BusinessLogic_Post_PostSecurity
     public function DeletePost($blogID, $postID, $userID)
     {
 	//Returns true if the user has privilege {Editor, Owner}. Returns true if the user has privilege Author and is the creator of the post. Otherwise, false.
-	$permission = BusinessLogic_User_User::GetInstance()->UserPermission($blogID, $userID);
+	$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
 	if ($permission == "Nobody")
 	{
 	    return false;
@@ -85,7 +85,7 @@ class BusinessLogic_Post_PostSecurity
     private function ViewPost($blogID,$userID)
     {
 	//Returns the user's permission level and whether hidden posts should be hidden (in an array of that order).
-	$permissionlabel = BusinessLogic_User_User::GetInstance()->UserPermission($blogID,$userID);
+	return BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
 	return array($permissionlabel,($permissionlabel == "Nobody"));
     }
     public function ViewPostsByID($blogID,$userID)

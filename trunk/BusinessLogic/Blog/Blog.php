@@ -79,22 +79,22 @@ class BusinessLogic_Blog_Blog
 
 	switch($aBlogSecurity->ViewBlog($blogID))
 	{
-	case 'owner':
+	case 'Owner':
 	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>"
 		. " : <a href=index.php?Action=EditMembers&BlogID=$blogID>Edit Memberships</a>"
 		. " : <a href=index.php?Action=EditLayout&BlogID=$blogID>Edit Layout</a>";
 	    break;
               
-	case 'editor':
+	case 'Editor':
 	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>";
 	    break;
               
-	case 'author':
+	case 'Author':
 	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>";
 	    break;
               
 	    //FALL THROUGH
-	case 'nobody':
+	case 'Nobody':
 	default:
 	    $contentOptions = '';
 	    break;

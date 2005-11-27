@@ -4,7 +4,7 @@ class Presentation_View_ViewSignInView extends Presentation_View_View
 {
     public function Display()
     {
-      echo 'form method="post" action="index.php?Action=ProcessSignIn">'
+      return '<form method="post" action="index.php?Action=ProcessSignIn">'
             . '<fieldset>'
             . '<legend>&nbsp;Sign In</legend>'
             . '<p>'

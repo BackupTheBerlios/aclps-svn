@@ -4,9 +4,9 @@ class Presentation_View_ViewRegisterView extends Presentation_View_View
 {
     public function Display()
     {
-      echo 'form method="post" action="index.php?Action=ProcessRegister">'
+      return '<form method="post" action="index.php?Action=ProcessRegister">'
             . '<fieldset>'
-            . '<legend>&nbsp;Player Registration</legend>'
+            . '<legend>&nbsp;Account Registration</legend>'
             . '<p>'
             . '<center>Please fill in the fields below.</center></p>'
             . '<label for="userName">Username:</label>'

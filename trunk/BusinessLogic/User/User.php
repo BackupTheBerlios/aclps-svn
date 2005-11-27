@@ -75,7 +75,8 @@ class BusinessLogic_User_User
     
     public function ViewRegister()
     {
-        if (BusinessLogic_User_UserSecurity::GetInstance()->ViewRegister())
+        //if (BusinessLogic_User_UserSecurity::GetInstance()->ViewRegister())
+        if (true)
         {
             return new Presentation_View_ViewRegisterView();
         }
@@ -93,7 +94,8 @@ class BusinessLogic_User_User
 
     public function ViewSignIn()
     {
-        if (BusinessLogic_User_UserSecurity::GetInstance()->ViewSignIn())
+        //if (BusinessLogic_User_UserSecurity::GetInstance()->ViewSignIn())
+        if (true)
         {
             return new Presentation_View_ViewSignInView();
         }
@@ -175,6 +177,11 @@ class BusinessLogic_User_User
     public function GetTopBar()
     {
         return new Presentation_View_ViewTopBarView($this->CheckSignedIn());
+    }
+    
+    public static function ConvertUIDToName($authorID)
+    {
+      return 'WALRUS';
     }
 }
 

@@ -45,13 +45,13 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     
     public function DisplayTopBar()
     {
-    	if (is_object($this->TopBar))
+    	if (is_object($this->topBar))
     	{
     	    return $this->topBar->Display();
     	}
-    	elseif (isset($this->TopBar))
+    	elseif (isset($this->topBar))
     	{
-    	    return $this->TopBar;
+    	    return $this->topBar;
     	}
     	else
     	{
