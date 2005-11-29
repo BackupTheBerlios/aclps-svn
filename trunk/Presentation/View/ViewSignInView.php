@@ -2,15 +2,32 @@
 
 class Presentation_View_ViewSignInView extends Presentation_View_View
 {
+    private $errorMessage;
+
+    public functio __construc($errorMessage)
+    {
+        $this->errorMessage = $errorMessage;
+    }
+    
     public function Display()
     {
-      return '<form method="post" action="index.php?Action=ProcessSignIn">'
+        $form = '<form method="post" action="index.php?Action=ProcessSignIn">'
             . '<fieldset>'
             . '<legend>&nbsp;Sign In</legend>'
-            . '<p>'
-            . '<center>Please Login:</center></p>'
-            . '<label for="email">Email:</label>'
-            . '<input type="text" name="email">'
+            . '<p>';
+
+      if ($this->errorMessage != '')
+      {
+        $form = $form
+                . $this->errorMessage
+                . '<br />';
+      }
+
+        $form = $form
+            . '<center>Please Login:</center>'
+            . '</p>'
+            . '<label for="username">Username:</label>'
+            . '<input type="text" name="username">'
             . '<br />'
             . '<label for="password">Password:</label>'
             . '<input type="password" name="password">'

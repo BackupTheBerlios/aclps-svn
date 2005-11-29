@@ -35,13 +35,39 @@ class BusinessLogic_User_User
                 return $this->ViewRegister();
                 break;
             case 'ProcessRegister':
-                return $this->ProcessRegister();
+                if (isset($_POST['username']) and isset($_POST['email'])
+                    and isset($_POST['password']) and isset($_POST['confirmPassword']))
+                {
+                    if ($_POST['password'] == $_POST['confirmPassword'])
+                    {
+                        return $this->ProcessRegister($_POST['username'], $_POST['email'],
+                                                        $_POST['password']);
+                    }
+                    else
+                    {
+                        return new Presentation_View_ViewRegisterView('Password and Confirmation Password do not match.');
+                    }
+                }
+                else
+                {
+                    return new Presentation_View_ViewRegisterView('You must fill in the entire form.');
+                }
+
                 break;
+                
             case 'ViewSignIn':
                 return $this->ViewSignIn();
                 break;
             case 'ProcessSignIn':
-                return $this->ProcessSignIn();
+                if (isset($_POST['username']) and isset($_POST['password']))
+                {
+                    $this->ProcessSignIn($_POST['username'], $_POST['password']);
+                }
+                else
+                {
+                    return new Presentation_View_ViewSignInView('You must fill in the entire form.');
+                }
+                
                 break;
             case 'ProcessSignOut':
                 return $this->ProcessSignOut();
@@ -78,7 +104,7 @@ class BusinessLogic_User_User
         //if (BusinessLogic_User_UserSecurity::GetInstance()->ViewRegister())
         if (true)
         {
-            return new Presentation_View_ViewRegisterView();
+            return new Presentation_View_ViewRegisterView('');
         }
         else
         {
@@ -86,10 +112,27 @@ class BusinessLogic_User_User
         }
     }
 
-    public function ProcessRegister()
+    public function ProcessRegister($username, $email, $password)
     {
-	//Processes the form data in EditUserDataView and modifies the Users table.
-	//TODO
+        $query = 'select * from [0] where Username=[1]';
+        $arguments = array('Users', $username);
+        
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+
+        //there is no matching record in the DB
+        if (count($result) == 0)
+        {
+            $query = 'insert into [0] (Username, Email, Password) VALUES ([1],[2],sha1([3]))';
+            $arguments = array('Users', $username, $email, $password);
+            $result = $DataAccess->Insert($query, $arguments);
+            
+            $this->ProcessSignIn($username, $password);
+        }
+        else
+        {
+          return new Presentation_View_ViewRegisterView("The username $username is already in use.");
+        }
     }
 
     public function ViewSignIn()
@@ -97,7 +140,8 @@ class BusinessLogic_User_User
         //if (BusinessLogic_User_UserSecurity::GetInstance()->ViewSignIn())
         if (true)
         {
-            return new Presentation_View_ViewSignInView();
+            //'' is passed to indicate that there is no error message
+            return new Presentation_View_ViewSignInView('');
         }
         else
         {
@@ -105,10 +149,39 @@ class BusinessLogic_User_User
         }
     }
 
-    public function ProcessSignIn()
+    public function ProcessSignIn($username, $password)
     {
-	//Processes the form data in ViewSignInView and authenticates the user. Signs In the user if the credentials are valid.
-	//TODO
+        $query = 'select * from [0] where Username=[1] and Password=sha1([2])';
+        $arguments = array('Users', $username, $password);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+
+        //there is a matching record in the DB
+        if (count($result) > 0)
+        {
+            $this->userInfo = $result;
+
+            //Need to fill in permissions table
+            $query = 'select BlogID, Auth from [0] where UserID=[1]';
+            $arguments = array('User_Auth', $result['UserID']);
+            $result = $DataAccess->Select($query, $arguments);
+            $this->permissions = $result;
+
+            //Need to store all this information
+            $_SESSION['BusinessLogic_User_User'] = $this;
+
+            //We need to redirect since we cannot directly change the $_GET['Action']
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewDashboard&blogID=1';
+            header("Location: $path");
+            exit;
+        }
+        else
+        {
+          return new Presentation_View_ViewSignInView('There is no one who matches the supplied credentials.');
+        }
+        
+
     }
 
     public function ProcessSignOut()
@@ -118,7 +191,8 @@ class BusinessLogic_User_User
         session_destroy();
         
         //Return to index
-        header("Location: http://cs411.beoba.net/ACLPS/");
+        $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php';
+        header("Location: $path");
         exit;
     }
 
@@ -142,7 +216,7 @@ class BusinessLogic_User_User
     {
         if ($this->CheckSignedIn())
         {
-            return $this->userInfo['UserName'];
+            return $this->userInfo['Username'];
         }
         else
         {
@@ -179,7 +253,7 @@ class BusinessLogic_User_User
         return new Presentation_View_ViewTopBarView($this->CheckSignedIn());
     }
     
-    public static function ConvertUIDToName($authorID)
+    public static function ConvertUIDToName($userID)
     {
       return 'WALRUS';
     }
