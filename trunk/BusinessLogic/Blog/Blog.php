@@ -37,7 +37,7 @@ class BusinessLogic_Blog_Blog
 	    //TODO
 	    break;
 	case 'EditAbout':
-	    //TODO
+	  	$aViewBlogView->SetContent($this->EditAbout($_GET['blogID']));
 	    break;
 	case 'ProcessEditAbout':
 	    //TODO
@@ -109,9 +109,17 @@ class BusinessLogic_Blog_Blog
 	//TODO
     }
 
-    public function EditAbout()
+    public function EditAbout($blogID)
     {
-	//TODO
+			if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditAbout($blogID))
+			{
+				$aboutContent = BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditAbout($blogID);
+				return new Presentation_View_EditAboutView($aboutContent,$blogID);
+			}
+			else
+			{
+				throw new Exception('Authentication failed.');
+			}
     }
 
     public function ProcessEditAbout()

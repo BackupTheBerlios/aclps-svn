@@ -33,8 +33,17 @@ class BusinessLogic_Blog_BlogSecurity
 
     public function EditAbout()
     {
-	//TODO
-    }
+		$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
+		if($permission == 'Owner')
+		{
+			return true;
+
+		}
+		else
+		{
+			return false;
+    	}
+	}
 
     public function ProcessEditAbout()
     {

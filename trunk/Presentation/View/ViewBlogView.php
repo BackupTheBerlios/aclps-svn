@@ -25,7 +25,7 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     
     public function Display()
     {
-	die("ViewBlogView does not display.");
+		die("ViewBlogView does not display.");
     }
     
     public function SetTopBar($topBar)
@@ -40,7 +40,9 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     
     public function SetSideContent($aSideContent)
     {
-	$this->content = $aSideContent;
+		$this->content += $aSideContent;
+
+
     }
     
     public function DisplayTopBar()
@@ -110,18 +112,17 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     
     public function DisplaySideContent()
     {
-        if (is_object($this->sideContent))
-	{
-            return $this->sideContent->Display();
-	}
-	elseif (isset($this->sideContent))
-	{
-            return $this->sideContent;
-        }
-        else
-	{
-            return '&nbsp;';
-        }
+		if ($this->sideContent != '')
+		{
+			foreach($this->sideContent as $view)
+			{
+				$view->Display()
+			}
+		}
+		else
+		{
+			return '&nbsp;';
+		}
     }
     
     public function DisplayTheme()

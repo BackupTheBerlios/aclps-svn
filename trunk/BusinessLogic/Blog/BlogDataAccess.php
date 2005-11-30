@@ -40,6 +40,7 @@ class BusinessLogic_Blog_BlogDataAccess
                                                             $row['FooterImage'], $row['Theme']);
                                                             
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
+		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($row['About']));
                                                             
         //TODO: ADD SIDE CONTENT
         
@@ -52,9 +53,15 @@ class BusinessLogic_Blog_BlogDataAccess
 	//TODO
     }
 
-    public function EditAbout()
+    public function EditAbout($blogID)
     {
-	//TODO
+        $query = 'select About from [0] where blogID=[1]';
+        $arguments = array('Blogs', $blogID);
+        
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+
+		return $result['About'];
     }
 
     public function ProcessEditAbout()
