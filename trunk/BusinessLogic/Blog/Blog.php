@@ -120,7 +120,7 @@ class BusinessLogic_Blog_Blog
     {
 			if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditAbout($blogID))
 			{
-				BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditAbout($blogID);
+				return BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditAbout($blogID);
 			}
 			else
 			{
@@ -132,16 +132,17 @@ class BusinessLogic_Blog_Blog
     {      
     	if(BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessEditAbout($blogID))
 		{
-			BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditAbout($blogid, $aboutContent);	
+			BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditAbout($blogID, $aboutContent);
+			$path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
+        	header("Location: $path");
+        	exit;	
 		}
 		else
 		{
 			throw new Exception('Authentication failed.');
 		}
 
-		$path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
-        header("Location: $path");
-        exit;
+		
 	}
 
     public function EditBlogImages($blogID)
@@ -162,16 +163,17 @@ class BusinessLogic_Blog_Blog
     {
 		if(BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessEditBlogImages($blogID))
 		{
-			BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditBlogImages($blogid, $headerImage, $footerImage);	
+			BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditBlogImages($blogID, $headerImage, $footerImage);
+			$path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
+        	header("Location: $path");
+        	exit;
 		}
 		else
 		{
 			throw new Exception('Authentication failed.');
 		}
 
-		$path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
-        header("Location: $path");
-        exit;
+		
 
     }
 

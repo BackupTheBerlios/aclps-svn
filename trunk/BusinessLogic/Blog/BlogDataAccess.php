@@ -61,9 +61,9 @@ class BusinessLogic_Blog_BlogDataAccess
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $result = $DataAccess->Select($query, $arguments);
 
-		$aViewEditAboutView = new Presentation_View_EditAboutView($result['About'],$blogID);
+		return new Presentation_View_EditAboutView($result['About'],$blogID);
 
-		return $aViewEditAboutView;
+		
     }
 
     public function ProcessEditAbout($blogID,$aboutContent)
@@ -72,7 +72,9 @@ class BusinessLogic_Blog_BlogDataAccess
 		$arguments = array('Blogs', $aboutContent, $blogID);
 
 		$DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
-		$result = DataAccess_DataAccess->Update($query, $arguments);
+		return $DataAccess->Update($query, $arguments);
+
+	
     }
 
     public function EditBlogImages($blogID)
@@ -83,9 +85,9 @@ class BusinessLogic_Blog_BlogDataAccess
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $result = $DataAccess->Select($query, $arguments);
 
-$aViewEditBlogImagesView = new Presentation_View_EditBlogImagesView($result['HeaderImage'],$result['FooterImage'],$blogID);
+		return Presentation_View_EditBlogImagesView($result['HeaderImage'],$result['FooterImage'],$blogID);
 		
-		return $aViewEditBlogImages;
+		
 		
     }
 
@@ -96,7 +98,8 @@ $aViewEditBlogImagesView = new Presentation_View_EditBlogImagesView($result['Hea
 		$arguments = array('Blogs', $headerImage,$footerImage, $blogID);
 
 		$DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
-		$result = DataAccess_DataAccess->Update($query, $arguments);
+		return $DataAccess->Update($query, $arguments);
+
 
     }
 
