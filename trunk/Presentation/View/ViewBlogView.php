@@ -112,17 +112,17 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     
     public function DisplaySideContent()
     {
-		if ($this->sideContent != '')
-		{
-			foreach($this->sideContent as $view)
-			{
-				$view->Display()
-			}
-		}
-		else
-		{
-			return '&nbsp;';
-		}
+        if ($this->sideContent != '')
+        {
+            foreach($this->sideContent as $view)
+            {
+                $view->Display();
+            }
+        }
+        else
+        {
+            return '&nbsp;';
+        }
     }
     
     public function DisplayTheme()

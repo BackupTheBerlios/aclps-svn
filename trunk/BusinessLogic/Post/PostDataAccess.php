@@ -67,7 +67,7 @@ class BusinessLogic_Post_PostDataAccess
 
     public function ProcessDeletePost($postView)
     {
-	//Updates the Posts table with the new data.
+        //Updates the Posts table with the new data.
         $postID = $postView->GetPostID();
 
         $query = 'delete from [0] where PostID=[1]';
@@ -129,7 +129,7 @@ class BusinessLogic_Post_PostDataAccess
         }
 
         $query = 'select * from [0] where BlogID=[1] '.$extras.'and Timestamp >= date_sub(curdate(),interval [2] day) order by Timestamp desc';
-	
+
         $arguments = array($this->TABLE, $blogID, $daysOld);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -210,7 +210,7 @@ class BusinessLogic_Post_PostDataAccess
         if (strlen($year) != 4)
         {
             throw new Exception('Year must be 4 digits.');
-	}
+        }
         elseif ($month > 12 or $month < 1)
         {
             throw new Exception('Month must be greater than 0/less than 13');
