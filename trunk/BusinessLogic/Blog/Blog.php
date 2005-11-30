@@ -41,7 +41,14 @@ class BusinessLogic_Blog_Blog
 	    break;
 	case 'ProcessEditAbout':
 	    //TODO
+		//if it's not set throw exception
 	    break;
+	case 'EditBlogImages':
+		//TODO
+		break;
+	case 'ProcessEditBlogImages':
+		//TODO
+		break;
 	case 'EditBlogLayout':
 	    //TODO
 	    break;
@@ -113,8 +120,7 @@ class BusinessLogic_Blog_Blog
     {
 			if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditAbout($blogID))
 			{
-				$aboutContent = BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditAbout($blogID);
-				return new Presentation_View_EditAboutView($aboutContent,$blogID);
+				BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditAbout($blogID);
 			}
 			else
 			{
@@ -122,19 +128,51 @@ class BusinessLogic_Blog_Blog
 			}
     }
 
-    public function ProcessEditAbout()
+    public function ProcessEditAbout($blogID,$aboutContent)
+    {      
+    	if(BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessEditAbout($blogID))
+		{
+			BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditAbout($blogid, $aboutContent);	
+		}
+		else
+		{
+			throw new Exception('Authentication failed.');
+		}
+
+		$path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
+        header("Location: $path");
+        exit;
+	}
+
+    public function EditBlogImages($blogID)
     {
-	//TODO
+		if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditBlogImages($blogID))
+		{
+			BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditBlogImages($blogID);
+			
+		}
+		else
+		{
+			throw new Exception('Authentication failed.');
+		}	
+	
     }
 
-    public function EditBlogImages()
+    public function ProcessEditBlogImages($blogID, $headerImage, $footerImage)
     {
-	//TODO
-    }
+		if(BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessEditBlogImages($blogID))
+		{
+			BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditBlogImages($blogid, $headerImage, $footerImage);	
+		}
+		else
+		{
+			throw new Exception('Authentication failed.');
+		}
 
-    public function ProcessEditBlogImages()
-    {
-	//TODO
+		$path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
+        header("Location: $path");
+        exit;
+
     }
 
     public function EditLinks()
