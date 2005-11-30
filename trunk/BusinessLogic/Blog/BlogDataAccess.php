@@ -35,7 +35,7 @@ class BusinessLogic_Blog_BlogDataAccess
         }
         
     	$row = $result[0];
-        
+
         $aViewBlogView = new Presentation_View_ViewBlogView($blogID, $contentOptions, $row['HeaderImage'],
                                                             $row['FooterImage'], $row['Theme']);
                                                             

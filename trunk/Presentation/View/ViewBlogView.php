@@ -40,7 +40,7 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     
     public function SetSideContent($aSideContent)
     {
-        $this->content += $aSideContent;
+        $this->sideContent[] = $aSideContent;
     }
     
     public function DisplayTopBar()
@@ -110,11 +110,12 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     
     public function DisplaySideContent()
     {
+
         if ($this->sideContent != '')
         {
             foreach($this->sideContent as $view)
             {
-                $view->Display();
+                return $view->Display();
             }
         }
         else

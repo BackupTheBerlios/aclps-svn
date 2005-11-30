@@ -2,10 +2,10 @@
 
 class Presentation_View_ViewAboutView extends Presentation_View_View
 {
-  private $aboutContent
+  private $aboutContent;
   public function __construct($aboutContent)
   {
-    $this->aboutContent = $aboutContent
+    $this->aboutContent = $aboutContent;
   }
   
   public function Display()
