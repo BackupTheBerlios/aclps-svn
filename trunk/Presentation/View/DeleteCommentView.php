@@ -7,16 +7,17 @@ class Presentation_View_DeleteCommentView extends Presentation_View_View
     
     public function __construct($comment)
     {
-	if (is_array($comment))
-	{
-	    throw new Exception("DeleteCommentViews only support a single ViewCommentView");
-	}
-	$this->comment = $comment;
+        if (is_array($comment))
+        {
+            throw new Exception("DeleteCommentViews only support a single ViewCommentView");
+        }
+        $this->comment = $comment;
     }
 
     public function Display()
     {
-	return 'This is a delete comment view! :D<br />'.$this->comment->Display();
+        //TODO: make display
+        return 'This is a delete comment view! :D<br />'.$this->comment->Display();
     }
 }
 
