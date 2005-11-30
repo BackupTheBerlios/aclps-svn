@@ -65,8 +65,6 @@ class BusinessLogic_Post_PostDataAccess
 	return new Presentation_View_DeletePostView($postarray[0]);
     }
 
-    //TODO: DOES MYSQL AUTOSHIFT POSTIDS?
-    //(IF TWO PEOPLE DELETE THE SAME ID AT ONCE, DO THEY END UP DELETING TWO POSTS?)
     public function ProcessDeletePost($postView)
     {
 	$postID = $postView->GetPostID();
@@ -246,7 +244,6 @@ class BusinessLogic_Post_PostDataAccess
 	//go through each row and make a postview from it:
 	foreach ($results as $key=>$value)
 	{
-	    //TODO: make sure that "public" is being sent as a boolean (might be an int: 0 or 1):
 	    $returnme[$key] = new Presentation_View_ViewPostView($value['BlogID'], $value['PostID'],
 								      $value['UserID'], $value['Title'],
 								      $value['Public'], $value['Timestamp'],

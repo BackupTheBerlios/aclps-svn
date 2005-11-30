@@ -27,7 +27,6 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 	$this->authorName = "arr";//BusinessLogic_User_User::ConvertUIDToName($authorID); //TODO: make this function
 	$this->title = $title;
 	$this->public = $public;
-	//TODO: perhaps some sort of checking on the timestamp?
 	$this->timestamp = $timestamp;
 	$this->content = $content;
 
@@ -147,7 +146,6 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 
     public function SetTimestamp($aTimestamp)
     {
-	//TODO: perhaps some sort of checking on the new timestamp?
 	$this->timestamp = $aTimestamp;
     }
     public function GetTimestamp()

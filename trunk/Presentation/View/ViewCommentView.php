@@ -23,7 +23,6 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
 	$this->authorID = $authorID;
 	$this->authorName = "arr";//BusinessLogic_User_User::ConvertUIDToName($this->authorID);//TODO: make this function
 	$this->title = $title;
-	//TODO: perhaps some sort of checking on the timestamp?
 	$this->timestamp = $timestamp;
 	$this->content = $content;
 
@@ -75,11 +74,6 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
 	return "&nbsp;";
     }
 
-    public function SetAuthorID($aAuthor)
-    {
-	$this->authorID = $aAuthor;
-	$this->authorName = BusinessLogic_User_User::ConvertUIDToName($aAuthor);//TODO:make this function
-    }
     public function GetAuthorID()
     {
 	if (isset($this->authorID))
@@ -113,7 +107,6 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
 
     public function SetTimestamp($aTimestamp)
     {
-	//TODO: perhaps some sort of checking on the new timestamp?
 	$this->timestamp = $aTimestamp;
     }
     public function GetTimestamp()
