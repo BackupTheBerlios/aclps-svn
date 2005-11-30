@@ -17,6 +17,7 @@ class Presentation_View_EditPostView extends Presentation_View_View
     public function Display()
     {
         //TODO: make display
+        //note: can only set timestamp as "<original>" or "Now"
         return 'This is an edit post view! :D<br />'.$this->post->DisplayAsForm();
     }
 }

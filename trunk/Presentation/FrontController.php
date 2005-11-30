@@ -6,8 +6,8 @@ class Presentation_FrontController
     {
         if (!isset($_GET['Action']))
         {
-            //TODO: CHANGE TO USE RELATIVE PATHS
-            header('Location: http://cs411.beoba.net/ACLPS/index.php?Action=ViewBlog&blogID=1');
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=1';
+            header("Location: $path");
             exit;
         }
 
