@@ -33,11 +33,12 @@ class BusinessLogic_Post_PostDataAccess
     public function ProcessNewPost($postView)
     {
         //Inserts data into the Posts table.
-        $query = 'insert into [0] (BlogID,UserID,Title,Timestamp,Content) VALUES ([1],[2],[3],[4],[5])';
+        $query = 'insert into [0] (BlogID,UserID,Title,Timestamp,Content) VALUES ([1],[2],[3],NOW(),[4])';
         $arguments = array($this->TABLE, $postView->GetBlogID(), $postView->GetAuthorID(),
-                           $postView->GetTitle(), $postView->GetTimestamp(), $postView->GetContent());
+                           $postView->GetTitle(), $postView->GetContent());
 
         $response = $DataAccess->Insert($query, $arguments);
+        return $response[0]['PostID'];//TODO: make this response be the post ID
     }
 
     public function EditPost($postID)
@@ -47,13 +48,21 @@ class BusinessLogic_Post_PostDataAccess
         return new Presentation_View_EditPostView($postarray[0]);
     }
 
-    public function ProcessEditPost($postView)
+    public function ProcessEditPost($postView,$useNowForTimestamp)
     {
         //Updates the Posts table with the new data.
-        $query = 'update [0] set UserID=[1], Title=[2], Timestamp=[3], Content=[4] where PostID=[5]';
-        $arguments = array($this->TABLE, $postview->GetAuthorID(),$postView->GetTitle(), $postView->GetTimestamp(),
-                           $postView->GetContent(), $postView->GetPostID());
-
+        if ($useNowForTimestamp)
+        {
+            $query = 'update [0] set Title=[1], Timestamp=NOW(), Public=[2], Content=[3] where PostID=[4]';
+            $arguments = array($this->TABLE, $postView->GetTitle(), $postView->GetPublic(),
+                               $postView->GetContent(), $postView->GetPostID());
+        }
+        else
+        {
+            $query = 'update [0] set Title=[1], Public=[2], Content=[3] where PostID=[4]';
+            $arguments = array($this->TABLE, $postView->GetTitle(), $postView->GetPublic(),
+                               $postView->GetContent(), $postView->GetPostID());
+        }
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Update($query, $arguments);
     }
@@ -65,11 +74,9 @@ class BusinessLogic_Post_PostDataAccess
         return new Presentation_View_DeletePostView($postarray[0]);
     }
 
-    public function ProcessDeletePost($postView)
+    public function ProcessDeletePost($postID)
     {
         //Updates the Posts table with the new data.
-        $postID = $postView->GetPostID();
-
         $query = 'delete from [0] where PostID=[1]';
         $arguments = array($this->TABLE, $postID);
 

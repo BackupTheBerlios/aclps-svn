@@ -33,10 +33,10 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ProcessNewComment($commentView)
     {
         //Inserts data into the Comments table.
-        $query = 'insert into [0] (PostID,BlogID,UserID,Title,Timestamp,Content) VALUES ([1],[2],[3],[4],[5],[6])';
+        $query = 'insert into [0] (PostID,BlogID,UserID,Title,Timestamp,Content) VALUES ([1],[2],[3],[4],NOW(),[5])';
         $arguments = array($this->TABLE, $commentView->GetPostID(), $commentView->GetBlogID(),
 			   $commentView->GetAuthorID(), $commentView->GetTitle(),
-			   $commentView->GetTimestamp(), $commentView->GetContent());
+                           $commentView->GetContent());
         $response = $DataAccess->Insert($query, $arguments);
     }
 
@@ -50,9 +50,8 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ProcessEditComment($commentView)
     {
         //Updates the Comments table with the new data.
-        $query = 'update [0] set UserID=[1], Title=[2], Timestamp=[3], Content=[4] where CommentID=[5]';
-        $arguments = array($this->TABLE, $postview->GetAuthorID(), $postView->GetTitle(),
-                           $postView->GetTimestamp(), $postView->GetContent(), $postView->GetCommentID());
+        $query = 'update [0] set Title=[1], Content=[2] where CommentID=[3]';
+        $arguments = array($this->TABLE, $postView->GetTitle(), $postView->GetContent(), $postView->GetCommentID());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Update($query, $arguments);
@@ -65,11 +64,9 @@ class BusinessLogic_Comment_CommentDataAccess
         return new Presentation_View_DeleteCommentView($commentarray[0]);
     }
 
-    public function ProcessDeleteComment($commentView)
+    public function ProcessDeleteComment($commentID)
     {
         //Updates the Comments table with the new data.
-        $commentID = $commentView->GetCommentID();
-
         $query = 'delete from [0] where CommentID=[1]';
         $arguments = array($this->TABLE, $commentID);
 
@@ -77,11 +74,9 @@ class BusinessLogic_Comment_CommentDataAccess
         $response = $DataAccess->Delete($query, $arguments);
     }
 
-    public function ProcessDeleteAllComments($postView)
+    public function ProcessDeleteAllComments($postID)
     {
         //Deletes all comments associated with this post.
-        $postID = $postView->GetPostID();
-
         $query = 'delete from [0] where PostID=[1]';
         $arguments = array($this->TABLE, $postID);
 

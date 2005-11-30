@@ -66,14 +66,13 @@ class BusinessLogic_Comment_Comment
         return BusinessLogic_Comment_CommentDataAccess::GetInstance()->DeleteComment($commentID);
     }
 
-    public function ProcessDeleteComment($commentView)
+    public function ProcessDeleteComment($blogID, $commentID)
     {
         //Calls CommentSecurity to determine if the user can delete a post. If so, it will process the form data in DeleteCommentView and call CommentDataAccess.ProcessDeleteComment() to commit the new data to storage. Otherwise, an exception is thrown.
-        $blogID = $commentView->GetBlogID();
         if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->ProcessDeleteComment($blogID)) {
             throw new Exception("Insufficient permissions.");
         }
-        BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessDeleteComment($commentCollectionView);
+        BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessDeleteComment($commentID);
     }
 
     public function ViewComments($blogID, $postID)
@@ -93,29 +92,38 @@ class BusinessLogic_Comment_Comment
         //Checks $_GET['action'] to see if the action belongs to the Comment class. If so, the appropriate function is called. Otherwise, User.HandleRequest() is called.
         $request = $_GET['Action'];
         $blogID = $_GET['blogID'];
-        $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
         switch($request)
         {
         case 'NewComment':
             $postID = $_GET['postID'];
-            return $this->NewComment($postID,$blogID,$userID);
+            return $this->NewComment($postID,$blogID);
             break;
         case 'ProcessNewComment':
-            //TODO ???
+            $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
+            //__construct($blogID, $postID, $commentID, $authorID, $title, $timestamp, $content)
+            $view = new Presentation_View_ViewCommentView($blogID,$_POST['postID'],0,$authorID,$_POST['title'],0,$_POST['content']);
+            //forward user to viewing comments in the post:
+            return $this->ViewComments($blogID,$_POST['postID']);
             break;
         case 'EditComment':
             $commentID = $_GET['commentID'];
-            return $this->EditComment($blogID,$commentID,$userID);
+            return $this->EditComment($blogID,$commentID);
             break;
         case 'ProcessEditComment':
-            //TODO ???
+            $view = new Presentation_View_ViewCommentView($blogID,0,$_POST['commentID'],0,$_POST['title'], 0, $_POST['content']);
+            $this->ProcessEditComment($view);
+            //forward user to viewing comments in the post:
+            return $this->ViewComments($blogID,$_POST['postID']);
             break;
         case 'DeleteComment':
             $commentID = $_GET['commentID'];
-            return $this->DeleteComment($blogID,$commentID,$userID);
+            return $this->DeleteComment($blogID,$commentID);
             break;
         case 'ProcessDeleteComment':
-            //TODO ???
+            $commentID = $_POST['commentID'];
+            $this->ProcessDeleteComment($blogID,$commentID);
+            //forward user to viewing comments in the post:
+            return $this->ViewComments($blogID,$_POST['postID']);
             break;
         default:
             die('Unknown Request.');
