@@ -77,6 +77,17 @@ class BusinessLogic_User_User
         case 'ViewSearch':
             return $this->ViewSearch();
             break;
+        case 'ProcessSearch':
+            if($_POST['blog_name'] != '')
+            {
+                return $this->ProcessSearch($_POST['blog_name']);
+            }
+            else
+            {
+                return new Presentation_View_ViewSearchView('You must fill in something.');
+            }
+            
+            break;
         default:
             return BusinessLogic_Post_Post::GetInstance()->HandleRequest();
     	}
@@ -221,6 +232,30 @@ class BusinessLogic_User_User
         else
         {
             return new Exception('You are not allowed to Sign In at this time.');
+        }
+    }
+    
+    public function ProcessSearch($blog_name)
+    {
+      //TODO....................................................
+        $query = "select * from [0] where Username='[1]'";
+        $arguments = array('Users', $username);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+
+        //there is no matching record in the DB
+        if (count($result) == 0)
+        {
+            $query = "insert into [0] (Username, Email, Password) VALUES ('[1]','[2]',sha1('[3]'))";
+            $arguments = array('Users', $username, $email, $password);
+            $result = $DataAccess->Insert($query, $arguments);
+
+            $this->ProcessSignIn($username, $password);
+        }
+        else
+        {
+          return new Presentation_View_ViewRegisterView("The username $username is already in use.");
         }
     }
 
