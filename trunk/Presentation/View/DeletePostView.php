@@ -16,8 +16,15 @@ class Presentation_View_DeletePostView extends Presentation_View_View
 
     public function Display()
     {
-        //TODO: make display
-        return 'Are you sure you want to delete this post?:<br />'.$this->post->Display();
+        $form = '<form method="post" action="index.php?blogID='.$this->post->GetBlogID().'&Action=ProcessDeletePost">'
+            . '<fieldset>'
+            . '<legend>&nbsp;Post Deletion</legend>'
+            . '<input type="hidden" name="postID" value="'.$this->post->GetPostID().'">'
+            . '<p><center>Do you really want to delete this post?</center></p>'
+            . '<p><input type="submit" class="submit-register" value="Yes"></p>'
+            . '</fieldset>'
+            . '</form>';
+        return $this->post->Display().$form;
     }
 }
 

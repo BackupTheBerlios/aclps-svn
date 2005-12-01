@@ -31,16 +31,16 @@ class BusinessLogic_Blog_Blog
 	{
 	case 'ViewBlog':
 	    //TODO: real values for postcount/userid:
-	    $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],10,1));
+	    $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],10));
 	    break;		
 	case 'ViewArchive':
 	    //TODO
 	    break;
-     case 'ViewDashboard':
-        //GetUserID will throw an exception if the user is not logged in
-        $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
-        $aViewBlogView->SetContent($this->ViewDashboard($userID));
-        break;
+        case 'ViewDashboard':
+            //GetUserID will throw an exception if the user is not logged in
+            $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
+            $aViewBlogView->SetContent($this->ViewDashboard($userID));
+            break;
 	case 'EditAbout':
             $aViewBlogView->SetContent($this->EditAbout($_GET['blogID']));
 	    break;
@@ -73,10 +73,21 @@ class BusinessLogic_Blog_Blog
 	    //TODO
 	    break;
 	case 'NewBlog':
-	    //TODO
+            //blogid is passed solely for returning to system when user submits processnewblog form
+            return $this->NewBlog($_GET['blogID']);
 	    break;
 	case 'ProcessNewBlog':
-	    //TODO
+            $title = $_POST['title'];
+            $about = $_POST['about'];
+            //TODO: before submitting new blog to data: clean the header/footer image (then make them img tags)
+            $headerimg = $_POST['headerimg'];
+            $footerimg = $_POST['footerimg'];
+            //TODO: also ensure that chosen theme is actually an available theme
+            $theme = $_POST['theme'];
+
+            //forward user to viewing newly created blog:
+            $newBlogID = $this->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
+            return $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($newBlogID,10));;
 	    break;
 	default:
 	    $aViewBlogView->SetContent(BusinessLogic_User_User::GetInstance()->HandleRequest());
@@ -92,17 +103,17 @@ class BusinessLogic_Blog_Blog
 	switch($aBlogSecurity->ViewBlog($blogID))
 	{
 	case 'Owner':
-	    $contentOptions = '<a href=index.php?Action=NewPost&blogID=' . $blogID . '>New Post</a>'
-                            . ' : <a href=index.php?Action=EditMembers&blogID=' . $blogID . '>Edit Memberships</a>'
-                            . ' : <a href=index.php?Action=EditLayout&blogID=' . $blogID . '>Edit Layout</a>';
+	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>"
+		. " : <a href=index.php?Action=EditMembers&BlogID=$blogID>Edit Memberships</a>"
+		. " : <a href=index.php?Action=EditLayout&BlogID=$blogID>Edit Layout</a>";
 	    break;
               
 	case 'Editor':
-	    $contentOptions = "<a href=index.php?Action=NewPost&blogID=' . $blogID . '>New Post</a>";
+	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>";
 	    break;
               
 	case 'Author':
-	    $contentOptions = "<a href=index.php?Action=NewPost&blogID=' . $blogID . '>New Post</a>";
+	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>";
 	    break;
               
 	    //FALL THROUGH
@@ -120,7 +131,7 @@ class BusinessLogic_Blog_Blog
     {
 	//TODO
     }
-    
+
     public function ViewDashboard($userID)
     {
         return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewDashboard($userID);
@@ -200,26 +211,25 @@ class BusinessLogic_Blog_Blog
 	//TODO
     }
 
-    public function NewBlog()
+    public function NewBlog($blogID)
     {
         //Calls the BlogSecurity class to determine if the user can create a new blog. If so, a NewBlogView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Blog_BlogSecurity::GetInstance()->NewBlog())
         {
             throw new Exception('Authentication failed.');
         }
-        return new Presentation_View_NewBlogView();
+        //blogid is passed solely for returning to system when user submits processnewblog form
+        return new Presentation_View_NewBlogView($blogID);
     }
 
-    public function ProcessNewBlog($blogView)
+    public function ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg)
     {
         //Calls BlogSecurity to determine if the user can create a new blog. If so, it will process the form data in NewBlogView and call BlogDataAccess.ProcessNewBlog() to commit the new data to storage. Otherwise, an exception is thrown. Returns the blog ID of the new blog.
         if (!BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessNewBlog())
         {
             throw new Exception('Authentication failed.');
         }
-        //TODO: before submitting new blog to data: clean the header/footer image (then make them html tags)
-        //TODO: also ensure that chosen theme is actually an available theme
-        return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessNewBlog($blogView);
+        return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
     }
 }
 

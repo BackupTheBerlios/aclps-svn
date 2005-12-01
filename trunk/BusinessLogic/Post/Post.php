@@ -33,6 +33,7 @@ class BusinessLogic_Post_Post
         {
             throw new Exception('Authentication failed.');
         }
+        //TODO: filter content
         return BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessNewPost($postView);
     }
 
@@ -55,6 +56,7 @@ class BusinessLogic_Post_Post
         {
             throw new Exception('Authentication failed.');
         }
+        //TODO: filter content
         BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessEditPost($postView,$useNowForTimestamp);
     }
 
@@ -186,8 +188,8 @@ class BusinessLogic_Post_Post
             break;
         case 'ProcessEditPost':
             $view = new Presentation_View_ViewPostView($blogID,$_POST['postID'],0,$_POST['title'],$_POST['public'], 0, $_POST['content']);
-            $useNowForTimestamp = ($_POST['useNowForTimestamp'] == 1);
-            $this->ProcessEditPost($view,$useNowForTimestamp);
+            $updateTimestamp = ($_POST['timestamp'] == 'now');
+            $this->ProcessEditPost($view,$updateTimestamp);
             //forward user to viewing newly edited post:
             return $this->ViewPostsByID($blogID,$_POST['postID']);
             break;

@@ -109,8 +109,14 @@ class BusinessLogic_Blog_BlogSecurity
     public function NewBlog()
     {
         //Returns true if the user has no blogs. Returns false otherwise.
-        $hasABlog = true;//BusinessLogic_User_User::GetInstance()->IsBlogOwner();//TODO: Make this function
-        return !$hasABlog;
+        $query = 'select Count(*) from [0] where UserID=[1] AND Auth=[2]';
+        $arguments = array('User_Auth', $userID, 'Owner');
+        
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
+        $result = $DataAccess->Select($query, $arguments);
+        $numOfBlogs = $result[0]["Count(*)"];
+
+        return ($num == 0);
     }
 
     public function ProcessNewBlog()

@@ -164,12 +164,11 @@ class BusinessLogic_Blog_BlogDataAccess
 	//TODO
     }
 
-    public function ProcessNewBlog($blogView)
+    public function ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg)
     {
         //Inserts data into the Blogs table.
         $query = 'insert into [0] (Title,About,Theme,HeaderImage,FooterImage) VALUES ([1],[2],[3],[4],[5])';
-        $arguments = array('Blogs', $blogView->GetTitle(), $postView->GetAboutText(),
-                           $postView->GetTheme(), $postView->GetHeaderImg(), $postView->GetFooterImg());
+        $arguments = array('Blogs', $title, $about,$theme,$headerimg,$footerimg);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Insert($query, $arguments);
