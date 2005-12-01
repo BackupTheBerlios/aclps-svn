@@ -18,7 +18,7 @@ class Presentation_View_NewPostView extends Presentation_View_View
             . '<p><label for="title">Title:</label>'
             . '<input type="text" name="title"></p>'
 
-            . '<p><label for="public">Public/Private:</label>'
+            . '<p><label for="public">Public (Anonymous can view):</label>'
             . '<input type="checkbox" name="public" checked></p>'
 
             . '<p><label for="content">Content:</label>'

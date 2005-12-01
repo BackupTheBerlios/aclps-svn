@@ -34,7 +34,7 @@ class Presentation_View_EditPostView extends Presentation_View_View
             . '<p><label>Author:</label>'
             . $this->post->GetAuthorName().'</p>'
 
-            . '<p><label for="public">Public/Private:</label>'
+            . '<p><label for="public">Public (Anonymous can view):</label>'
             . '<input type="checkbox" name="public" '.$checkmark.'></p>'
 
             . '<p><label for="timestamp">Timestamp:</label>'

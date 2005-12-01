@@ -24,7 +24,7 @@ class BusinessLogic_Post_PostDataAccess
     public function ProcessNewPost($postView)
     {
         //Inserts data into the Posts table.
-        $query = 'insert into [0] (BlogID,UserID,Title,Timestamp,Content) VALUES ([1],[2],[3],NOW(),[4])';
+        $query = 'insert into [0] (BlogID,UserID,Title,Timestamp,Content) VALUES ("[1]","[2]","[3]",NOW(),"[4]")';
         $filteredContent = BusinessLogic_ACLPSCodeConverter::ACLPSCodeToHTML($postView->GetContent());
         $arguments = array($this->TABLE, $postView->GetBlogID(), $postView->GetAuthorID(),
                            $postView->GetTitle(), $filteredContent);
@@ -37,8 +37,7 @@ class BusinessLogic_Post_PostDataAccess
     public function EditPost($postID)
     {
         //Returns an EditPostView with data from the Posts table.
-        $postarray = $this->ViewPostsByID($postID);
-        return new Presentation_View_EditPostView($postarray[0]);
+        return new Presentation_View_EditPostView($this->GetSinglePost($postID));
     }
 
     public function ProcessEditPost($postView,$useNowForTimestamp)
@@ -47,13 +46,13 @@ class BusinessLogic_Post_PostDataAccess
         $filteredContent = BusinessLogic_ACLPSCodeConverter::ACLPSCodeToHTML($postView->GetContent());
         if ($useNowForTimestamp)
         {
-            $query = 'update [0] set Title=[1], Timestamp=NOW(), Public=[2], Content=[3] where PostID=[4]';
+            $query = 'update [0] set Title="[1]", Timestamp=NOW(), Public=[2], Content="[3]" where PostID=[4]';
             $arguments = array($this->TABLE, $postView->GetTitle(), $postView->GetPublic(),
                                $filteredContent, $postView->GetPostID());
         }
         else
         {
-            $query = 'update [0] set Title=[1], Public=[2], Content=[3] where PostID=[4]';
+            $query = 'update [0] set Title="[1]", Public=[2], Content="[3]" where PostID=[4]';
             $arguments = array($this->TABLE, $postView->GetTitle(), $postView->GetPublic(),
                                $filteredContent, $postView->GetPostID());
         }
@@ -65,8 +64,7 @@ class BusinessLogic_Post_PostDataAccess
     public function DeletePost($postID)
     {
         //Returns a DeletePostView with data from the Posts table.
-        $postarray = $this->ViewPostsByID($postID);
-        return new Presentation_View_DeletePostView($postarray[0]);
+        return new Presentation_View_DeletePostView($this->GetSinglePost($postID));
     }
 
     public function ProcessDeletePost($postID)
@@ -77,6 +75,19 @@ class BusinessLogic_Post_PostDataAccess
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Delete($query, $arguments);
+    }
+
+    private function GetSinglePost($postID)
+    {
+        //Returns a single post's viewpostview.
+        $query = 'select * from [0] where PostID=[1]';
+        $arguments = array($this->TABLE, $postID);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Select($query, $arguments);
+
+        $posts = $this->SQLResultsToViewPostViews($response);
+        return $posts[0];
     }
 
     public function ViewPostsByID($blogID, $postID, $commentView, $hideprivate)
@@ -95,11 +106,13 @@ class BusinessLogic_Post_PostDataAccess
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-        $compositePosts = $this->SQLResultsToViewPostViews($response);
+        $posts = $this->SQLResultsToViewPostViews($response);
 
-        //This is a single post, so add comments to the bottom:
-        $compositePosts[0]->SetBottomContent($commentView);
-        return $compositePosts[0];
+        //This is a single post, so add comments to the bottom if they're provided):
+        if (is_object($commentView)) {
+            $posts[0]->SetBottomContent($commentView);
+        }
+        return $posts[0];
     }
 
     public function ViewPostsByRecentCount($blogID, $postCount, $hideprivate)
@@ -117,8 +130,8 @@ class BusinessLogic_Post_PostDataAccess
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-        $compositePosts = $this->SQLResultsToViewPostViews($response);
-        return new Presentation_View_ViewPostCollectionView($compositePosts);
+        $posts = $this->SQLResultsToViewPostViews($response);
+        return new Presentation_View_ViewPostCollectionView($posts);
     }
 
     public function ViewPostsByDaysOld($blogID, $daysOld, $hideprivate)
@@ -137,8 +150,8 @@ class BusinessLogic_Post_PostDataAccess
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-        $compositePosts = $this->SQLResultsToViewPostViews($response);
-        return new Presentation_View_ViewPostCollectionView($compositePosts);
+        $posts = $this->SQLResultsToViewPostViews($response);
+        return new Presentation_View_ViewPostCollectionView($posts);
     }
 
     public function ViewPostsByMonth($blogID, $year, $month, $hideprivate)
@@ -177,8 +190,8 @@ class BusinessLogic_Post_PostDataAccess
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-        $compositePosts = $this->SQLResultsToViewPostViews($response);
-        return new Presentation_View_ViewPostCollectionView($compositePosts);
+        $posts = $this->SQLResultsToViewPostViews($response);
+        return new Presentation_View_ViewPostCollectionView($posts);
     }
 
     public function ViewPostsByDay($blogID, $year, $month, $date, $hideprivate)
@@ -202,8 +215,8 @@ class BusinessLogic_Post_PostDataAccess
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
 
-        $compositePosts = $this->SQLResultsToViewPostViews($response);
-        return new Presentation_View_ViewPostCollectionView($compositePosts);
+        $posts = $this->SQLResultsToViewPostViews($response);
+        return new Presentation_View_ViewPostCollectionView($posts);
     }
 
     private function CheckTimes($year,$month,$date)

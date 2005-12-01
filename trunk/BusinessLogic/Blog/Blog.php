@@ -102,17 +102,17 @@ class BusinessLogic_Blog_Blog
 	switch($aBlogSecurity->ViewBlog($blogID))
 	{
 	case 'Owner':
-	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>"
-		. " : <a href=index.php?Action=EditMembers&BlogID=$blogID>Edit Memberships</a>"
-		. " : <a href=index.php?Action=EditLayout&BlogID=$blogID>Edit Layout</a>";
+	    $contentOptions = "<a href=index.php?Action=NewPost&blogID=$blogID>New Post</a>"
+		. " : <a href=index.php?Action=EditMembers&blogID=$blogID>Edit Memberships</a>"
+		. " : <a href=index.php?Action=EditLayout&blogID=$blogID>Edit Layout</a>";
 	    break;
               
 	case 'Editor':
-	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>";
+	    $contentOptions = "<a href=index.php?Action=NewPost&blogID=$blogID>New Post</a>";
 	    break;
               
 	case 'Author':
-	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>";
+	    $contentOptions = "<a href=index.php?Action=NewPost&blogID=$blogID>New Post</a>";
 	    break;
               
 	    //FALL THROUGH

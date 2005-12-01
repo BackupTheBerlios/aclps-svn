@@ -185,7 +185,9 @@ class BusinessLogic_Post_Post
             return $this->EditPost($blogID,$postID);
             break;
         case 'ProcessEditPost':
-            $view = new Presentation_View_ViewPostView($blogID,$_POST['postID'],0,$_POST['title'],$_POST['public'], 0, $_POST['content']);
+            $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
+            $public = ($_POST['public'] == 'on');
+            $view = new Presentation_View_ViewPostView($blogID,$_POST['postID'],$authorID,$_POST['title'],$public, 0, $_POST['content']);
             $updateTimestamp = ($_POST['timestamp'] == 'now');
             $this->ProcessEditPost($view,$updateTimestamp);
             //forward user to viewing newly edited post:
