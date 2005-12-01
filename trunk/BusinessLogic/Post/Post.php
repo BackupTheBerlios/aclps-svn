@@ -127,7 +127,6 @@ class BusinessLogic_Post_Post
     public function HandleRequest()
     {
         //Checks $_GET['Action'] to see if the action belongs to the Post class. If so, the appropriate function is called. Otherwise, Comment.HandleRequest() is called.
-        try {
             $request = $_GET['Action'];
             $blogID = $_GET['blogID'];
             switch($request)
@@ -203,11 +202,6 @@ class BusinessLogic_Post_Post
             default:
                 BusinessLogic_Comment_Comment::GetInstance()->HandleRequest();
             }
-        }
-        catch (Exception $err)
-        {
-            return new Presentation_View_ViewErrorView($err);
-        }
     }
 }
 ?>

@@ -126,7 +126,7 @@ class BusinessLogic_Comment_Comment
             return $this->ViewComments($blogID,$_POST['postID']);
             break;
         default:
-            die('Unknown Request.');
+            throw new Exception('Unknown Request.');
 	}
     }
 }

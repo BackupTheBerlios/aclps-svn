@@ -12,10 +12,20 @@ class Presentation_FrontController
         }
 
 	$aBlog = BusinessLogic_Blog_Blog::GetInstance();
-	$result = $aBlog->HandleRequest();
-
+	
+	try
+    {
+	   $view = $aBlog->HandleRequest();
+    }
+    catch (Exception $e)
+    {
+        echo 'An error occurred processing your request.<br /><b>Error Message:</b> ' . $e->getMessage();
+        exit;
+    }
+    
+	
 	$aViewer = new Presentation_Viewer();
-	$aViewer->Display($result);
+	$aViewer->Display($view);
     }
 }
 

@@ -35,8 +35,8 @@ class BusinessLogic_User_User
                 return $this->ViewRegister();
                 break;
             case 'ProcessRegister':
-                if (isset($_POST['username']) and isset($_POST['email'])
-                    and isset($_POST['password']) and isset($_POST['confirmPassword']))
+                if ($_POST['username'] != '' and $_POST['email'] != ''
+                    and $_POST['password'] != '' and $_POST['confirmPassword'] != '')
                 {
                     if ($_POST['password'] == $_POST['confirmPassword'])
                     {
@@ -59,7 +59,7 @@ class BusinessLogic_User_User
                 return $this->ViewSignIn();
                 break;
             case 'ProcessSignIn':
-                if (isset($_POST['username']) and isset($_POST['password']))
+                if ($_POST['username'] != '' and $_POST['password'] != '')
                 {
                     $this->ProcessSignIn($_POST['username'], $_POST['password']);
                 }

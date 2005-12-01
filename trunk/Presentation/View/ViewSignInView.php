@@ -4,14 +4,14 @@ class Presentation_View_ViewSignInView extends Presentation_View_View
 {
     private $errorMessage;
 
-    public functio __construc($errorMessage)
+    public function __construct($errorMessage)
     {
         $this->errorMessage = $errorMessage;
     }
     
     public function Display()
     {
-        $form = '<form method="post" action="index.php?Action=ProcessSignIn">'
+        $form = '<form method="post" action="index.php?Action=ProcessSignIn&blogID=1">'
             . '<fieldset>'
             . '<legend>&nbsp;Sign In</legend>'
             . '<p>';
@@ -35,6 +35,8 @@ class Presentation_View_ViewSignInView extends Presentation_View_View
             . '<input type="submit" class="submit-login" value="Sign In">'
             . '</fieldset>'
             . '</form>';
+            
+            return $form;
     }
 }
 

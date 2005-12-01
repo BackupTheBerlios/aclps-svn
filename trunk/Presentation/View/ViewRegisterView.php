@@ -4,14 +4,14 @@ class Presentation_View_ViewRegisterView extends Presentation_View_View
 {
     private $errorMessage;
     
-    public functio __construc($errorMessage)
+    public function __construct($errorMessage)
     {
         $this->errorMessage = $errorMessage;
     }
     
     public function Display()
     {
-      $form = '<form method="post" action="index.php?Action=ProcessRegister">'
+        $form = '<form method="post" action="index.php?Action=ProcessRegister&blogID=1">'
             . '<fieldset>'
             . '<legend>&nbsp;Account Registration</legend>'
             . '<p>';
@@ -23,7 +23,7 @@ class Presentation_View_ViewRegisterView extends Presentation_View_View
             . '<br />';
       }
       
-      $form = $form
+        $form = $form
             . '<center>Please fill in the fields below.</center>'
             . '</p>'
             . '<label for="username">Username:</label>'
@@ -41,6 +41,8 @@ class Presentation_View_ViewRegisterView extends Presentation_View_View
             . '<input type="submit" class="submit-register" value="Register">'
             . '</fieldset>'
             . '</form>';
+
+        return $form;
     }
 }
 
