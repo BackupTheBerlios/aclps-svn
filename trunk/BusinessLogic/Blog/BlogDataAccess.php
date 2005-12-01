@@ -41,7 +41,8 @@ class BusinessLogic_Blog_BlogDataAccess
                                                             
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
 		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($row['About']));
-//		$aViewBlogView->SetSideBottom(new Presentation_View_ViewRankView());
+		$aViewBlogView->SetSideBottom(new Presentation_View_ViewRankView(array()));
+		//$this->BlogViewPopular()
                                                             
         //TODO: ADD SIDE CONTENT
         
@@ -204,6 +205,25 @@ class BusinessLogic_Blog_BlogDataAccess
           {
             throw new Exception("Counter update failed.");
           }
+        }
+    }
+    
+    //get the most 10 popular blogs
+    public function BlogViewPopular()
+    {
+        $query = "select BlogID, Title from Blogs order by Count desc limit 3;";
+        $arguments = array();
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+
+        if(count($result) < 1)
+        {
+          throw new Exception("Can't find the most popular blog.");
+        }
+        else
+        {
+          return $blogsID;
         }
     }
 
