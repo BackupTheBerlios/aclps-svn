@@ -41,7 +41,7 @@ class BusinessLogic_Blog_BlogDataAccess
                                                             
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
 		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($row['About']));
-		$aViewBlogView->SetSideBottom(new Presentation_View_ViewRankView());
+//		$aViewBlogView->SetSideBottom(new Presentation_View_ViewRankView());
                                                             
         //TODO: ADD SIDE CONTENT
         
@@ -175,9 +175,30 @@ class BusinessLogic_Blog_BlogDataAccess
         return $response;
     }
     
-    public function BlogViewCount()
+    //counter for a blog
+    public function BlogViewCountUpdate($blogID)
     {
-
+        $query = "select [0] from Blogs where BlogID=[1]";
+        $arguments = array('Count', $blogID);
+        
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+        
+        if(count($result) < 1)
+        {
+          throw new Exception("Counter can't find the blog.");
+        }
+        else
+        {
+          $query = "update Blogs set Count=[0] where BlogID=[1]";
+          $arguments = array(($result[0]['Count']+1), $blogID);
+          $result = $DataAccess->Update($query, $arguments);
+          
+          if(!$result)
+          {
+            throw new Exception("Counter update failed.");
+          }
+        }
     }
 
 }
