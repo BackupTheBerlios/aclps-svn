@@ -13,8 +13,8 @@ class Presentation_View_ViewTopBarView extends Presentation_View_View
         if ($this->signedIn)
         {
             $ret = '<a href=index.php?Action=ViewDashboard&blogID=1>My DashBoard</a>&nbsp;|&nbsp;'
-                    . '<a href=index.php?Action=EditUserData&blogID=1>Edit My Account</a>&nbsp;|&nbsp;'
-                    . '<a href=index.php?Action=ProcessSignOut&blogID=1>Sign Out</a>';
+                    . '<a href=index.php?Action=EditUserData&blogID=1>Edit My Account</a>'
+                    . '&nbsp;|&nbsp;<a href=index.php?Action=ProcessSignOut&blogID=1>Sign Out</a>';
         }
         else
         {

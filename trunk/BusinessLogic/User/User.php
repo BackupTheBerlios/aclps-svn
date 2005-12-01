@@ -75,7 +75,7 @@ class BusinessLogic_User_User
             return $this->ProcessSignOut();
             break;
         case 'ViewSearch':
-            //return $this->ViewSearch();
+            return $this->ViewSearch();
             break;
         default:
             return BusinessLogic_Post_Post::GetInstance()->HandleRequest();
@@ -206,6 +206,22 @@ class BusinessLogic_User_User
         $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php';
         header("Location: $path");
         exit;
+    }
+
+    //**********************************
+    //Search-Action Functions
+    //**********************************
+    public function ViewSearch()
+    {
+        if (true)
+        {
+            //'' is passed to indicate that there is no error message
+            return new Presentation_View_ViewSearchView('');
+        }
+        else
+        {
+            return new Exception('You are not allowed to Sign In at this time.');
+        }
     }
 
     //**********************************
