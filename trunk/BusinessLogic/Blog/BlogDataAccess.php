@@ -137,7 +137,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function ProcessEditBlogImages($blogID, $headerImage, $footerImage)
     {
-        $query = 'update [0] set HeaderImage = [1], FooterImage = [2] where BlogID = [3]';
+        $query = 'update [0] set HeaderImage = "[1]", FooterImage = "[2]" where BlogID = [3]';
         $arguments = array('Blogs', $headerImage,$footerImage, $blogID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
@@ -167,12 +167,12 @@ class BusinessLogic_Blog_BlogDataAccess
     public function ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg)
     {
         //Inserts data into the Blogs table.
-        $query = 'insert into [0] (Title,About,Theme,HeaderImage,FooterImage) VALUES ([1],[2],[3],[4],[5])';
+        $query = 'insert into [0] (Title,About,Theme,HeaderImage,FooterImage) VALUES ("[1]","[2]","[3]","[4]","[5]")';
         $arguments = array('Blogs', $title, $about,$theme,$headerimg,$footerimg);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Insert($query, $arguments);
-        return $response[0]['BlogID'];//TODO: make this response be the new blog's ID
+        return $response;
     }
 }
 

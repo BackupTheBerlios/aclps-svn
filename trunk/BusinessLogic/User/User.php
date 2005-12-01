@@ -13,11 +13,11 @@ class BusinessLogic_User_User
     static public function GetInstance()
     {
     	if (!isset($_SESSION['BusinessLogic_User_User']))
-	    {
-	        $_SESSION['BusinessLogic_User_User'] = serialize(new BusinessLogic_User_User());
-   	    }
-   	    
-	    return unserialize($_SESSION['BusinessLogic_User_User']);
+        {
+            $_SESSION['BusinessLogic_User_User'] = serialize(new BusinessLogic_User_User());
+        }
+   	
+        return unserialize($_SESSION['BusinessLogic_User_User']);
     }
 
     public function HandleRequest()
@@ -25,58 +25,60 @@ class BusinessLogic_User_User
         $request = $_GET['Action'];
         switch($request)
     	{
-            case 'EditUserData':
-                return $this->EditUserData();
-                break;
-            case 'ProcessEditUserData':
-                return $this->ProcessEditUserData();
-                break;
-            case 'ViewRegister':
-                return $this->ViewRegister();
-                break;
-            case 'ProcessRegister':
-                if ($_POST['username'] != '' and $_POST['email'] != ''
-                    and $_POST['password'] != '' and $_POST['confirmPassword'] != '')
+        case 'EditUserData':
+            return $this->EditUserData();
+            break;
+        case 'ProcessEditUserData':
+            return $this->ProcessEditUserData();
+            break;
+        case 'ViewRegister':
+            return $this->ViewRegister();
+            break;
+        case 'ProcessRegister':
+            if ($_POST['username'] != '' and $_POST['email'] != ''
+                and $_POST['password'] != '' and $_POST['confirmPassword'] != '')
+            {
+                if ($_POST['password'] == $_POST['confirmPassword'])
                 {
-                    if ($_POST['password'] == $_POST['confirmPassword'])
-                    {
-                        return $this->ProcessRegister($_POST['username'], $_POST['email'],
-                                                        $_POST['password']);
-                    }
-                    else
-                    {
-                        return new Presentation_View_ViewRegisterView('Password and Confirmation Password do not match.');
-                    }
+                    return $this->ProcessRegister($_POST['username'], $_POST['email'],
+                                                  $_POST['password']);
                 }
                 else
                 {
-                    return new Presentation_View_ViewRegisterView('You must fill in the entire form.');
+                    $tryagain = new Presentation_View_ViewRegisterView('Password and Confirmation Password do not match.');
+                    $tryagain->SetFields($_POST['username'],$_POST['email']);
+                    return $tryagain;
                 }
-
-                break;
-                
-            case 'ViewSignIn':
-                return $this->ViewSignIn();
-                break;
-            case 'ProcessSignIn':
-                if ($_POST['username'] != '' and $_POST['password'] != '')
-                {
-                    return $this->ProcessSignIn($_POST['username'], $_POST['password']);
-                }
-                else
-                {
-                    return new Presentation_View_ViewSignInView('You must fill in the entire form.');
-                }
-                
-                break;
-            case 'ProcessSignOut':
-                return $this->ProcessSignOut();
-                break;
-            case 'ViewSearch':
-//                return $this->ViewSearch();
-                break;
-        	default:
-    	       return BusinessLogic_Post_Post::GetInstance()->HandleRequest();
+            }
+            else
+            {
+                return new Presentation_View_ViewRegisterView('You must fill in the entire form.');
+            }
+            
+            break;
+            
+        case 'ViewSignIn':
+            return $this->ViewSignIn();
+            break;
+        case 'ProcessSignIn':
+            if ($_POST['username'] != '' and $_POST['password'] != '')
+            {
+                return $this->ProcessSignIn($_POST['username'], $_POST['password']);
+            }
+            else
+            {
+                return new Presentation_View_ViewSignInView('You must fill in the entire form.');
+            }
+            
+            break;
+        case 'ProcessSignOut':
+            return $this->ProcessSignOut();
+            break;
+        case 'ViewSearch':
+            //return $this->ViewSearch();
+            break;
+        default:
+            return BusinessLogic_Post_Post::GetInstance()->HandleRequest();
     	}
     }
     
@@ -269,6 +271,10 @@ class BusinessLogic_User_User
     
     public static function ConvertUserIDToName($userID)
     {
+        if (!$userID)
+        {
+            throw new Exception('No UserID was provided!');
+        }
         $query = "select Username from [0] where UserID=[1]";
         $arguments = array('Users', $userID);
 
@@ -277,11 +283,11 @@ class BusinessLogic_User_User
         
         if (isset($result[0]['Username']))
         {
-          return $result[0]['Username'];
+            return $result[0]['Username'];
         }
         else
         {
-          throw new Exception('Username does not exist for specified UserID');
+            throw new Exception('Username does not exist for specified UserID');
         }
     }
     

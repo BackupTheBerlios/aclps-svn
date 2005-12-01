@@ -162,7 +162,7 @@ class BusinessLogic_Comment_CommentDataAccess
         foreach ($results as $key=>$value)
         {
             $returnme[$key] = new Presentation_View_ViewCommentView($value['BlogID'], $value['PostID'],
-                                                                    $value['CommentID'], $value['Author'],
+                                                                    $value['CommentID'], $value['UserID'],
                                                                     $value['Title'], $value['Timestamp'],
                                                                     $value['Content']);
         }

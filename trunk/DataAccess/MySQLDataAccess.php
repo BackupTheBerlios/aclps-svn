@@ -69,8 +69,6 @@ class DataAccess_MySQLDataAccess implements DataAccess_DataAccess
 
     private function GetConnection($action)
     {
-	//TODO add variations on getting connections by action
-
 	$connection = new mysqli($this->dbHost, $this->dbUser, $this->dbPassword, $this->dbName);
 		
         if(mysqli_connect_errno())
@@ -83,8 +81,8 @@ class DataAccess_MySQLDataAccess implements DataAccess_DataAccess
 
     private function Query($connection, $query)
     {
-	   print 'QUERY: '.$query.'<br />';
-	   $queryResult = $connection->query($query);
+        print 'DBQUERY: '.$query.'<br />';//TODO: remove debug info when done
+        $queryResult = $connection->query($query);
 	
         if(!$queryResult)
         {
@@ -96,17 +94,17 @@ class DataAccess_MySQLDataAccess implements DataAccess_DataAccess
 
     private function InsertArgumentsIntoQuery($baseQuery, $arguments)
     {
-	   $lastindex = count($arguments)-1;
-
-	   //check for too few or too many replacement flags in basequery:
-	   if (!strstr($baseQuery, '[' . $lastindex . ']') or
-	       strstr($baseQuery, '[' . ($lastindex+1) . ']'))
-	   {
-	       throw new Exception('Malformed Query');
-	   }
-
+        $lastindex = count($arguments)-1;
+        
+        //check for too few or too many replacement flags in basequery:
+        if (!strstr($baseQuery, '[' . $lastindex . ']') or
+            strstr($baseQuery, '[' . ($lastindex+1) . ']'))
+        {
+            throw new Exception('Malformed Query');
+        }
+        
     	$query = $baseQuery;
-
+        
         foreach($arguments as $key=>$value)
         {
             $value = DataAccess_InputSanitizer::SanitizeInput($value);

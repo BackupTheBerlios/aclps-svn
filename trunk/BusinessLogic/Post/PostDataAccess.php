@@ -31,7 +31,7 @@ class BusinessLogic_Post_PostDataAccess
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Insert($query, $arguments);
-        return $response[0]['PostID'];//TODO: make this response be the post ID
+        return $response;
     }
 
     public function EditPost($postID)
@@ -86,7 +86,7 @@ class BusinessLogic_Post_PostDataAccess
         $extras = '';
         if ($hideprivate)
         {
-            $extras = 'and Public=true ';
+            $extras = 'and Public=1 ';
         }
 
         $query = 'select * from [0] where PostID=[1] and BlogID=[2] '.$extras.'order by Timestamp desc';

@@ -73,7 +73,7 @@ class BusinessLogic_Blog_Blog
 	    break;
 	case 'NewBlog':
             //blogid is passed solely for returning to system when user submits processnewblog form
-            return $this->NewBlog($_GET['blogID']);
+            $aViewBlogView->SetContent($this->NewBlog($_GET['blogID']));
 	    break;
 	case 'ProcessNewBlog':
             $title = $_POST['title'];
@@ -86,7 +86,7 @@ class BusinessLogic_Blog_Blog
 
             //forward user to viewing newly created blog:
             $newBlogID = $this->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
-            return $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($newBlogID,10));;
+            $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($newBlogID,10));
 	    break;
 	default:
 	    $aViewBlogView->SetContent(BusinessLogic_User_User::GetInstance()->HandleRequest());
@@ -228,6 +228,7 @@ class BusinessLogic_Blog_Blog
         {
             throw new Exception('Authentication failed.');
         }
+        //TODO: add this user as owner of this blog
         return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
     }
 }

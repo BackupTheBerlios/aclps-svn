@@ -20,6 +20,10 @@ class Presentation_FrontController
     catch (Exception $e)
     {
         echo 'An error occurred processing your request.<br /><b>Error Message:</b> ' . $e->getMessage();
+        if ($_GET['debug'])
+        {
+            echo $e->getTraceAsString();
+        }
         exit;
     }
     
