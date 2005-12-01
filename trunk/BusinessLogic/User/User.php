@@ -237,7 +237,7 @@ class BusinessLogic_User_User
     
     public function ProcessSearch($blog_title)
     {
-        $query = "select BlogID, Title, About from Blogs where Title='[0]'";
+        $query = "select BlogID, Title, About from Blogs where Title like '%[0]%'";
         $arguments = array($blog_title);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();

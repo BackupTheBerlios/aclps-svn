@@ -41,11 +41,11 @@ class BusinessLogic_Blog_BlogDataAccess
                                                             
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
 		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($row['About']));
+		$aViewBlogView->SetSideBottom(new Presentation_View_ViewRankView());
                                                             
         //TODO: ADD SIDE CONTENT
         
         return $aViewBlogView;
-        
     }
 
     public function ViewArchive()
@@ -174,6 +174,11 @@ class BusinessLogic_Blog_BlogDataAccess
         $response = $DataAccess->Insert($query, $arguments);
         return $response;
     }
-}
+    
+    public function BlogViewCount()
+    {
 
+    }
+
+}
 ?>

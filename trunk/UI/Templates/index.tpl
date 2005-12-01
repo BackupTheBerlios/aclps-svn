@@ -18,10 +18,15 @@
 	</div>
 
 	<div id="sidecontent">
-		<center>
+            <center>
 		{$sideContent}
-		</center>
+            </center>
 	</div>
+
+	<div id="sidebottom">
+		{$sidebottom}
+	</div>
+
 </div>
 <div id="floatclear"></div>
 

@@ -33,7 +33,7 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
             . '</fieldset>'
             . '</form>';
             
-            return $form;
+        return $form;
     }
 }
 
