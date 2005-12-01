@@ -72,6 +72,9 @@ class BusinessLogic_User_User
             case 'ProcessSignOut':
                 return $this->ProcessSignOut();
                 break;
+            case 'ViewSearch':
+//                return $this->ViewSearch();
+                break;
         	default:
     	       return BusinessLogic_Post_Post::GetInstance()->HandleRequest();
     	}
