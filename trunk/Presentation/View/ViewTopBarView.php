@@ -19,7 +19,8 @@ class Presentation_View_ViewTopBarView extends Presentation_View_View
         else
         {
             $ret = '<a href=index.php?Action=ViewSignIn&blogID=1>Sign In</a>&nbsp;|&nbsp;'
-                    . '<a href=index.php?Action=ViewRegister&blogID=1>Register An Account</a>';
+                    . '<a href=index.php?Action=ViewRegister&blogID=1>Register An Account</a>'
+                    . '&nbsp;|&nbsp;Search';
         }
         
         return $ret;
