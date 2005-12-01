@@ -113,6 +113,7 @@ class BusinessLogic_Post_PostSecurity
 
     public function ActivateControls($postCollectionView,$blogID,$permission) {
         //Depending on the user's permission level, adds controls to posts that should have them.
+        print $permission.'arr!!';
         if ($permission == "Nobody")
         {
             return;
@@ -121,7 +122,7 @@ class BusinessLogic_Post_PostSecurity
         {
             foreach($postCollectionView->GetPosts() as $key => $value)
             {
-                $value->SetControls($value->GetAuthorID() ==
+                $value->ActivateControls($value->GetAuthorID() ==
                                     BusinessLogic_User_User::GetInstance()->GetUserID());
             }
         }
@@ -129,7 +130,7 @@ class BusinessLogic_Post_PostSecurity
         {
             foreach($postCollectionView->GetPosts() as $key => $value)
             {
-                $value->SetControls(true);
+                $value->ActivateControls(true);
             }
         }
     }

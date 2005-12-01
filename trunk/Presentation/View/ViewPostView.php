@@ -11,12 +11,10 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     private $title;
     private $authorName;
     private $timestamp;
-    private $controls;
+    private $showcontrols;
     private $commentlink;
     private $commentcontent;
     private $content;
-
-    private $linkprefix;
 
     public function __construct($blogID, $postID, $authorID, $title, $public, $timestamp, $content)
     {
@@ -28,38 +26,35 @@ class Presentation_View_ViewPostView extends Presentation_View_View
         $this->public = $public;
         $this->timestamp = $timestamp;
         $this->content = $content;
-
-        $this->controls = '';
-        $this->linkprefix = explode('?',$_SERVER['REQUEST_URI'], 2);
-        $this->linkprefix = $this->linkprefix[0];
+        $this->showcontrols = false;
     }
 
-    public function SetControls($bool)
+    public function ActivateControls($bool)
     {
-        //Set by PostSecurity shortly after post creation, before it's returned to viewer
-        if ($bool)
-        {
-            $editurl = $linkprefix.'?Action=EditPost&blogID='.$this->blogID.'&postID='.$this->postID;
-            $newurl = $linkprefix.'?Action=DeletePost&blogID='.$this->blogID.'&postID='.$this->postID;
-            $this->controls = '<div id="postcontrols"><a href="'.$editurl.'">Edit Post</a> <a href="'.$newurl.'">Delete Post</a></div>';
-        }
-        else
-        {
-            $this->controls = '';
-        }
+        $this->showcontrols = $bool;
     }
 
     public function SetCommentCount($commentcount)
     {
         //Set by the PostCollectionView in its contructor on all posts.
-        $url = $linkprefix.'?Action=ViewPost&blogID='.$this->blogID.'&postID='.$this->postID;
+        $url = 'index.php?Action=ViewPost&blogID='.$this->blogID.'&postID='.$this->postID;
         $this->commentlink = '<a href="'.$url.'">Comments ('.$commentcount.')</a>';
     }
 
     public function Display()
     {
+        if ($this->showcontrols)
+        {
+            $editurl = 'index.php?Action=EditPost&blogID='.$this->blogID.'&postID='.$this->postID;
+            $newurl = 'index.php?Action=DeletePost&blogID='.$this->blogID.'&postID='.$this->postID;
+            $controls = '<div id="postcontrols"><a href="'.$editurl.'">Edit Post</a> <a href="'.$newurl.'">Delete Post</a></div>';
+        }
+        else
+        {
+            $controls = '';
+        }
         $displaystr = '<div id="post">'.
-            $this->controls.
+            $controls.
             '<div id="posttitle">'.$this->title.'</div>'.
             '<div id="postauthor">'.$this->authorName.'</div>'.
             '<div id="posttime">'.$this->timestamp.'</div>'.
