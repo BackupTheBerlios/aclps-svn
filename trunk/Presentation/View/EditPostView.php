@@ -1,6 +1,5 @@
 <?php
 
-  //this class represents a post to be edited
 class Presentation_View_EditPostView extends Presentation_View_View
 {
     private $post;
@@ -18,7 +17,7 @@ class Presentation_View_EditPostView extends Presentation_View_View
     {
         //TODO: make display
         //note: can only set timestamp as "<original>" or "Now"
-        return 'This is an edit post view! :D<br />'.$this->post->DisplayAsForm();
+        return 'This is an edit post view! :D<br />';
     }
 }
 

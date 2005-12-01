@@ -17,7 +17,7 @@ class Presentation_View_DeletePostView extends Presentation_View_View
     public function Display()
     {
         //TODO: make display
-        return 'This is a delete post view! :D<br />'.$this->post->Display();
+        return 'Are you sure you want to delete this post?:<br />'.$this->post->Display();
     }
 }
 

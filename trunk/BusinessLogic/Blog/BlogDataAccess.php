@@ -60,47 +60,37 @@ class BusinessLogic_Blog_BlogDataAccess
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $result = $DataAccess->Select($query, $arguments);
-
-		return new Presentation_View_EditAboutView($result['About'],$blogID);
-
-		
+        
+        return new Presentation_View_EditAboutView($result['About'],$blogID);
     }
 
     public function ProcessEditAbout($blogID,$aboutContent)
     {
-		$query = 'update [0] set About = [1] where BlogID = [2]';
-		$arguments = array('Blogs', $aboutContent, $blogID);
-
-		$DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
-		return $DataAccess->Update($query, $arguments);
-
-	
+        $query = 'update [0] set About = [1] where BlogID = [2]';
+        $arguments = array('Blogs', $aboutContent, $blogID);
+        
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
+        return $DataAccess->Update($query, $arguments);
     }
-
+    
     public function EditBlogImages($blogID)
     {
-  		$query = 'select HeaderImage,FooterImage from [0] where blogID=[1]';
+        $query = 'select HeaderImage,FooterImage from [0] where blogID=[1]';
         $arguments = array('Blogs', $blogID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $result = $DataAccess->Select($query, $arguments);
-
-		return Presentation_View_EditBlogImagesView($result['HeaderImage'],$result['FooterImage'],$blogID);
-		
-		
-		
+        
+        return Presentation_View_EditBlogImagesView($result['HeaderImage'],$result['FooterImage'],$blogID);
     }
 
     public function ProcessEditBlogImages($blogID, $headerImage, $footerImage)
     {
-
-		$query = 'update [0] set HeaderImage = [1], FooterImage = [2] where BlogID = [3]';
-		$arguments = array('Blogs', $headerImage,$footerImage, $blogID);
-
-		$DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
-		return $DataAccess->Update($query, $arguments);
-
-
+        $query = 'update [0] set HeaderImage = [1], FooterImage = [2] where BlogID = [3]';
+        $arguments = array('Blogs', $headerImage,$footerImage, $blogID);
+        
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
+        return $DataAccess->Update($query, $arguments);
     }
 
     public function EditLinks()
@@ -123,14 +113,16 @@ class BusinessLogic_Blog_BlogDataAccess
 	//TODO
     }
 
-    public function NewBlog()
+    public function ProcessNewBlog($blogView)
     {
-	//TODO
-    }
+        //Inserts data into the Blogs table.
+        $query = 'insert into [0] (Title,About,Theme,HeaderImage,FooterImage) VALUES ([1],[2],[3],[4],[5])';
+        $arguments = array('Blogs', $blogView->GetTitle(), $postView->GetAboutText(),
+                           $postView->GetTheme(), $postView->GetHeaderImg(), $postView->GetFooterImg());
 
-    public function ProcessNewBlog()
-    {
-	//TODO
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Insert($query, $arguments);
+        return $response[0]['BlogID'];//TODO: make this response be the new blog's ID
     }
 }
 

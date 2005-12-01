@@ -18,10 +18,11 @@ class BusinessLogic_Post_Post
         //Calls the PostSecurity class to determine if the user can create a new post. If so, a NewPostView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Post_PostSecurity::GetInstance()->NewPost($blogID))
         {
-            throw new Exception("Insufficient permissions.");
+            throw new Exception('Authentication failed.');
         }
-        $post = BusinessLogic_Post_PostDataAccess::GetInstance()->NewPost($blogID);
-        return $post;
+        //Create a new empty post form and return it.
+        //$blogID, $postID, $authorID, $title, $public, $timestamp, $content
+        return new Presentation_View_NewPostView($blogID);
     }
 
     public function ProcessNewPost($postView)
@@ -30,7 +31,7 @@ class BusinessLogic_Post_Post
         $blogID = $postView->GetBlogID();
         if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessNewPost($blogID))
         {
-            throw new Exception("Insufficient permissions.");
+            throw new Exception('Authentication failed.');
         }
         return BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessNewPost($postView);
     }
@@ -40,7 +41,7 @@ class BusinessLogic_Post_Post
         //Calls the PostSecurity class to determine if the user can edit a post. If so, PostDataAccess is called and an EditPostView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Post_PostSecurity::GetInstance()->EditPost($blogID,$postID))
         {
-            throw new Exception("Insufficient permissions.");
+            throw new Exception('Authentication failed.');
         }
         return BusinessLogic_Post_PostDataAccess::GetInstance()->EditPost($postID);
     }
@@ -52,7 +53,7 @@ class BusinessLogic_Post_Post
         $postID = $postView->GetPostID();
         if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessEditPost($blogID,$postID))
         {
-            throw new Exception("Insufficient permissions.");
+            throw new Exception('Authentication failed.');
         }
         BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessEditPost($postView,$useNowForTimestamp);
     }
@@ -62,7 +63,7 @@ class BusinessLogic_Post_Post
         //Calls the PostSecurity class to determine if the user can delete a post. If so, PostDataAccess is called and a DeletePostView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Post_PostSecurity::GetInstance()->DeletePost($blogID,$postID))
         {
-            throw new Exception("Insufficient permissions.");
+            throw new Exception('Authentication failed.');
         }
         return BusinessLogic_Post_PostDataAccess::GetInstance()->DeletePost($postID);
     }
@@ -72,6 +73,7 @@ class BusinessLogic_Post_Post
         //Calls PostSecurity to determine if the user can delete a post. If so, it will call PostDataAccess.ProcessDeletePost() to delete the post. Otherwise, an exception is thrown.
         if (!BusinessLogic_Post_PostSecurity::GetInstance()->ProcessDeletePost($blogID,$postID))
         {
+            throw new Exception('Authentication failed.');
             throw new Exception("Insufficient permissions.");
         }
         BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessDeletePost($postID);
@@ -127,81 +129,81 @@ class BusinessLogic_Post_Post
     public function HandleRequest()
     {
         //Checks $_GET['Action'] to see if the action belongs to the Post class. If so, the appropriate function is called. Otherwise, Comment.HandleRequest() is called.
-            $request = $_GET['Action'];
-            $blogID = $_GET['blogID'];
-            switch($request)
+        $request = $_GET['Action'];
+        $blogID = $_GET['blogID'];
+        switch($request)
+        {
+        case 'ViewPost':
+            if (isset($_GET['postID']))
             {
-            case 'ViewPost':
-                if (isset($_GET['postID']))
-                {
-                    return $this->ViewPostsByID($blogID,$_GET['postID']);
-                }
-                elseif (isset($_GET['date']))
-                {
-                    return $this->ViewPostsByDay($blogID,$_GET['year'],$_GET['month'],$_GET['date']);
-                }
-                elseif (isset($_GET['month']))
-                {
-                    return $this->ViewPostsByMonth($blogID,$_GET['year'],$_GET['month']);
-                }
-                elseif (isset($_GET['age']))
-                {
-                    $age = $_GET['age'];
-                    if ($age > 100)
-                    {
-                        $age = 100;
-                    }
-                    return $this->ViewPostsByDaysOld($blogID,$age);
-                }
-                elseif (isset($_GET['count']))
-                {
-                    $count = $_GET['count'];
-                    if ($count > 100)
-                    {
-                        $count = 100;
-                    }
-                    return $this->ViewPostsByRecentCount($blogID,$count);
-                }
-                else
-                {
-                    //FALLBACK: default return count 10
-                    return $this->ViewPostsByRecentCount($blogID,10);
-                }
-                break;
-            case 'NewPost':
-                return $this->NewPost($blogID);
-                break;
-            case 'ProcessNewPost':
-                $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
-                $view = new Presentation_View_ViewPostView($blogID,0,$authorID,$_POST['title'],$_POST['public'],0,$_POST['content']);
-                $newPostID = $this->ProcessNewPost($view);
-                //forward user to viewing newly created post:
-                return $this->ViewPostsByID($blogID,$newPostID);
-                break;
-            case 'EditPost':
-                $postID = $_GET['postID'];
-                return $this->EditPost($blogID,$postID);
-                break;
-            case 'ProcessEditPost':
-                $view = new Presentation_View_ViewPostView($blogID,$_POST['postID'],0,$_POST['title'],$_POST['public'], 0, $_POST['content']);
-                $useNowForTimestamp = ($_POST['useNowForTimestamp'] == 1);
-                $this->ProcessEditPost($view,$useNowForTimestamp);
-                //forward user to viewing newly edited post:
-                return $this->ViewPostsByID($blogID,$_POST['postID']);
-                break;
-            case 'DeletePost':
-                $postID = $_GET['postID'];
-                return $this->DeletePost($blogID,$postID);
-                break;
-            case 'ProcessDeletePost':
-                $postID = $_POST['postID'];
-                $this->ProcessDeletePost($blogID,$postID);
-                //forward user to viewing posts in blog:
-                return $this->ViewPostsByRecentCount($blogID,10);
-                break;
-            default:
-                BusinessLogic_Comment_Comment::GetInstance()->HandleRequest();
+                return $this->ViewPostsByID($blogID,$_GET['postID']);
             }
+            elseif (isset($_GET['date']))
+            {
+                return $this->ViewPostsByDay($blogID,$_GET['year'],$_GET['month'],$_GET['date']);
+            }
+            elseif (isset($_GET['month']))
+            {
+                return $this->ViewPostsByMonth($blogID,$_GET['year'],$_GET['month']);
+            }
+            elseif (isset($_GET['age']))
+            {
+                $age = $_GET['age'];
+                if ($age > 100)
+                {
+                    $age = 100;
+                }
+                return $this->ViewPostsByDaysOld($blogID,$age);
+            }
+            elseif (isset($_GET['count']))
+            {
+                $count = $_GET['count'];
+                if ($count > 100)
+                {
+                    $count = 100;
+                }
+                return $this->ViewPostsByRecentCount($blogID,$count);
+            }
+            else
+            {
+                //FALLBACK: default return count 10
+                return $this->ViewPostsByRecentCount($blogID,10);
+            }
+            break;
+        case 'NewPost':
+            return $this->NewPost($blogID);
+            break;
+        case 'ProcessNewPost':
+            $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
+            $view = new Presentation_View_ViewPostView($blogID,0,$authorID,$_POST['title'],$_POST['public'],0,$_POST['content']);
+            $newPostID = $this->ProcessNewPost($view);
+            //forward user to viewing newly created post:
+            return $this->ViewPostsByID($blogID,$newPostID);
+            break;
+        case 'EditPost':
+            $postID = $_GET['postID'];
+            return $this->EditPost($blogID,$postID);
+            break;
+        case 'ProcessEditPost':
+            $view = new Presentation_View_ViewPostView($blogID,$_POST['postID'],0,$_POST['title'],$_POST['public'], 0, $_POST['content']);
+            $useNowForTimestamp = ($_POST['useNowForTimestamp'] == 1);
+            $this->ProcessEditPost($view,$useNowForTimestamp);
+            //forward user to viewing newly edited post:
+            return $this->ViewPostsByID($blogID,$_POST['postID']);
+            break;
+        case 'DeletePost':
+            $postID = $_GET['postID'];
+            return $this->DeletePost($blogID,$postID);
+            break;
+        case 'ProcessDeletePost':
+            $postID = $_POST['postID'];
+            $this->ProcessDeletePost($blogID,$postID);
+            //forward user to viewing posts in blog:
+            return $this->ViewPostsByRecentCount($blogID,10);
+            break;
+        default:
+            BusinessLogic_Comment_Comment::GetInstance()->HandleRequest();
+        }
     }
 }
 ?>

@@ -73,7 +73,7 @@ class BusinessLogic_Comment_CommentSecurity
         return $this->DeleteComment($blogID);
     }
 
-    public function ViewComments($blogID)
+    public function ViewComments($blogID,$postID)
     {
         //Returns true.
         return true;

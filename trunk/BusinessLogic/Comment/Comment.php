@@ -18,7 +18,7 @@ class BusinessLogic_Comment_Comment
         //Calls the CommentSecurity class to determine if the user can create a new comment. If so, a NewCommentView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->NewComment($blogID))
         {
-            throw new Exception("Insufficient permissions.");
+            throw new Exception('Authentication failed.');
         }
         return BusinessLogic_Comment_CommentDataAccess::GetInstance()->NewComment($blogID,$postID);
     }
@@ -29,7 +29,7 @@ class BusinessLogic_Comment_Comment
         $blogID = $commentView->GetBlogID();
         if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->ProcessNewComment($blogID))
         {
-            throw new Exception("Insufficient permissions.");
+            throw new Exception('Authentication failed.');
         }
         BusinessLogic_Post_CommentDataAccess::GetInstance()->ProcessNewComment($commentView);
     }
@@ -39,7 +39,7 @@ class BusinessLogic_Comment_Comment
         //Calls the CommentSecurity class to determine if the user can edit a comment. If so, CommentDataAccess is called and an EditCommentView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->EditComment($blogID))
         {
-            throw new Exception("Insufficient permissions.");
+            throw new Exception('Authentication failed.');
         }
         return BusinessLogic_Comment_CommentDataAccess::GetInstance()->EditComment($commentID);
     }
@@ -50,7 +50,7 @@ class BusinessLogic_Comment_Comment
         $blogID = $commentView->GetBlogID();
         if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->ProcessEditComment($blogID))
         {
-            throw new Exception("Insufficient permissions.");
+            throw new Exception('Authentication failed.');
         }
         BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessEditComment($commentView);
 
@@ -61,7 +61,7 @@ class BusinessLogic_Comment_Comment
         //Calls the CommentSecurity class to determine if the user can delete a post. If so, CommentDataAccess is called and a DeleteCommentView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->DeleteComment($blogID))
         {
-            throw new Exception("Insufficient permissions.");
+            throw new Exception('Authentication failed.');
         }
         return BusinessLogic_Comment_CommentDataAccess::GetInstance()->DeleteComment($commentID);
     }
@@ -69,8 +69,9 @@ class BusinessLogic_Comment_Comment
     public function ProcessDeleteComment($blogID, $commentID)
     {
         //Calls CommentSecurity to determine if the user can delete a post. If so, it will process the form data in DeleteCommentView and call CommentDataAccess.ProcessDeleteComment() to commit the new data to storage. Otherwise, an exception is thrown.
-        if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->ProcessDeleteComment($blogID)) {
-            throw new Exception("Insufficient permissions.");
+        if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->ProcessDeleteComment($blogID))
+        {
+            throw new Exception('Authentication failed.');
         }
         BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessDeleteComment($commentID);
     }
@@ -78,9 +79,9 @@ class BusinessLogic_Comment_Comment
     public function ViewComments($blogID, $postID)
     {
         //Calls the CommentDataAccess class and returns a ViewCommentsView.
-        $permission = BusinessLogic_Comment_CommentSecurity::GetInstance()->ViewComments($blogID);
-        if (!$permission) {
-            throw new Exception("Insufficient permissions.");
+        if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->ViewComments($blogID,$postID))
+        {
+            throw new Exception('Authentication failed.');
         }
         $commentCollectionView = BusinessLogic_Comment_CommentDataAccess::GetInstance()->ViewComments($blogID,$postID);
         BusinessLogic_Comment_CommentSecurity::GetInstance()->ActivateControls($commentCollectionView,$blogID);

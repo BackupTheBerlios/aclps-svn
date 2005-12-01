@@ -37,18 +37,18 @@ class BusinessLogic_Blog_Blog
 	    //TODO
 	    break;
 	case 'EditAbout':
-	  	$aViewBlogView->SetContent($this->EditAbout($_GET['blogID']));
+            $aViewBlogView->SetContent($this->EditAbout($_GET['blogID']));
 	    break;
 	case 'ProcessEditAbout':
 	    //TODO
 		//if it's not set throw exception
 	    break;
 	case 'EditBlogImages':
-		//TODO
-		break;
+            //TODO
+            break;
 	case 'ProcessEditBlogImages':
-		//TODO
-		break;
+            //TODO
+            break;
 	case 'EditBlogLayout':
 	    //TODO
 	    break;
@@ -118,65 +118,58 @@ class BusinessLogic_Blog_Blog
 
     public function EditAbout($blogID)
     {
-			if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditAbout($blogID))
-			{
-				return BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditAbout($blogID);
-			}
-			else
-			{
-				throw new Exception('Authentication failed.');
-			}
+        if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditAbout($blogID))
+        {
+            return BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditAbout($blogID);
+        }
+        else
+        {
+            throw new Exception('Authentication failed.');
+        }
     }
 
     public function ProcessEditAbout($blogID,$aboutContent)
     {      
     	if(BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessEditAbout($blogID))
-		{
-			BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditAbout($blogID, $aboutContent);
-			$path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
-        	header("Location: $path");
-        	exit;	
-		}
-		else
-		{
-			throw new Exception('Authentication failed.');
-		}
-
-		
-	}
+        {
+            BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditAbout($blogID, $aboutContent);
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
+            header("Location: $path");
+            exit;	
+        }
+        else
+        {
+            throw new Exception('Authentication failed.');
+        }
+    }
 
     public function EditBlogImages($blogID)
     {
-		if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditBlogImages($blogID))
-		{
-			BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditBlogImages($blogID);
-			
-		}
-		else
-		{
-			throw new Exception('Authentication failed.');
-		}	
-	
+        if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditBlogImages($blogID))
+        {
+            BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditBlogImages($blogID);
+        }
+        else
+        {
+            throw new Exception('Authentication failed.');
+        }
     }
 
     public function ProcessEditBlogImages($blogID, $headerImage, $footerImage)
     {
-		if(BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessEditBlogImages($blogID))
-		{
-			BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditBlogImages($blogID, $headerImage, $footerImage);
-			$path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
-        	header("Location: $path");
-        	exit;
-		}
-		else
-		{
-			throw new Exception('Authentication failed.');
-		}
-
-		
-
+        if(BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessEditBlogImages($blogID))
+        {
+            BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditBlogImages($blogID, $headerImage, $footerImage);
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
+            header("Location: $path");
+            exit;
+        }
+        else
+        {
+            throw new Exception('Authentication failed.');
+        }
     }
-
+    
     public function EditLinks()
     {
 	//TODO
@@ -199,12 +192,24 @@ class BusinessLogic_Blog_Blog
 
     public function NewBlog()
     {
-	//TODO
+        //Calls the BlogSecurity class to determine if the user can create a new blog. If so, a NewBlogView is returned. Otherwise, an exception is thrown.
+        if (!BusinessLogic_Blog_BlogSecurity::GetInstance()->NewBlog())
+        {
+            throw new Exception('Authentication failed.');
+        }
+        return new Presentation_View_NewBlogView();
     }
 
-    public function ProcessNewBlog()
+    public function ProcessNewBlog($blogView)
     {
-	//TODO
+        //Calls BlogSecurity to determine if the user can create a new blog. If so, it will process the form data in NewBlogView and call BlogDataAccess.ProcessNewBlog() to commit the new data to storage. Otherwise, an exception is thrown. Returns the blog ID of the new blog.
+        if (!BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessNewBlog())
+        {
+            throw new Exception('Authentication failed.');
+        }
+        //TODO: before submitting new blog to data: clean the header/footer image (then make them html tags)
+        //TODO: also ensure that chosen theme is actually an available theme
+        return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessNewBlog($blogView);
     }
 }
 

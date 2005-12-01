@@ -55,12 +55,6 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
         return $displaystr;
     }
 
-    public function DisplayAsForm()
-    {
-        //TODO: make this a pretty form
-        return "THIS SHOULD BE A PRETTY FORM!<br />Title ".$this->title."<br />Content: ".$this->content;
-    }
-
     public function SetContent($aContent)
     {
         $this->content = $aContent;

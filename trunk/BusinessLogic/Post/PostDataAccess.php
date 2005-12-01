@@ -21,15 +21,6 @@ class BusinessLogic_Post_PostDataAccess
         return $_SESSION['BusinessLogic_Post_PostDataAccess'];
     }
 
-    public function NewPost($blogID)
-    {
-        //Creates a new empty post and returns it.
-        //$blogID, $postID, $authorID, $title, $public, $timestamp, $content
-        $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
-        $newPostData = new Presentation_View_ViewPostView($blogID, 0, $userID, '', true, 0, '');
-        return new Presentation_View_NewPostView($newPostData);
-    }
-
     public function ProcessNewPost($postView)
     {
         //Inserts data into the Posts table.
@@ -37,6 +28,7 @@ class BusinessLogic_Post_PostDataAccess
         $arguments = array($this->TABLE, $postView->GetBlogID(), $postView->GetAuthorID(),
                            $postView->GetTitle(), $postView->GetContent());
 
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Insert($query, $arguments);
         return $response[0]['PostID'];//TODO: make this response be the post ID
     }
@@ -63,6 +55,7 @@ class BusinessLogic_Post_PostDataAccess
             $arguments = array($this->TABLE, $postView->GetTitle(), $postView->GetPublic(),
                                $postView->GetContent(), $postView->GetPostID());
         }
+
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Update($query, $arguments);
     }
@@ -87,7 +80,7 @@ class BusinessLogic_Post_PostDataAccess
     public function ViewPostsByID($blogID, $postID, $commentView, $hideprivate)
     {
         //Returns a ViewPostView with data from the Posts table.
-        //(blogid MUST be here to prevent someone from sneaking into a post through another blog that they better access to)
+        //(blogid MUST be here to prevent someone from sneaking into a post through another blog that they have better access to)
         $extras = '';
         if ($hideprivate)
         {
