@@ -78,9 +78,9 @@ class BusinessLogic_User_User
             return $this->ViewSearch();
             break;
         case 'ProcessSearch':
-            if($_POST['blog_name'] != '')
+            if($_POST['blog_title'] != '')
             {
-                return $this->ProcessSearch($_POST['blog_name']);
+                return $this->ProcessSearch($_POST['blog_title']);
             }
             else
             {
@@ -235,27 +235,30 @@ class BusinessLogic_User_User
         }
     }
     
-    public function ProcessSearch($blog_name)
+    public function ProcessSearch($blog_title)
     {
-      //TODO....................................................
-        $query = "select * from [0] where Username='[1]'";
-        $arguments = array('Users', $username);
-
+        $query = "select BlogID, Title, About from Blogs where Title='[0]'";
+        $arguments = array($blog_title);
+        
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $result = $DataAccess->Select($query, $arguments);
+        
+      //TODO...................................................
 
         //there is no matching record in the DB
-        if (count($result) == 0)
+        if(count($result) < 1)
         {
-            $query = "insert into [0] (Username, Email, Password) VALUES ('[1]','[2]',sha1('[3]'))";
-            $arguments = array('Users', $username, $email, $password);
-            $result = $DataAccess->Insert($query, $arguments);
-
-            $this->ProcessSignIn($username, $password);
+        return new Presentation_View_ViewSearchBlogCollectionView(0, $blog_title);
         }
         else
         {
-          return new Presentation_View_ViewRegisterView("The username $username is already in use.");
+        foreach($result as $key => $value)
+        {
+            $blogsID[$key] = new Presentation_View_ViewSearchBlogView($value['BlogID'],
+                $value['Title'], $value['About']);
+        }
+        
+        return new Presentation_View_ViewSearchBlogCollectionView($blogsID, $blog_title);
         }
     }
 

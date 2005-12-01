@@ -24,10 +24,10 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
       }
 
         $form = $form
-            . '<center>Please enter the name you want to search:</center>'
+            . '<center>Please enter the blog title you want to search:</center>'
             . '</p>'
-            . '<label for="username">Blog Name:</label>'
-            . '<input type="text" name="blog_name">'
+            . '<label for="username">Blog Title:</label>'
+            . '<input type="text" name="blog_title">'
             . '<br />'
             . '<input type="submit" class="submit-search" value="Search">'
             . '</fieldset>'
