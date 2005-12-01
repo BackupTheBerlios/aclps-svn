@@ -229,5 +229,31 @@ class BusinessLogic_Blog_BlogDataAccess
         }
     }
 
+    public function ProcessSearch($blog_title)
+    {
+        $query = "select BlogID, Title, About from Blogs where Title like '%[0]%'";
+        $arguments = array($blog_title);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+
+        //there is no matching record in the DB
+        if(count($result) < 1)
+        {
+        return new Presentation_View_ViewSearchBlogCollectionView(0, $blog_title);
+        }
+        else
+        {
+        foreach($result as $key => $value)
+        {
+            $blogsID[$key] = new Presentation_View_ViewSearchBlogView($value['BlogID'],
+                $value['Title'], $value['About']);
+        }
+
+        return new Presentation_View_ViewSearchBlogCollectionView($blogsID, $blog_title);
+        }
+    }
+
+
 }
 ?>

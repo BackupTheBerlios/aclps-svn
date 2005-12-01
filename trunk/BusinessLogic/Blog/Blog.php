@@ -92,16 +92,7 @@ class BusinessLogic_Blog_Blog
      case 'ViewSearch':
         $aViewBlogView->SetContent($this->ViewSearch());
         break;
-     case 'ProcessSearch':
-        if($_POST['blog_title'] != '')
-        {
-            $aViewBlogView->SetContent($this->ProcessSearch($_POST['blog_title']));
-        }
-        else
-        {
-            $aViewBlogView->SetContent(new Presentation_View_ViewSearchView('You must fill in something.'));
-        }
-        break;
+
 	default:
 	    $aViewBlogView->SetContent(BusinessLogic_User_User::GetInstance()->HandleRequest());
 	}
@@ -152,15 +143,16 @@ class BusinessLogic_Blog_Blog
 
     public function ViewSearch()
     {
-        if(true)
+        if($_POST['blog_title'] != '')
         {
-            //'' is passed to indicate that there is no error message
-            return new Presentation_View_ViewSearchView('');
+            $result = BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessSearch($_POST['blog_title']);
         }
         else
         {
-            return new Exception('You are not allowed to Sign In at this time.');
+            $result = "You have to enter something!!!";
         }
+        
+        return new Presentation_View_ViewSearchView($result);
     }
 
     public function EditAbout($blogID)
@@ -272,31 +264,6 @@ class BusinessLogic_Blog_Blog
     BusinessLogic_Blog_BlogDataAccess::GetInstance()->BlogViewCountUpdate($blogID);
     }
 
-    public function ProcessSearch($blog_title)
-    {
-        $query = "select BlogID, Title, About from Blogs where Title like '%[0]%'";
-        $arguments = array($blog_title);
-
-        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
-        $result = $DataAccess->Select($query, $arguments);
-
-        //there is no matching record in the DB
-        if(count($result) < 1)
-        {
-        return new Presentation_View_ViewSearchBlogCollectionView(0, $blog_title);
-        }
-        else
-        {
-        foreach($result as $key => $value)
-        {
-            $blogsID[$key] = new Presentation_View_ViewSearchBlogView($value['BlogID'],
-                $value['Title'], $value['About']);
-        }
-
-        return new Presentation_View_ViewSearchBlogCollectionView($blogsID, $blog_title);
-        }
-    }
-    
 }
 
 ?>
