@@ -95,7 +95,7 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     {
 	if (is_object($this->content))
 	{
-            $ret = $contentOptions . '<br />' . $this->content->Display();
+            $ret = $this->contentOptions . '<br />' . $this->content->Display();
             return $ret;
         }
 	elseif (isset($this->content))

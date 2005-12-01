@@ -169,7 +169,11 @@ class BusinessLogic_User_User
             $query = 'select BlogID, Auth from [0] where UserID=[1]';
             $arguments = array('User_Auth', $result[0]['UserID']);
             $result = $DataAccess->Select($query, $arguments);
-            $this->permissions = $result;
+            
+            foreach ($result as $key=>$value)
+            {
+                $this->permissions[$value['BlogID']] = $value['Auth'];
+            }
 
             //Need to store all this information
             $_SESSION['BusinessLogic_User_User'] = serialize($this);
@@ -255,6 +259,8 @@ class BusinessLogic_User_User
     {
         print_r($this->userInfo);
         print '<br />';
+        print_r($this->permissions);
+        print '<br />';
         return new Presentation_View_ViewTopBarView($this->CheckSignedIn());
     }
     
@@ -275,6 +281,51 @@ class BusinessLogic_User_User
           throw new Exception('Username does not exist for specified UserID');
         }
     }
+    
+    public function IsUserBlogOwner()
+    {
+        if ($this->CheckSignedIn())
+        {
+            $hasBlog = false;
+            
+            foreach($this->permissions as $key=>$value)
+            {
+                if ($value == 'Owner')
+                {
+                  $hasBlog = true;
+                }
+            }
+            
+            return $hasBlog;
+        }
+        else
+        {
+          throw new Exception('User is not logged in.');
+        }
+    }
+    
+    public function GetUserBlogID()
+    {
+      if ($this->IsUserBlogOwner)
+      {
+            $blogID = -1;
+            
+            foreach($this->permissions as $key=>$value)
+            {
+                if ($value == 'Owner')
+                {
+                  $blogID = $key;
+                }
+            }
+
+            return $blogID;
+      }
+      else
+      {
+        throw new Exception('User does not own a blog.');
+      }
+    }
+
 }
 
 ?>

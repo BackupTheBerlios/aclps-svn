@@ -9,7 +9,7 @@ abstract class Presentation_View_View
 	//print_r( $this->Views);
 	$this->Views[] = $aView;
     }
-  
+
     public function DeleteView($aViewName)
     {
 	foreach($this->Views as $key=>$value)
@@ -24,10 +24,12 @@ abstract class Presentation_View_View
   
     public function Display()
     {
+        $ret = '';
         foreach($this->Views as $key=>$value)
         {
-	    $value->$Display();
+            $ret = $ret . '<br />' . $value->Display();
         }
+        return $ret;
     }
 }
 

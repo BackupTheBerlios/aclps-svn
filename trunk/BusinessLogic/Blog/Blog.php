@@ -36,6 +36,11 @@ class BusinessLogic_Blog_Blog
 	case 'ViewArchive':
 	    //TODO
 	    break;
+     case 'ViewDashboard':
+        //GetUserID will throw an exception if the user is not logged in
+        $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
+        $aViewBlogView->SetContent($this->ViewDashboard($userID));
+        break;
 	case 'EditAbout':
             $aViewBlogView->SetContent($this->EditAbout($_GET['blogID']));
 	    break;
@@ -87,17 +92,17 @@ class BusinessLogic_Blog_Blog
 	switch($aBlogSecurity->ViewBlog($blogID))
 	{
 	case 'Owner':
-	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>"
-		. " : <a href=index.php?Action=EditMembers&BlogID=$blogID>Edit Memberships</a>"
-		. " : <a href=index.php?Action=EditLayout&BlogID=$blogID>Edit Layout</a>";
+	    $contentOptions = '<a href=index.php?Action=NewPost&blogID=' . $blogID . '>New Post</a>'
+                            . ' : <a href=index.php?Action=EditMembers&blogID=' . $blogID . '>Edit Memberships</a>'
+                            . ' : <a href=index.php?Action=EditLayout&blogID=' . $blogID . '>Edit Layout</a>';
 	    break;
               
 	case 'Editor':
-	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>";
+	    $contentOptions = "<a href=index.php?Action=NewPost&blogID=' . $blogID . '>New Post</a>";
 	    break;
               
 	case 'Author':
-	    $contentOptions = "<a href=index.php?Action=NewPost&BlogID=$blogID>New Post</a>";
+	    $contentOptions = "<a href=index.php?Action=NewPost&blogID=' . $blogID . '>New Post</a>";
 	    break;
               
 	    //FALL THROUGH
@@ -114,6 +119,11 @@ class BusinessLogic_Blog_Blog
     public function ViewArchive()
     {
 	//TODO
+    }
+    
+    public function ViewDashboard($userID)
+    {
+        return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewDashboard($userID);
     }
 
     public function EditAbout($blogID)
