@@ -41,10 +41,12 @@ class BusinessLogic_Blog_BlogDataAccess
                                                             
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
 		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($row['About']));
-		$aViewBlogView->SetSideBottom(new Presentation_View_ViewRankView(array()));
-		//$this->BlogViewPopular()
-                                                            
+
         //TODO: ADD SIDE CONTENT
+//TODO	$aViewBlogView->SetSideBottom();
+
+                                                            
+
         
         return $aViewBlogView;
     }
