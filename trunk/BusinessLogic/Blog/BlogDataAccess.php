@@ -144,9 +144,15 @@ class BusinessLogic_Blog_BlogDataAccess
         return $DataAccess->Update($query, $arguments);
     }
 
-    public function EditLinks()
+    public function EditLinks($blogID)
     {
-	//TODO
+		$query = 'select Url from [0] where blogID=[1]';
+        $arguments = array('Links', $blogID);
+        
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+        
+        return Presentation_View_EditLinks($result['Url'],$blogID);	//need to create this view
     }
 
     public function ProcessEditLinks()

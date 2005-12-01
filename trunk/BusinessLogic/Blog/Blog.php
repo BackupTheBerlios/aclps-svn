@@ -193,7 +193,15 @@ class BusinessLogic_Blog_Blog
     
     public function EditLinks()
     {
-	//TODO
+		if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditLinks($blogID))
+        {
+            BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditLinks($blogID);
+        }
+        else
+        {
+            throw new Exception('Authentication failed.');
+        }
+
     }
 
     public function ProcessEditLinks()

@@ -88,12 +88,28 @@ class BusinessLogic_Blog_BlogSecurity
     
     public function EditLinks()
     {
-	//TODO
+		 $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
+        if($permission == 'Owner')
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     
     public function ProcessEditLinks()
     {
-	//TODO
+		$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
+        if($permission == 'Owner')
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public function EditMembers()
