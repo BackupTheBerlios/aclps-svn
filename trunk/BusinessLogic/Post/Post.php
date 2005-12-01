@@ -33,7 +33,6 @@ class BusinessLogic_Post_Post
         {
             throw new Exception('Authentication failed.');
         }
-        //TODO: filter content
         return BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessNewPost($postView);
     }
 
@@ -56,7 +55,6 @@ class BusinessLogic_Post_Post
         {
             throw new Exception('Authentication failed.');
         }
-        //TODO: filter content
         BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessEditPost($postView,$useNowForTimestamp);
     }
 

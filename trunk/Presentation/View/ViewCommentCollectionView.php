@@ -16,22 +16,32 @@ class Presentation_View_ViewCommentCollectionView extends Presentation_View_View
 
     public function Display()
     {
-        //TODO: finish display with comment form
         if (is_array($this->comments))
         {
             $ret = '<div id="commentcollection">';
             foreach($this->comments as $value)
             {
-                //If there's anything that should go between posts (newline or something), add it here
                 $ret = $ret.'<p id="comment">'.$value->Display()."</p>\n";
             }
-            $ret = $ret.'<p>TODO: needs newcomment form iff user can make comments</p>';
             $ret = $ret.'</div>';
+            try {
+                //try to show a new comment form at end of list of comments:
+                $ret = $ret.BusinessLogic_Comment_Comment::GetInstance()->NewComment($blogID, $postID);
+            } catch (Exception $e) {
+                //don't show new comment form if user lacks permission
+            }
             return $ret;
         }
         elseif (!isset($this->comments))
         {
-            return 'No Comments';
+            $ret = 'No Comments Posted Yet.';
+            try {
+                //try to show a new comment form at end of list of comments:
+                $ret = $ret.BusinessLogic_Comment_Comment::GetInstance()->NewComment($blogID, $postID);
+            } catch (Exception $e) {
+                //don't show new comment form if user lacks permission
+            }
+            return $ret;
         }
         else
         {

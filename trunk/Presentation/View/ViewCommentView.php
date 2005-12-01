@@ -21,7 +21,7 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
         $this->postID = $postID;
         $this->commentID = $commentID;
         $this->authorID = $authorID;
-        $this->authorName = "arr";//BusinessLogic_User_User::ConvertUIDToName($this->authorID);//TODO: make this function
+        $this->authorName = BusinessLogic_User_User::ConvertUserIDToName($authorID);
         $this->title = $title;
         $this->timestamp = $timestamp;
         $this->content = $content;

@@ -23,7 +23,7 @@ class Presentation_View_ViewPostView extends Presentation_View_View
         $this->blogID = $blogID;
         $this->postID = $postID;
         $this->authorID = $authorID;
-        $this->authorName = "arr";//BusinessLogic_User_User::ConvertUIDToName($authorID); //TODO: make this function
+        $this->authorName = BusinessLogic_User_User::ConvertUserIDToName($authorID);
         $this->title = $title;
         $this->public = $public;
         $this->timestamp = $timestamp;

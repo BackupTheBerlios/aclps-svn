@@ -31,7 +31,6 @@ class BusinessLogic_Comment_Comment
         {
             throw new Exception('Authentication failed.');
         }
-        //TODO: filter content
         BusinessLogic_Post_CommentDataAccess::GetInstance()->ProcessNewComment($commentView);
     }
 
@@ -53,9 +52,7 @@ class BusinessLogic_Comment_Comment
         {
             throw new Exception('Authentication failed.');
         }
-        //TODO: filter content
         BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessEditComment($commentView);
-
     }
 
     public function DeleteComment($blogID, $commentID)
