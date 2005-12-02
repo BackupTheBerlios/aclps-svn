@@ -291,53 +291,50 @@ class BusinessLogic_User_User
     {
         if ($this->CheckSignedIn())
         {
-            $hasBlog = false;
-            
             foreach($this->permissions as $key=>$value)
             {
                 if ($value == 'Owner')
                 {
-                  $hasBlog = true;
+                    return true;
                 }
             }
-            
-            return $hasBlog;
+            return false;
         }
         else
         {
-          throw new Exception('User is not logged in.');
+            throw new Exception('User is not logged in.');
         }
     }
     
     public function GetUserBlogID()
     {
-      if ($this->IsUserBlogOwner)
-      {
+        if ($this->IsUserBlogOwner)
+        {
             $blogID = -1;
             
             foreach($this->permissions as $key=>$value)
             {
                 if ($value == 'Owner')
                 {
-                  $blogID = $key;
+                    $blogID = $key;
                 }
             }
-
+            
             return $blogID;
-      }
-      else
-      {
-        throw new Exception('User does not own a blog.');
-      }
+        }
+        else
+        {
+            throw new Exception('User does not own a blog.');
+        }
     }
     
     public function NewBlog($blogID)
     {
         if (!$this->IsUserBlogOwner())
         {
-            //Should also check that the blogID does't already have an owner...
+            //TODO: Should also check that the blogID does't already have an owner...
             $query = "insert into [0] (UserID, BlogID, Auth) values('[1]', '[2]', '[3]')";
-            $arguments = array('User_Auth', $this->GetUserID, $blogID, 'Owner');
+            $arguments = array('User_Auth', $this->GetUserID(), $blogID, 'Owner');
 
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
             $result = $DataAccess->Insert($query, $arguments);
@@ -433,19 +430,21 @@ class BusinessLogic_User_User
     
     private function UpdatePermissions()
     {
-            $this->permissions = array();
-            
-            $query = 'select BlogID, Auth from [0] where UserID=[1]';
-            $arguments = array('User_Auth', $this->GetUserID());
-            $result = $DataAccess->Select($query, $arguments);
+        $this->permissions = array();
+        
+        $query = 'select BlogID, Auth from [0] where UserID=[1]';
+        $arguments = array('User_Auth', $this->GetUserID());
 
-            foreach ($result as $key=>$value)
-            {
-                $this->permissions[$value['BlogID']] = $value['Auth'];
-            }
-
-            //Need to store all this information
-            $_SESSION['BusinessLogic_User_User'] = serialize($this);
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+        
+        foreach ($result as $key=>$value)
+        {
+            $this->permissions[$value['BlogID']] = $value['Auth'];
+        }
+        
+        //Need to store all this information
+        $_SESSION['BusinessLogic_User_User'] = serialize($this);
     }
     
     public function ChangeOwnerShip($blogID, $currentOwner, $newOwner)

@@ -209,13 +209,18 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg)
     {
-        //Inserts data into the Blogs table.
+        //TODO: fyi: could have a "random" column in the blog table, pass random num to it, then ask for that random num back
+        //Inserts data into the Blogs table, and returns the new blog ID
         $query = 'insert into Blogs (Title,About,ThemeID,HeaderImage,FooterImage) VALUES ("[0]","[1]","[2]","[3]","[4]")';
-        $arguments = array($title, $about,$theme,$headerimg,$footerimg);
+        $arguments = array($title,$about,$theme,$headerimg,$footerimg);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Insert($query, $arguments);
-        return $response;
+
+        $query = 'select MAX(BlogID) from Blogs where Title="[0]" and About="[1]"';
+        $arguments = array($title,$about);
+        $response = $DataAccess->Select($query, $arguments);
+        return $response[0]['MAX(BlogID)'];//return new blog id
     }
     
     //counter for a blog

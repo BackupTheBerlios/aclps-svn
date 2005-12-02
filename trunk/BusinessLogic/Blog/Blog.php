@@ -96,11 +96,10 @@ class BusinessLogic_Blog_Blog
             {
                 throw new Exception("Invalid Theme ID");
             }
-            $this->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
+            $newBlogID = $this->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
 
-            //forward user to viewing their dashboard:
-            $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
-            $aViewBlogView->SetContent($this->ViewDashboard($userID));
+            //forward user to viewing their new blog:
+            $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($newBlogID,10));
 	    break;
         case 'ViewSearch':
             $aViewBlogView->SetContent($this->ViewSearch($this->ViewPopular()));
@@ -270,7 +269,7 @@ class BusinessLogic_Blog_Blog
         //Calls the BlogSecurity class to determine if the user can create a new blog. If so, a NewBlogView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Blog_BlogSecurity::GetInstance()->NewBlog())
         {
-            throw new Exception('Authentication failed.');
+            throw new Exception('You are already the owner of another blog, you may not own two blogs at once.');
         }
         //blogid is passed solely for returning to system when user submits processnewblog form
         return new Presentation_View_NewBlogView($blogID);
@@ -278,13 +277,14 @@ class BusinessLogic_Blog_Blog
 
     public function ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg)
     {
-        //Calls BlogSecurity to determine if the user can create a new blog. If so, it will process the form data in NewBlogView and call BlogDataAccess.ProcessNewBlog() to commit the new data to storage. Otherwise, an exception is thrown. Returns the blog ID of the new blog.
+        //Calls BlogSecurity to determine if the user can create a new blog. If so, it will process the form data in NewBlogView and call BlogDataAccess.ProcessNewBlog() to commit the new data to storage, and call User.NewBlog to add the user as an owner for this blog. Otherwise, an exception is thrown. Returns the blog ID of the new blog.
         if (!BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessNewBlog())
         {
-            throw new Exception('Authentication failed.');
+            throw new Exception('You are already the owner of another blog, you may not own two blogs at once.');
         }
-        //TODO: add this user as owner of this blog
-        return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
+        $newblogID = BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
+        BusinessLogic_User_User::GetInstance()->NewBlog($newblogID);
+        return $newblogID;
     }
     
     public function ProcessCount($blogID)
