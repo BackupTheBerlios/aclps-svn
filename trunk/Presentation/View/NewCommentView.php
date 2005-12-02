@@ -4,9 +4,9 @@
 class Presentation_View_NewCommentView extends Presentation_View_View
 {
     private $postID;
-    private $blogID
+    private $blogID;
     
-    public function __construct($postID,$blogID)
+    public function __construct($blogID,$postID)
     {
         $this->postID = $postID;
         $this->blogID = $blogID;
@@ -16,16 +16,16 @@ class Presentation_View_NewCommentView extends Presentation_View_View
     {
         $form = '<form method="post" action="index.php?blogID='.$this->blogID.'&Action=ProcessNewComment">'
             . '<fieldset>'
-            . '<legend>&nbsp;Create New Comment</legend>'
+            . '<legend>&nbsp;Add A Comment</legend>'
             . '<input type="hidden" name="postID" value="'.$this->postID.'">'
 
             . '<p><label for="title">Title:</label>'
-            . '<input type="text" name="title"></p>'
+            . '<input type="text" maxlength="30" name="title"></p>'
 
             . '<p><label for="content">Content:</label>'
             . '<textarea name="content" rows="5" cols="40"></textarea></p>'
 
-            . '<p><input type="submit" class="submit-register" value="Add Post"></p>'
+            . '<p><input type="submit" class="submit-register" value="Add Comment"></p>'
             . '</fieldset>'
             . '</form>';
 

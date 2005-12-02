@@ -55,90 +55,43 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
         return $displaystr;
     }
 
-    public function SetContent($aContent)
-    {
-        $this->content = $aContent;
-    }
     public function GetContent()
     {
-        if (isset($this->content))
-        {
-            return $this->content;
-        }
-        return "&nbsp;";
+        return $this->content;
     }
 
     public function GetAuthorID()
     {
-        if (isset($this->authorID))
-        {
-            return $this->authorID;
-        }
-        return "&nbsp;";
+        return $this->authorID;
     }
 
     public function GetAuthorName()
     {
-        if (isset($this->authorName))
-        {
-            return $this->authorName;
-        }
-        return "&nbsp;";
+        return $this->authorName;
     }
 
-    public function SetTitle($aTitle)
-    {
-        $this->title = $aTitle;
-    }
     public function GetTitle()
     {
-        if (isset($this->title))
-        {
-            return $this->title;
-        }
-        return "&nbsp;";
+        return $this->title;
     }
 
-    public function SetTimestamp($aTimestamp)
-    {
-        $this->timestamp = $aTimestamp;
-    }
     public function GetTimestamp()
     {
-        if (isset($this->timestamp))
-        {
-            return $this->timestamp;
-        }
-        return "&nbsp;";
+        return $this->timestamp;
     }
 
-    //commentID cannot be changed, is always set in constructor
     public function GetCommentID()
     {
-        if (!isset($this->commentID))
-        {
-            return new Exception("CommentID must always be set.");
-        }
         return $this->commentID;
     }
 
-    //postID cannot be changed, is always set in constructor
     public function GetPostID()
     {
-        if (!isset($this->postID))
-        {
-            return new Exception("PostID must always be set.");
-        }
         return $this->postID;
     }
 
-    //blogID cannot be changed, is always set in constructor
     public function GetBlogID()
     {
-        if (!isset($this->blogID))
-        {
-            return new Exception("BlogID must always be set.");
-        }
         return $this->blogID;
     }
 }

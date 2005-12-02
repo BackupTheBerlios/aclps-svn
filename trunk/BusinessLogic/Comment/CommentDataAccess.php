@@ -22,10 +22,7 @@ class BusinessLogic_Comment_CommentDataAccess
     public function NewComment($blogID, $postID)
     {
         //Creates a new empty comment and returns it.
-        //$blogID, $postID, $commentID, $authorID, $title, $timestamp, $content
-        $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
-        $newCommentData = new Presentation_View_ViewCommentView($blogID, $postID, 0, $userID, '', 0, '');
-        return new Presentation_View_NewCommentView($newCommentData);
+        return new Presentation_View_NewCommentView($blogID,$postID);
     }
 
     public function ProcessNewComment($commentView)
@@ -35,6 +32,8 @@ class BusinessLogic_Comment_CommentDataAccess
         $arguments = array($commentView->GetPostID(), $commentView->GetBlogID(),
 			   $commentView->GetAuthorID(), $commentView->GetTitle(),
                            $commentView->GetContent());
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Insert($query, $arguments);
     }
 

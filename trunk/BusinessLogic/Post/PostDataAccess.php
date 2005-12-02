@@ -106,11 +106,7 @@ class BusinessLogic_Post_PostDataAccess
 
         $posts = $this->SQLResultsToViewPostViews($response);
 
-        //This is a single post, so add comments to the bottom if they're provided):
-        if (is_object($commentView)) {
-            $posts[0]->SetBottomContent($commentView);
-        }
-        return $posts[0];
+        return new Presentation_View_ViewPostSingleView($posts[0],$commentView);
     }
 
     public function ViewPostsByRecentCount($blogID, $postCount, $hideprivate)

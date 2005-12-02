@@ -142,12 +142,12 @@ class BusinessLogic_Post_PostSecurity
         }
         elseif ($permission == "Author")
         {
-            $postView->ActivateControls($postView->GetAuthorID() ==
-                                             BusinessLogic_User_User::GetInstance()->GetUserID());
+            $postView->GetPost()->ActivateControls($postView->GetAuthorID() ==
+                                                   BusinessLogic_User_User::GetInstance()->GetUserID());
         }
         else
         {
-            $postView->ActivateControls(true);
+            $postView->GetPost()->ActivateControls(true);
         }
     }
 }

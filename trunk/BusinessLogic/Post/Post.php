@@ -186,7 +186,7 @@ class BusinessLogic_Post_Post
             $view = new Presentation_View_ViewPostView($blogID,0,$authorID,$title,$_POST['public'],0,$_POST['content']);
             $this->ProcessNewPost($view);
             //forward user to viewing the blog that the post was just made in:
-            return $this->ViewPostsByID(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($blogID,10));
+            return $this->ViewPostsByRecentCount($blogID,10);
             break;
         case 'EditPost':
             $postID = $_GET['postID'];

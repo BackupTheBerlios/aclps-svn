@@ -31,7 +31,7 @@ class BusinessLogic_Comment_Comment
         {
             throw new Exception('Authentication failed.');
         }
-        BusinessLogic_Post_CommentDataAccess::GetInstance()->ProcessNewComment($commentView);
+        BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessNewComment($commentView);
     }
 
     public function EditComment($blogID, $commentID)
@@ -103,8 +103,9 @@ class BusinessLogic_Comment_Comment
             $title = substr($_POST['title'],0,30);
             //__construct($blogID, $postID, $commentID, $authorID, $title, $timestamp, $content)
             $view = new Presentation_View_ViewCommentView($blogID,$_POST['postID'],0,$authorID,$title,0,$_POST['content']);
-            //forward user to viewing comments in the post:
-            return $this->ViewComments($blogID,$_POST['postID']);
+            $this->ProcessNewComment($view);
+            //forward user to viewing the post:
+            return BusinessLogic_Post_Post::GetInstance()->ViewPostsByID($blogID,$_POST['postID']);
             break;
         case 'EditComment':
             $commentID = $_GET['commentID'];
