@@ -1,6 +1,6 @@
 <?php
 
-class Presentation_View_ViewPopularView extends Presentation_View_View
+class Presentation_View_ViewCalendarView extends Presentation_View_View
 {
 
   public function __construct()
