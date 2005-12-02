@@ -44,11 +44,23 @@ class BusinessLogic_Blog_BlogDataAccess
                                                             $blogRow['FooterImage'], $themeRow['URL']);
                                                             
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
-        $aViewBlogView->setSideContent(new Presentation_View_ViewCalendarView());
-		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($blogRow['About']));
+        $aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($blogRow['About']));
+        $aViewBlogView->SetSideContent(new Presentation_View_ViewCalendarView());
         
         return $aViewBlogView;
     }
+
+    public function GetThemesList()
+    {
+        //Returns a list of themes in a two dimensional array:
+        //[0] => Array ( [ThemeID] => 1 [Title] => Default [URL] => UI/Themes/Default.css )
+        //[1] => Array ( [ThemeID] => 2 [Title] => SomethingElse [URL] => Other/Theme.css )
+    	$query = 'select * from Themes where 1';
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        return $DataAccess->Select($query, array());
+    }
+        
 
     public function ViewArchive()
     {
@@ -167,7 +179,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function EditLinks($blogID)
     {
-		$query = 'select Url from [0] where blogID=[1]';
+        $query = 'select Url from [0] where blogID=[1]';
         $arguments = array('Links', $blogID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -205,26 +217,15 @@ class BusinessLogic_Blog_BlogDataAccess
     //counter for a blog
     public function BlogViewCountUpdate($blogID)
     {
-        $query = "select [0] from Blogs where BlogID=[1]";
-        $arguments = array('Count', $blogID);
+        $query = "update Blogs set Count=Count+1 where BlogID=[0]";
+        $arguments = array($blogID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
-        $result = $DataAccess->Select($query, $arguments);
+        $result = $DataAccess->Update($query, $arguments);
         
-        if(count($result) < 1)
+        if($result < 1)
         {
-          throw new Exception("Counter can't find the blog.");
-        }
-        else
-        {
-          $query = "update Blogs set Count=[0] where BlogID=[1]";
-          $arguments = array(($result[0]['Count']+1), $blogID);
-          $result = $DataAccess->Update($query, $arguments);
-          
-          if(!$result)
-          {
-            throw new Exception("Counter update failed.");
-          }
+          throw new Exception('Counter update failed on blogID '.$blogID);
         }
     }
 

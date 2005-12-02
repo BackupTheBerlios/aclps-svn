@@ -67,7 +67,7 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
 	}
 	elseif (isset($this->headerImage))
 	{
-	    return '<img id="blogheaderimg" src="'.$this->headerImage.'"/>';
+	    return '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img id="blogheaderimg" src="'.$this->headerImage.'"/></a>';
 	}
 	else
 	{
@@ -83,7 +83,7 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
 	}
 	elseif (isset($this->footerImage))
 	{
-	    return '<img id="blogfooterimg" src="'.$this->footerImage.'"/>';
+	    return '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img id="blogfooterimg" src="'.$this->footerImage.'"/></a>';
 	}
 	else
 	{

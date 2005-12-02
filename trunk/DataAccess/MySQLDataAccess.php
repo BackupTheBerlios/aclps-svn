@@ -94,6 +94,12 @@ class DataAccess_MySQLDataAccess implements DataAccess_DataAccess
 
     private function InsertArgumentsIntoQuery($baseQuery, $arguments)
     {
+        //if no arguments, assume there's nothing to insert
+        if (count($arguments) < 1)
+        {
+            return $baseQuery;
+        }
+
         $lastindex = count($arguments)-1;
         
         //check for too few or too many replacement flags in basequery:

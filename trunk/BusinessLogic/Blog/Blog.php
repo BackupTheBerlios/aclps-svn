@@ -82,8 +82,21 @@ class BusinessLogic_Blog_Blog
             //TODO: before submitting new blog to data: clean the header/footer image urls
             $headerimg = $_POST['headerimg'];
             $footerimg = $_POST['footerimg'];
-            //TODO: also ensure that chosen themeID is actually an available theme
-            $theme = $_POST['theme'];
+
+            //ensure that chosen themeID is actually an available theme
+            $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
+            foreach ($themeslist as $key=>$value)
+            {
+                if ($value['ThemeID'] == $_POST['theme'])
+                {
+                    $theme = $_POST['theme'];
+                    break;
+                }
+            }
+            if (!isset($theme))
+            {
+                throw new Exception("Invalid Theme ID");
+            }
             $this->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
 
             //forward user to viewing their dashboard:
@@ -109,17 +122,17 @@ class BusinessLogic_Blog_Blog
 	switch($aBlogSecurity->ViewBlog($blogID))
 	{
 	case 'Owner':
-	    $contentOptions = "<a href=index.php?Action=NewPost&blogID=$blogID>New Post</a>"
-		. " : <a href=index.php?Action=EditMembers&blogID=$blogID>Edit Memberships</a>"
-		. " : <a href=index.php?Action=EditLayout&blogID=$blogID>Edit Layout</a>";
+	    $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a>'
+		. ' : <a href="index.php?Action=EditMembers&blogID='.$blogID.'">Edit Memberships</a>'
+		. ' : <a href="index.php?Action=EditLayout&blogID='.$blogID.'">Edit Layout</a></a>';
 	    break;
               
 	case 'Editor':
-	    $contentOptions = "<a href=index.php?Action=NewPost&blogID=$blogID>New Post</a>";
+	    $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=$blogID">New Post</a></div>';
 	    break;
               
 	case 'Author':
-	    $contentOptions = "<a href=index.php?Action=NewPost&blogID=$blogID>New Post</a>";
+	    $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=$blogID">New Post</a></div>';
 	    break;
               
 	    //FALL THROUGH
