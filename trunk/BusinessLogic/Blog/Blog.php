@@ -79,7 +79,6 @@ class BusinessLogic_Blog_Blog
 	case 'ProcessNewBlog':
             $title = $_POST['title'];
             $about = $_POST['about'];
-            //TODO: before submitting new blog to data: clean the header/footer image urls
             $headerimg = $_POST['headerimg'];
             $footerimg = $_POST['footerimg'];
 
@@ -87,7 +86,7 @@ class BusinessLogic_Blog_Blog
             $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
             foreach ($themeslist as $key=>$value)
             {
-                if ($value['ThemeID'] == $_POST['theme'])
+                if ($value['ThemeID'].'' == $_POST['theme'])
                 {
                     $theme = $_POST['theme'];
                     break;
@@ -291,7 +290,7 @@ class BusinessLogic_Blog_Blog
     
     public function ProcessCount($blogID)
     {
-    BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessCount($blogID);
+        BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessCount($blogID);
     }
 
 }

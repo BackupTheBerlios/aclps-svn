@@ -5,6 +5,7 @@ class Presentation_View_ViewPostSingleView extends Presentation_View_View
 {
     private $post;
     private $comments;
+    private $commentform;
     
     public function __construct($post,$comments)
     {
@@ -14,13 +15,23 @@ class Presentation_View_ViewPostSingleView extends Presentation_View_View
         }
         $this->post = $post;
         $this->comments = $comments;
-        $this->commentform = BusinessLogic_Comment_Comment::GetInstance()->NewComment($post->GetBlogID(),$post->GetPostID());
+        try {
+            $this->commentform = BusinessLogic_Comment_Comment::GetInstance()->NewComment($post->GetBlogID(),$post->GetPostID());
+        } catch (Exception $e) {
+            //do nothing, this user just cant make new comments
+        }
     }
 
     public function Display()
     {
-        $commentlabel = '<div id="commentlabel">Comments:</div>';
-        return $this->post->Display().$commentlabel.$this->comments->Display().$this->commentform->Display();
+        $ret = $this->post->Display();
+        $ret = $ret.'<div id="commentlabel">Comments:</div>';
+        $ret = $ret.$this->comments->Display();
+        if (isset($this->commentform))
+        {
+            $ret = $ret.$this->commentform->Display();
+        }
+        return $ret;
     }
 
     public function GetPost()

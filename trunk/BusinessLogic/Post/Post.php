@@ -111,6 +111,9 @@ class BusinessLogic_Post_Post
     public function GetDatesWithPostsForMonth($blogID, $year, $month)
     {
         //Returns an array mapping of DateOfMonth->true (true=posts on that date, nothing=no posts)
+        //arr[1] -> true (has one or more posts on the 1st)
+        //arr[2] -> NOT SET (no posts on the 2nd)
+        //etc
         $permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByMonth($blogID);
         return BusinessLogic_Post_PostDataAccess::GetInstance()->GetDatesWithPostsForMonth($blogID,$year,$month,$permission[1]);
     }
