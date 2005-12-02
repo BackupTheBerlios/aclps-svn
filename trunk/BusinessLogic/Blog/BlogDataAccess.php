@@ -179,19 +179,23 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function EditLinks($blogID)
     {
-        $query = 'select Url from [0] where blogID=[1]';
+        $query = 'select URL, Title from [0] where blogID=[1]';
         $arguments = array('Links', $blogID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $result = $DataAccess->Select($query, $arguments);
         
-        return Presentation_View_EditLinks($result['Url'],$blogID);	//need to create this view
+        return Presentation_View_EditLinks($result['URL'],$result['Title'],$blogID);
     }
 
-    public function ProcessEditLinks()
+    public function ProcessEditLinks($blogID,$urls,$titles)
     {
-	//TODO
-    }
+		$query = 'update [0] set URL = "[1]", Title = "[2]" where BlogID = [3]';
+		$arguments = array('Links',$urls,$titles);
+		
+		$DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
+        return $DataAccess->Update($query, $arguments);
+	}
 
     public function EditMembers()
     {

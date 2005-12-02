@@ -86,7 +86,7 @@ class BusinessLogic_Blog_BlogSecurity
         }
     }
     
-    public function EditLinks()
+    public function EditLinks($blogID)
     {
 		 $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
         if($permission == 'Owner')
@@ -99,7 +99,7 @@ class BusinessLogic_Blog_BlogSecurity
         }
     }
     
-    public function ProcessEditLinks()
+    public function ProcessEditLinks($blogID)
     {
 		$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
         if($permission == 'Owner')

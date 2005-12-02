@@ -229,7 +229,7 @@ class BusinessLogic_Blog_Blog
         }
     }
     
-    public function EditLinks()
+    public function EditLinks($blogID)
     {
 		if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditLinks($blogID))
         {
@@ -242,14 +242,24 @@ class BusinessLogic_Blog_Blog
 
     }
 
-    public function ProcessEditLinks()
+    public function ProcessEditLinks($blogID,$urls,$titles)
     {
-	//TODO
+		 if(BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessEditLinks($blogID))
+        {
+            BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditLinks($blogID, $urls,$titles);
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
+            header("Location: $path");
+            exit;
+        }
+        else
+        {
+            throw new Exception('Authentication failed.');
+        }
     }
 
     public function EditMembers()
     {
-	//TODO
+		//TODO
     }
 
     public function ProcessEditMembers()
