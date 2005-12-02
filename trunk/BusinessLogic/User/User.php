@@ -331,22 +331,124 @@ class BusinessLogic_User_User
       }
     }
     
-    public function NewBlog()
+    public function NewBlog($blogID)
     {
-        //TODO
+        if (!$this->IsUserBlogOwner())
+        {
+            //Should also check that the blogID does't already have an owner...
+            $query = "insert into [0] (UserID, BlogID, Auth) values('[1]', '[2]', '[3]')";
+            $arguments = array('User_Auth', $this->GetUserID, $blogID, 'Owner');
+
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+            $result = $DataAccess->Insert($query, $arguments);
+            
+            $this->UpdatePermissions();
+            
+            return true;
+        }
+        else
+        {
+            throw new Exception('User already owns a blog.');
+        }
     }
-    
-    public function DeleteBlog()
+
+    //Deletes all members of a blog
+    public function DeleteBlog($blogID)
     {
-        //TODO
+        if ($this->IsUserBlogOwner())
+        {
+            if ($this->GetUserBlogID() == $blogID)
+            {
+                $query = "delete from [0] where BlogID=[1]";
+                $arguments = array('User_Auth', $blogID);
+
+                $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+                $result = $DataAccess->Delete($query, $arguments);
+
+                $this->UpdatePermissions();
+
+                return true;
+            }
+            else
+            {
+                throw new Exception('User does not own the specified blog.');
+            }
+        }
+        else
+        {
+            throw new Exception("User doesn't own a blog.");
+        }
     }
-    
-    public function AddPermission($userID, $blogID)
+
+    public function AddPermission($userID, $blogID, $auth)
     {
-        //TODO
+        //should use NewBlog for this case
+        if ($auth != 'Owner')
+        {
+            $query = "insert into [0] (UserID, BlogID, Auth) values('[1]', '[2]', '[3]')";
+            $arguments = array('User_Auth', $this->GetUserID(), $blogID, $auth);
+
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+            $result = $DataAccess->Insert($query, $arguments);
+
+            if ($userID == $this->GetUserID())
+            {
+                $this->UpdatePermissions();
+            }
+            
+            return true;
+        }
+        else
+        {
+          throw new Exception('Illegal function call: Owners cannot be added using this function.');
+        }
     }
 
     public function RemovePermission($userID, $blogID)
+    {
+        $query = "select Auth from [0] where UserID=[1] and BlogID=[2]";
+        $arguments = array('User_Auth', $userID, $blogID);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+        $row = $result[0];
+        
+        if ($row['Auth'] != 'Owner')
+        {
+            $query = "delete from [0] where UserID=[1] and BlogID=[2]";
+            $arguments = array('User_Auth', $userID, $blogID);
+            
+            if ($userID == $this->GetUserID())
+            {
+                $this->UpdatePermissions();
+            }
+            
+            return true;
+        }
+        else
+        {
+            throw new Exception('Illegal function call: Owners cannot be deleted using this function.');
+        }
+    }
+    
+    private function UpdatePermissions()
+    {
+            $this->permissions = array();
+            
+            $query = 'select BlogID, Auth from [0] where UserID=[1]';
+            $arguments = array('User_Auth', $this->GetUserID());
+            $result = $DataAccess->Select($query, $arguments);
+
+            foreach ($result as $key=>$value)
+            {
+                $this->permissions[$value['BlogID']] = $value['Auth'];
+            }
+
+            //Need to store all this information
+            $_SESSION['BusinessLogic_User_User'] = serialize($this);
+    }
+    
+    public function ChangeOwnerShip($blogID, $currentOwner, $newOwner)
     {
         //TODO
     }
