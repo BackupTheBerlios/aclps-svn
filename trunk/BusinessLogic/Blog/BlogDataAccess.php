@@ -44,7 +44,7 @@ class BusinessLogic_Blog_BlogDataAccess
                                                             $blogRow['FooterImage'], $themeRow['URL']);
                                                             
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
-
+        $aViewBlogView->setSideContent(new Presentation_View_ViewCalendarView());
 		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($blogRow['About']));
         
         return $aViewBlogView;
