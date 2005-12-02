@@ -36,10 +36,15 @@ class Presentation_View_ViewPostCollectionView extends Presentation_View_View
         if (is_array($this->posts))
         {
             $ret = '<div id="postcollection">';
-            foreach($this->posts as $value)
+            if (count($this->posts) > 1)
             {
-                //If there's anything that should go between posts (newline or something), add it here
-                $ret = $ret.$value->Display()."\n";
+                $ret = $ret."There aren't any posts here yet. Why don't you make one?\n";
+            } else {
+                foreach($this->posts as $value)
+                {
+                    //If there's anything that should go between posts (newline or something), add it here
+                    $ret = $ret.$value->Display()."\n";
+                }
             }
             $ret = $ret.'</div>';
             return $ret;
