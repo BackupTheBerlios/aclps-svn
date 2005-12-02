@@ -22,25 +22,29 @@ class BusinessLogic_Blog_BlogDataAccess
     public function ViewBlog($blogID, $contentOptions)
     {
     	$query = 'select * from [0] where BlogID=[1]';
-
-        $arguments = array($this->$TABLE, $blogID);
+        $arguments = array('Blogs', $blogID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
-
-        $result = $DataAccess->Select($query, $arguments);
+        $blogResult = $DataAccess->Select($query, $arguments);
         
-        if (count($result) < 1)
+        if (count($blogResult) < 1)
         {
 	    throw new Exception('Request for unknown blog.');
         }
-        
-    	$row = $result[0];
 
-        $aViewBlogView = new Presentation_View_ViewBlogView($blogID, $contentOptions, $row['HeaderImage'],
-                                                            $row['FooterImage'], $row['Theme']);
+    	$blogRow = $blogResult[0];
+
+    	$query = 'select URL from [0] where ThemeID=[1]';
+        $arguments = array('Themes', $blogRow['ThemeID']);
+        $themeResult = $DataAccess->Select($query, $arguments);
+
+        $themeRow = $themeResult[0];
+
+        $aViewBlogView = new Presentation_View_ViewBlogView($blogID, $contentOptions, $blogRow['HeaderImage'],
+                                                            $blogRow['FooterImage'], $themeRow['URL']);
                                                             
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
-        //TODO: ADD SIDE CONTENT
+
 		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($row['About']));
         
         return $aViewBlogView;

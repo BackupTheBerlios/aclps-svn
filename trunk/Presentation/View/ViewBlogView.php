@@ -67,7 +67,7 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
 	}
 	elseif (isset($this->headerImage))
 	{
-	    return $this->headerImage;
+	    return '<img src="' . $this->headerImage . '">';
 	}
 	else
 	{
@@ -83,7 +83,7 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
 	}
 	elseif (isset($this->footerImage))
 	{
-	    return $this->footerImage;
+	    return '<img src="' . $this->footerImage . '">';
 	}
 	else
 	{
