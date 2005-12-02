@@ -7,7 +7,6 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     private $footerImage;
     private $content;
     private $sideContent;
-    private $sideBottom;
     private $theme;
     private $blogID;
     private $contentOptions;
@@ -42,11 +41,6 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     public function SetSideContent($aSideContent)
     {
         $this->sideContent[] = $aSideContent;
-    }
-    
-    public function SetSideBottom($aSideBottom)
-    {
-        $this->sideBottom[] = $aSideBottom;
     }
     
     public function DisplayTopBar()
@@ -120,22 +114,6 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
         if ($this->sideContent != '')
         {
             foreach($this->sideContent as $view)
-            {
-                return $view->Display();
-            }
-        }
-        else
-        {
-            return '&nbsp;';
-        }
-    }
-    
-    public function DisplaySideBottom()
-    {
-
-        if ($this->sideBottom != '')
-        {
-            foreach($this->sideBottom as $view)
             {
                 return $view->Display();
             }

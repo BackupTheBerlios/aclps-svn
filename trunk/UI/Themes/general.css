@@ -42,12 +42,7 @@ body
 #sidecontent
 {
 	margin-left: 500px;
-	margin: 20px;
-}
-
-#sidebottom
-{
-    margin-left: 500px;
+	margin: 0px;
 }
 
 #contentbox

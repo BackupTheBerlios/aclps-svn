@@ -91,6 +91,7 @@ class BusinessLogic_Blog_Blog
 	    break;
      case 'ViewSearch':
         $aViewBlogView->SetContent($this->ViewSearch());
+        $aViewBlogView->SetSideContent($this->ViewPopular());
         break;
 
 	default:
@@ -153,6 +154,11 @@ class BusinessLogic_Blog_Blog
         }
         
         return new Presentation_View_ViewSearchView($result);
+    }
+    
+    public function ViewPopular()
+    {
+        return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewPopular();
     }
 
     public function EditAbout($blogID)

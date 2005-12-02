@@ -1,6 +1,6 @@
 <?php
 
-class Presentation_View_ViewRankView extends Presentation_View_View
+class Presentation_View_ViewPopularView extends Presentation_View_View
 {
   private $blogs;
   private $linkprefix;
@@ -19,7 +19,7 @@ class Presentation_View_ViewRankView extends Presentation_View_View
     {
       if(count($this->blogs) > 0)
       {
-        $ret = '<div id="rankcollection">';
+        $ret = '<div id="popularcollection">';
         foreach($this->blogs as $value)
         {
         $ret .= '<a href="'.$this->linkprefix.'?Action=ViewBlog&blogID='.
@@ -35,7 +35,7 @@ class Presentation_View_ViewRankView extends Presentation_View_View
     }
     else
     {
-            throw new Exception("Can't get Rank");
+        throw new Exception("Can't get Rank");
     }
   }
   

@@ -30,7 +30,6 @@ class Presentation_Viewer
 	$smarty->assign('footerImage', $aView->DisplayFooterImage());
 	$smarty->assign('content', $aView->DisplayContent());
 	$smarty->assign('sideContent', $aView->DisplaySideContent());
-	$smarty->assign('sidebottom', $aView->DisplaySideBottom());
 	$smarty->assign('theme', $aView->DisplayTheme());
 	$smarty->display('index.tpl');
     }

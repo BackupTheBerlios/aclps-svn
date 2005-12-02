@@ -21,7 +21,7 @@ class BusinessLogic_Blog_BlogDataAccess
     
     public function ViewBlog($blogID, $contentOptions)
     {
-	$query = 'select * from [0] where BlogID=[1]';
+    	$query = 'select * from [0] where BlogID=[1]';
 
         $arguments = array($this->$TABLE, $blogID);
 
@@ -40,13 +40,8 @@ class BusinessLogic_Blog_BlogDataAccess
                                                             $row['FooterImage'], $row['Theme']);
                                                             
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
-		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($row['About']));
-
         //TODO: ADD SIDE CONTENT
-//TODO	$aViewBlogView->SetSideBottom();
-
-                                                            
-
+		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($row['About']));
         
         return $aViewBlogView;
     }
@@ -105,6 +100,25 @@ class BusinessLogic_Blog_BlogDataAccess
         $ViewDashboardView->AddView($ViewAssociatedBlogsView);
 
         return $ViewDashboardView;
+    }
+    
+    //get the most 3 popular blogs
+    public function ViewPopular()
+    {
+        $query = "select [0], [1] from Blogs order by Count desc limit 3;";
+        $arguments = array('BlogID', 'Title');
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+
+        if(count($result) < 1)
+        {
+          throw new Exception("Can't find the most popular blog.");
+        }
+        else
+        {
+          return new Presentation_View_ViewPopularView($result);
+        }
     }
 
     public function EditAbout($blogID)
@@ -207,25 +221,6 @@ class BusinessLogic_Blog_BlogDataAccess
           {
             throw new Exception("Counter update failed.");
           }
-        }
-    }
-    
-    //get the most 10 popular blogs
-    public function BlogViewPopular()
-    {
-        $query = "select BlogID, Title from Blogs order by Count desc limit 3;";
-        $arguments = array();
-
-        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
-        $result = $DataAccess->Select($query, $arguments);
-
-        if(count($result) < 1)
-        {
-          throw new Exception("Can't find the most popular blog.");
-        }
-        else
-        {
-          return $blogsID;
         }
     }
 

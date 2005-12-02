@@ -22,12 +22,8 @@
 		{$sideContent}
             </center>
 	</div>
-
-	<div id="sidebottom">
-		{$sidebottom}
-	</div>
-
 </div>
+
 <div id="floatclear"></div>
 
 <div id="image">
