@@ -17,20 +17,21 @@ class Presentation_View_ViewPopularView extends Presentation_View_View
   {
     if(is_array($this->blogs))
     {
+      $ret = '<fieldset><legend>&nbsp;Popular Blogs</legend>';
       if(count($this->blogs) > 0)
       {
-        $ret = '<br/>Popular Blogs:<br/><div id="popularcollection">';
+        $ret .= '<div id="popularcollection">';
         foreach($this->blogs as $value)
         {
         $ret .= '<a href="'.$this->linkprefix.'?Action=ViewBlog&blogID='.
             $value['BlogID'].'">'.$value['Title'].'</a><br/>';
         }
-        $ret .= '</div>';
+        $ret .= '</div></fieldset>';
         return $ret;
       }
       else
       {
-        return '<div id="rankcollection">No Rank.</div>';
+        return $ret.'<div id="popularcollection">No Rank.</div></fieldset>';
       }
     }
     else

@@ -103,8 +103,7 @@ class BusinessLogic_Blog_Blog
             $aViewBlogView->SetContent($this->ViewDashboard($userID));
 	    break;
         case 'ViewSearch':
-            $aViewBlogView->SetContent($this->ViewSearch());
-            $aViewBlogView->SetSideContent($this->ViewPopular());
+            $aViewBlogView->SetContent($this->ViewSearch($this->ViewPopular()));
             break;
 
 	default:
@@ -155,7 +154,7 @@ class BusinessLogic_Blog_Blog
         return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewDashboard($userID);
     }
 
-    public function ViewSearch()
+    public function ViewSearch($more)
     {
         if($_POST['blog_title'] != '')
         {
@@ -166,7 +165,7 @@ class BusinessLogic_Blog_Blog
             $result = "You have to enter something!!!";
         }
         
-        return new Presentation_View_ViewSearchView($result);
+        return new Presentation_View_ViewSearchView($result, $more);
     }
     
     public function ViewPopular()

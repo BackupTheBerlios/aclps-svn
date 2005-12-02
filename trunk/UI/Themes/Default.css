@@ -57,3 +57,24 @@ body
 	width: 250px;
 	text-align: left;
 }
+
+#calendar_month_year
+{
+    color: green;
+}
+
+#calendar_week
+{
+    color: yellow;
+    text-decoration:underline;
+}
+
+#calendar_today
+{
+    color: red;
+}
+
+#calendar_number
+{
+    color: white;
+}

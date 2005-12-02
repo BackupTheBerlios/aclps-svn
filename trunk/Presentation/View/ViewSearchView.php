@@ -4,10 +4,12 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
 {
     private $result;
     private $blogid;
+    private $popular;
 
-    public function __construct($result)
+    public function __construct($result, $more)
     {
         $this->result = $result;
+        $this->popular = $more;
         
         if($_GET['blogID'])
             $this->blogid = $_GET['blogID'];
@@ -17,12 +19,10 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
     
     public function Display()
     {
-        $form = '<form method="post" action="index.php?Action=ViewSearch&blogID='
+        $form = '<fieldset><legend>&nbsp;Search</legend>'
+            . '<form method="post" action="index.php?Action=ViewSearch&blogID='
             . $this->blogid
-            . '">'
-            . '<fieldset>'
-            . '<legend>&nbsp;Search</legend>'
-            . '<p>';
+            . '"><p>';
 
         if(is_string($this->result))
         {
@@ -43,9 +43,8 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
             . '<input type="text" name="blog_title">'
             . '<br />'
             . '<input type="submit" class="submit-search" value="Search">'
-            . '</fieldset>'
-            . '</form>'
-            . $ret;
+            . '</form></fieldset>'
+            . $ret.$this->popular->Display();
 
         return $form;
     }

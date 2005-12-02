@@ -25,19 +25,24 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
     $day = 1;
 
     //month and year
-    $cal = $today['month'].'&nbsp;&nbsp;'.$today['year'].'<br/>'
-        .'<table border="0" id="table1" cellspacing="5"><tr>'
-        .'<td>Sun</td><td>Mon</td><td>Tue</td><td>Wed</td><td>Thu</td>'
-        .'<td>Fri</td><td>Sat</td></tr><tr>';
+    $cal = '<div id="calendar_month_year">'.$today['month'].'&nbsp;&nbsp;'.$today['year']
+        .'</div><table border="0" id="table1" cellspacing="5"><tr>'
+        .'<td><div id="calendar_week">Sun</div></td><td><div id="calendar_week">Mon</div></td><td><div id="calendar_week">Tue</div></td><td><div id="calendar_week">Wed</div></td><td><div id="calendar_week">Thu</div></td>'
+        .'<td><div id="calendar_week">Fri</div></td><td><div id="calendar_week">Sat</div></td></tr><tr>';
     //1st row
     for($count=0; $count<7; ++$count)
     {
         if($count >= $space)
+        {
             $temp = $day++;
+            if($temp == $today['mday'])
+                $temp = '<div id="calendar_today">'.$temp.'</div>';
+            else
+                $temp = '<div id="calendar_number">'.$temp.'</div>';
+        }
         else
             $temp = '';
-        if($temp == $today['mday'])
-            $temp = '<font color="#FF0000">'.$temp.'</font>';
+
         $cal .= "<td>$temp</td>";
     }
     $cal .= '</tr>';
@@ -53,7 +58,9 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
                 $done = true;
             }
             if($temp == $today['mday'])
-                $temp = '<font color="#FF0000">'.$temp.'</font>';
+                $temp = '<div id="calendar_today">'.$temp.'</div>';
+            else
+                $temp = '<div id="calendar_number">'.$temp.'</div>';
             $cal .= "<td>$temp</td>";
         }
         $cal .= '</tr>';
