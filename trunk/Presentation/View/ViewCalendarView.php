@@ -13,7 +13,7 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
     return $this->ViewCalendar();
   }
   
-  //Display the current month Calendar
+  //Display the current month Calendar, today's date will be red'
   public function ViewCalendar()
   {
     //get current time
@@ -36,6 +36,8 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
             $temp = $day++;
         else
             $temp = '';
+        if($temp == $today['mday'])
+            $temp = '<font color="#FF0000">'.$temp.'</font>';
         $cal .= "<td>$temp</td>";
     }
     $cal .= '</tr>';
@@ -50,6 +52,8 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
                 $temp = '';
                 $done = true;
             }
+            if($temp == $today['mday'])
+                $temp = '<font color="#FF0000">'.$temp.'</font>';
             $cal .= "<td>$temp</td>";
         }
         $cal .= '</tr>';
