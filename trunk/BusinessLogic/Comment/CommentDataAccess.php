@@ -111,13 +111,18 @@ class BusinessLogic_Comment_CommentDataAccess
     public function GetCommentCounts($postIDs)
     {
         //Given an array of postIDs to look at, returns an array of comment counts in the same array indices.
+        if (count($postIDs) < 1)
+        {
+            return array();
+        }
+
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
-        $arguments = array($this->TABLE);
         
-        $insertme = '0';
+        $arguments = array();
+        $insertme = '0';//just to stick into OR statement
         foreach($postIDs as $key=>$value)
         {
-            $insertme = $insertme.' or PostID=['.($key+1).']';
+            $insertme = $insertme.' or PostID=['.$key.']';
             array_push($arguments, $value);
         }
         $query = 'select count(CommentID),PostID from Comments where '.$insertme.' group by PostID';

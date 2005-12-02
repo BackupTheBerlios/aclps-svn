@@ -100,8 +100,9 @@ class BusinessLogic_Comment_Comment
             break;
         case 'ProcessNewComment':
             $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
+            $title = substr($_POST['title'],0,30);
             //__construct($blogID, $postID, $commentID, $authorID, $title, $timestamp, $content)
-            $view = new Presentation_View_ViewCommentView($blogID,$_POST['postID'],0,$authorID,$_POST['title'],0,$_POST['content']);
+            $view = new Presentation_View_ViewCommentView($blogID,$_POST['postID'],0,$authorID,$title,0,$_POST['content']);
             //forward user to viewing comments in the post:
             return $this->ViewComments($blogID,$_POST['postID']);
             break;
@@ -110,7 +111,8 @@ class BusinessLogic_Comment_Comment
             return $this->EditComment($blogID,$commentID);
             break;
         case 'ProcessEditComment':
-            $view = new Presentation_View_ViewCommentView($blogID,0,$_POST['commentID'],0,$_POST['title'], 0, $_POST['content']);
+            $title = substr($_POST['title'],0,30);
+            $view = new Presentation_View_ViewCommentView($blogID,0,$_POST['commentID'],0,$title, 0, $_POST['content']);
             $this->ProcessEditComment($view);
             //forward user to viewing comments in the post:
             return $this->ViewComments($blogID,$_POST['postID']);

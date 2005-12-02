@@ -152,28 +152,13 @@ class BusinessLogic_Post_PostDataAccess
         return new Presentation_View_ViewPostCollectionView($posts);
     }
 
-    public function ViewPostsByMonth($blogID, $year, $month, $hideprivate)
+    public function GetDatesWithPostsForMonth($blogID, $year, $month, $hideprivate)
     {
-        //Returns a ViewPostCollectionView with data from the Posts table.
+        //DONT CALL THIS DIRECTLY, call the function in Post (it will determine $hideprivate for you).
+        //Returns an array mapping of dates->true (true=posts on that date, nothing=no posts)
+        //If hideprivate is true, doesn't return true for days on which there are only private posts.
+
         $this->CheckTimes($year,$month,1);
-
-        $followingmonth = ($month%12)+1;
-        if ($followingmonth == 1)
-        {
-            $followingyear = $year + 1;
-        }
-        else
-        {
-            $followingyear = $year;
-        }
-
-        $month = str_pad($month, 2, '0', STR_PAD_LEFT);
-        $year = str_pad($year, 4, '0', STR_PAD_LEFT);
-        $followingmonth = str_pad($followingmonth, 2, '0', STR_PAD_LEFT);
-        $followingyear = str_pad($followingyear, 4, '0', STR_PAD_LEFT);
-
-        $begdate = $year.$month.'01';
-        $enddate = $followingyear.$followingmonth.'01';
 
         $extras = '';
         if ($hideprivate)
@@ -181,9 +166,33 @@ class BusinessLogic_Post_PostDataAccess
             $extras = 'and Public=true ';
         }
 
-        $query = 'select * from Posts where BlogID=[0] '.$extras.'and Timestamp >= [1] and Timestamp < [2]';
+        $query = 'select DAYOFMONTH(Timestamp) from Posts where BlogID=[0] '.$extras.'and YEAR(Timestamp) = [1] and MONTH(Timestamp) = [2]';
+        $arguments = array($blogID, $year, $month);
 
-        $arguments = array($blogID, $begdate, $enddate);
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Select($query, $arguments);
+
+        $returnme = array();
+        foreach ($response as $key=>$value)
+        {
+            $returnme[$value['Timestamp']] = true;
+        }
+        return $returnme;
+    }
+
+    public function ViewPostsByMonth($blogID, $year, $month, $hideprivate)
+    {
+        //Returns a ViewPostCollectionView with data from the Posts table.
+        $this->CheckTimes($year,$month,1);
+
+        $extras = '';
+        if ($hideprivate)
+        {
+            $extras = 'and Public=true ';
+        }
+
+        $query = 'select * from Posts where BlogID=[0] '.$extras.'and YEAR(Timestamp) = [1] and MONTH(Timestamp) = [2]';
+        $arguments = array($blogID, $year, $month);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
@@ -197,18 +206,15 @@ class BusinessLogic_Post_PostDataAccess
         //Returns a ViewPostCollectionView with data from the Posts table.
         $this->CheckTimes($year,$month,$date);
 
-        $begtime = $year.$month.$date.'000000';
-        $endtime = $year.$month.$date.'235959';
-
         $extras = '';
         if ($hideprivate)
         {
             $extras = 'and Public=true ';
         }
 
-        $query = 'select Timestamp from Posts where BlogID=[0] '.$extras.'and Timestamp >= [1] and Timestamp <= [2]';
+        $query = 'select * from Posts where BlogID=[0] '.$extras.'and YEAR(Timestamp) = [1] and MONTH(Timestamp) = [2] and DAYOFMONTH(Timestamp) = [3]';
 
-        $arguments = array($blogID, $begtime, $endtime);
+        $arguments = array($blogID, $year, $month, $date);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
@@ -251,7 +257,7 @@ class BusinessLogic_Post_PostDataAccess
     {
         if (count($results) < 1)
         {
-            throw new Exception('No posts were found.');
+            return array();
         }
 
         //go through each row and make a postview from it:

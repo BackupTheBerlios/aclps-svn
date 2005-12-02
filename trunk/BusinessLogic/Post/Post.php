@@ -108,6 +108,13 @@ class BusinessLogic_Post_Post
         return $postCollectionView;
     }
 
+    public function GetDatesWithPostsForMonth($blogID, $year, $month)
+    {
+        //Returns an array mapping of DateOfMonth->true (true=posts on that date, nothing=no posts)
+        $permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewPostsByMonth($blogID);
+        return BusinessLogic_Post_PostDataAccess::GetInstance()->GetDatesWithPostsForMonth($blogID,$year,$month,$permission[1]);
+    }
+
     public function ViewPostsByMonth($blogID, $year, $month)
     {
         //Calls the PostSecurity class to determine the user's permissions. The PostDataAccess class is then called and a ViewPostCollectionView is returned.
@@ -175,7 +182,8 @@ class BusinessLogic_Post_Post
             break;
         case 'ProcessNewPost':
             $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
-            $view = new Presentation_View_ViewPostView($blogID,0,$authorID,$_POST['title'],$_POST['public'],0,$_POST['content']);
+            $title = substr($_POST['title'],0,30);
+            $view = new Presentation_View_ViewPostView($blogID,0,$authorID,$title,$_POST['public'],0,$_POST['content']);
             $this->ProcessNewPost($view);
             //forward user to viewing the blog that the post was just made in:
             return $this->ViewPostsByID(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($blogID,10));
@@ -186,8 +194,9 @@ class BusinessLogic_Post_Post
             break;
         case 'ProcessEditPost':
             $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
+            $title = substr($_POST['title'],0,30);
             $public = ($_POST['public'] == 'on');
-            $view = new Presentation_View_ViewPostView($blogID,$_POST['postID'],$authorID,$_POST['title'],$public, 0, $_POST['content']);
+            $view = new Presentation_View_ViewPostView($blogID,$_POST['postID'],$authorID,$title,$public, 0, $_POST['content']);
             $updateTimestamp = ($_POST['timestamp'] == 'now');
             $this->ProcessEditPost($view,$updateTimestamp);
             //forward user to viewing newly edited post:

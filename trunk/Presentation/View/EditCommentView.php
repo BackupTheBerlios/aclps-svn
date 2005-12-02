@@ -23,7 +23,7 @@ class Presentation_View_EditCommentView extends Presentation_View_View
             . '<input type="hidden" name="commentID" value="'.$this->comment->GetCommentID().'">'
 
             . '<p><label for="title">Title:</label>'
-            . '<input type="text" name="title" value="'.$this->comment->GetTitle().'"></p>'
+            . '<input type="text" name="title" maxlength="30" value="'.$this->comment->GetTitle().'"></p>'
 
             . '<p><label>Author:</label>'
             . $this->comment->GetAuthorName().'</p>'

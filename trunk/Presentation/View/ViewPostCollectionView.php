@@ -39,7 +39,7 @@ class Presentation_View_ViewPostCollectionView extends Presentation_View_View
             foreach($this->posts as $value)
             {
                 //If there's anything that should go between posts (newline or something), add it here
-                $ret = $ret.'<p id="post">'.$value->Display()."</p>\n";
+                $ret = $ret.$value->Display()."\n";
             }
             $ret = $ret.'</div>';
             return $ret;

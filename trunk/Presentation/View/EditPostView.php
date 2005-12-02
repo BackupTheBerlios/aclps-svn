@@ -29,7 +29,7 @@ class Presentation_View_EditPostView extends Presentation_View_View
             . '<input type="hidden" name="postID" value="'.$this->post->GetPostID().'">'
 
             . '<p><label for="title">Title:</label>'
-            . '<input type="text" name="title" value="'.$this->post->GetTitle().'"></p>'
+            . '<input type="text" name="title" maxlength="30" value="'.$this->post->GetTitle().'"></p>'
 
             . '<p><label>Author:</label>'
             . $this->post->GetAuthorName().'</p>'
