@@ -19,11 +19,11 @@ class Presentation_View_ViewPopularView extends Presentation_View_View
     {
       if(count($this->blogs) > 0)
       {
-        $ret = '<div id="popularcollection">';
+        $ret = '<br/>Popular Link:<br/><div id="popularcollection">';
         foreach($this->blogs as $value)
         {
         $ret .= '<a href="'.$this->linkprefix.'?Action=ViewBlog&blogID='.
-            $value['BlogID'].'">'.$value['Title'].'</a>\n';
+            $value['BlogID'].'">'.$value['Title'].'</a><br/>';
         }
         $ret .= '</div>';
         return $ret;

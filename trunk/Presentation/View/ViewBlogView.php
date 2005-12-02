@@ -115,8 +115,10 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
         {
             foreach($this->sideContent as $view)
             {
-                return $view->Display();
+                $final_view .= $view->Display();
             }
+            
+            return $final_view;
         }
         else
         {
