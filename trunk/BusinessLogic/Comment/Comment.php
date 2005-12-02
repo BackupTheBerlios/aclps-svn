@@ -111,21 +111,24 @@ class BusinessLogic_Comment_Comment
             return $this->EditComment($blogID,$commentID);
             break;
         case 'ProcessEditComment':
+            $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
             $title = substr($_POST['title'],0,30);
-            $view = new Presentation_View_ViewCommentView($blogID,0,$_POST['commentID'],0,$title, 0, $_POST['content']);
+            $view = new Presentation_View_ViewCommentView($blogID,0,$_POST['commentID'],$authorID,$title, 0, $_POST['content']);
             $this->ProcessEditComment($view);
-            //forward user to viewing comments in the post:
-            return $this->ViewComments($blogID,$_POST['postID']);
+            //forward user to viewing the post:
+            return BusinessLogic_Post_Post::GetInstance()->ViewPostsByID($blogID,$_POST['postID']);
             break;
         case 'DeleteComment':
             $commentID = $_GET['commentID'];
-            return $this->DeleteComment($blogID,$commentID);
+            $comment = $this->DeleteComment($blogID,$commentID);
+            print_r($comment);
+            return $comment;
             break;
         case 'ProcessDeleteComment':
             $commentID = $_POST['commentID'];
             $this->ProcessDeleteComment($blogID,$commentID);
-            //forward user to viewing comments in the post:
-            return $this->ViewComments($blogID,$_POST['postID']);
+            //forward user to viewing the post:
+            return BusinessLogic_Post_Post::GetInstance()->ViewPostsByID($blogID,$_POST['postID']);
             break;
         default:
             throw new Exception('Unknown Request.');

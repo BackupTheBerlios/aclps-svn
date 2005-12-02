@@ -213,7 +213,7 @@ class BusinessLogic_Post_Post
             return $this->ViewPostsByRecentCount($blogID,10);
             break;
         default:
-            BusinessLogic_Comment_Comment::GetInstance()->HandleRequest();
+            return BusinessLogic_Comment_Comment::GetInstance()->HandleRequest();
         }
     }
 }

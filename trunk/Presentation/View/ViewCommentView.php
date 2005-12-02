@@ -35,9 +35,9 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
     {
         if ($bool)
         {
-            $editurl = $linkprefix.'?Action=EditComment&commentID='.$this->commentID;
-            $deleteurl = $linkprefix.'?Action=DeleteComment&commentID='.$this->commentID;
-            $this->controls = '<div id="commentcontrols"><a href="'.$url.'">Edit Comment</a> <a href="'.$url.'">Delete Comment</a></div>';
+            $editurl = $linkprefix.'?Action=EditComment&blogID='.$this->blogID.'&commentID='.$this->commentID;
+            $deleteurl = $linkprefix.'?Action=DeleteComment&blogID='.$this->blogID.'&commentID='.$this->commentID;
+            $this->controls = '<div id="commentcontrols"><a href="'.$editurl.'">Edit Comment</a> <a href="'.$deleteurl.'">Delete Comment</a></div>';
         }
         else
         {

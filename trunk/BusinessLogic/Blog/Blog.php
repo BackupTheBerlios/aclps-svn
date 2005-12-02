@@ -90,10 +90,10 @@ class BusinessLogic_Blog_Blog
             $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
             $aViewBlogView->SetContent($this->ViewDashboard($userID));
 	    break;
-     case 'ViewSearch':
-        $aViewBlogView->SetContent($this->ViewSearch());
-        $aViewBlogView->SetSideContent($this->ViewPopular());
-        break;
+        case 'ViewSearch':
+            $aViewBlogView->SetContent($this->ViewSearch());
+            $aViewBlogView->SetSideContent($this->ViewPopular());
+            break;
 
 	default:
 	    $aViewBlogView->SetContent(BusinessLogic_User_User::GetInstance()->HandleRequest());

@@ -41,15 +41,14 @@ class BusinessLogic_Comment_CommentDataAccess
     public function EditComment($commentID)
     {
         //Returns an EditCommentView with data from the Comments table.
-        $commentarray = $this->ViewCommentsByID($commentID);
-        return new Presentation_View_EditCommentView($commentarray[0]);
+        return new Presentation_View_EditCommentView($this->GetSingleComment($commentID));
     }
 
     public function ProcessEditComment($commentView)
     {
         //Updates the Comments table with the new data.
         $query = 'update Comments set Title="[0]", Content="[1]" where CommentID=[2]';
-        $arguments = array($postView->GetTitle(), $postView->GetContent(), $postView->GetCommentID());
+        $arguments = array($commentView->GetTitle(), $commentView->GetContent(), $commentView->GetCommentID());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Update($query, $arguments);
@@ -58,8 +57,7 @@ class BusinessLogic_Comment_CommentDataAccess
     public function DeleteComment($commentID)
     {
         //Returns a DeleteCommentView with data from the Comments table.
-        $commentarray = $this->ViewCommentsByID($commentID);
-        return new Presentation_View_DeleteCommentView($commentarray[0]);
+        return new Presentation_View_DeleteCommentView($this->GetSingleComment($commentID));
     }
 
     public function ProcessDeleteComment($commentID)
@@ -93,6 +91,19 @@ class BusinessLogic_Comment_CommentDataAccess
 
         $comments = $this->SQLResultsToViewCommentViews($response);
         return new Presentation_View_ViewCommentCollectionView($comments);
+    }
+
+    private function GetSingleComment($commentID)
+    {
+        //Returns a single comment's viewcommentview.
+        $query = 'select * from Comments where CommentID=[0]';
+        $arguments = array($commentID);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Select($query, $arguments);
+
+        $comments = $this->SQLResultsToViewCommentViews($response);
+        return $comments[0];
     }
 
     public function ViewCommentsByID($commentID)
