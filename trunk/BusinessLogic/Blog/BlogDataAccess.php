@@ -45,7 +45,7 @@ class BusinessLogic_Blog_BlogDataAccess
                                                             
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
 
-		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($row['About']));
+		$aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($blogRow['About']));
         
         return $aViewBlogView;
     }

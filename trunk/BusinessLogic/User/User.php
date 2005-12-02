@@ -330,6 +330,27 @@ class BusinessLogic_User_User
         throw new Exception('User does not own a blog.');
       }
     }
+    
+    public function NewBlog()
+    {
+        //TODO
+    }
+    
+    public function DeleteBlog()
+    {
+        //TODO
+    }
+    
+    public function AddPermission($userID, $blogID)
+    {
+        //TODO
+    }
+
+    public function RemovePermission($userID, $blogID)
+    {
+        //TODO
+    }
+
 
 }
 
