@@ -5,11 +5,9 @@ class BusinessLogic_Comment_CommentDataAccess
     //Helper class which interacts with the Data Access layer.
     //This class is also responsible for converting data into a View structure.
 
-    private $TABLE;
-
     private function __construct()
     {
-        $this->TABLE = 'Comments';
+        //do nothing
     }
 
     static public function GetInstance()
@@ -33,8 +31,8 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ProcessNewComment($commentView)
     {
         //Inserts data into the Comments table.
-        $query = 'insert into [0] (PostID,BlogID,UserID,Title,Timestamp,Content) VALUES ([1],[2],[3],[4],NOW(),[5])';
-        $arguments = array($this->TABLE, $commentView->GetPostID(), $commentView->GetBlogID(),
+        $query = 'insert into Comments (PostID,BlogID,UserID,Title,Timestamp,Content) VALUES ("[0]","[1]","[2]","[3]",NOW(),"[4]")';
+        $arguments = array($commentView->GetPostID(), $commentView->GetBlogID(),
 			   $commentView->GetAuthorID(), $commentView->GetTitle(),
                            $commentView->GetContent());
         $response = $DataAccess->Insert($query, $arguments);
@@ -50,8 +48,8 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ProcessEditComment($commentView)
     {
         //Updates the Comments table with the new data.
-        $query = 'update [0] set Title=[1], Content=[2] where CommentID=[3]';
-        $arguments = array($this->TABLE, $postView->GetTitle(), $postView->GetContent(), $postView->GetCommentID());
+        $query = 'update Comments set Title="[0]", Content="[1]" where CommentID=[2]';
+        $arguments = array($postView->GetTitle(), $postView->GetContent(), $postView->GetCommentID());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Update($query, $arguments);
@@ -67,8 +65,8 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ProcessDeleteComment($commentID)
     {
         //Updates the Comments table with the new data.
-        $query = 'delete from [0] where CommentID=[1]';
-        $arguments = array($this->TABLE, $commentID);
+        $query = 'delete from Comments where CommentID=[0]';
+        $arguments = array($commentID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Delete($query, $arguments);
@@ -77,8 +75,8 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ProcessDeleteAllComments($postID)
     {
         //Deletes all comments associated with this post.
-        $query = 'delete from [0] where PostID=[1]';
-        $arguments = array($this->TABLE, $postID);
+        $query = 'delete from Comments where PostID=[0]';
+        $arguments = array($postID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Delete($query,$arguments);
@@ -87,8 +85,8 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ViewComments($blogID, $postID)
     {
         //Returns a ViewCommentCollectionView with data from the Comments table.
-        $query = 'select * from [0] where BlogID=[1] and PostID=[2] order by Timestamp asc';
-        $arguments = array($this->TABLE, $blogID, $postID);
+        $query = 'select * from Comments where BlogID=[0] and PostID=[1] order by Timestamp asc';
+        $arguments = array($blogID, $postID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
@@ -100,8 +98,8 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ViewCommentsByID($commentID)
     {
         //Returns a ViewCommentCollectionView with data from the Comments table.
-        $query = 'select * from [0] where CommentID=[1] order by Timestamp desc';
-        $arguments = array($this->TABLE, $commentID);
+        $query = 'select * from Comments where CommentID=[0] order by Timestamp desc';
+        $arguments = array($commentID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);

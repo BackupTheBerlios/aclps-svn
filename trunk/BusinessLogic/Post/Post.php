@@ -176,9 +176,9 @@ class BusinessLogic_Post_Post
         case 'ProcessNewPost':
             $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
             $view = new Presentation_View_ViewPostView($blogID,0,$authorID,$_POST['title'],$_POST['public'],0,$_POST['content']);
-            $newPostID = $this->ProcessNewPost($view);
-            //forward user to viewing newly created post:
-            return $this->ViewPostsByID($blogID,$newPostID);
+            $this->ProcessNewPost($view);
+            //forward user to viewing the blog that the post was just made in:
+            return $this->ViewPostsByID(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($blogID,10));
             break;
         case 'EditPost':
             $postID = $_GET['postID'];

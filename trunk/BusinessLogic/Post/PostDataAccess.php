@@ -5,11 +5,9 @@ class BusinessLogic_Post_PostDataAccess
     //Helper class which interacts with the Data Access layer.
     //This class is also responsible for converting data into a View structure.
 
-    private $TABLE;
-
     private function __construct()
     {
-        $this->TABLE = 'Posts';
+        //do nothing
     }
 
     static public function GetInstance()
@@ -24,9 +22,9 @@ class BusinessLogic_Post_PostDataAccess
     public function ProcessNewPost($postView)
     {
         //Inserts data into the Posts table.
-        $query = 'insert into [0] (BlogID,UserID,Title,Timestamp,Content) VALUES ("[1]","[2]","[3]",NOW(),"[4]")';
+        $query = 'insert into Posts (BlogID,UserID,Title,Timestamp,Content) VALUES ("[0]","[1]","[2]",NOW(),"[3]")';
         $filteredContent = BusinessLogic_ACLPSCodeConverter::ACLPSCodeToHTML($postView->GetContent());
-        $arguments = array($this->TABLE, $postView->GetBlogID(), $postView->GetAuthorID(),
+        $arguments = array($postView->GetBlogID(), $postView->GetAuthorID(),
                            $postView->GetTitle(), $filteredContent);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -46,14 +44,14 @@ class BusinessLogic_Post_PostDataAccess
         $filteredContent = BusinessLogic_ACLPSCodeConverter::ACLPSCodeToHTML($postView->GetContent());
         if ($useNowForTimestamp)
         {
-            $query = 'update [0] set Title="[1]", Timestamp=NOW(), Public=[2], Content="[3]" where PostID=[4]';
-            $arguments = array($this->TABLE, $postView->GetTitle(), $postView->GetPublic(),
+            $query = 'update Posts set Title="[0]", Timestamp=NOW(), Public=[1], Content="[2]" where PostID=[3]';
+            $arguments = array($postView->GetTitle(), $postView->GetPublic(),
                                $filteredContent, $postView->GetPostID());
         }
         else
         {
-            $query = 'update [0] set Title="[1]", Public=[2], Content="[3]" where PostID=[4]';
-            $arguments = array($this->TABLE, $postView->GetTitle(), $postView->GetPublic(),
+            $query = 'update Posts set Title="[0]", Public=[1], Content="[2]" where PostID=[3]';
+            $arguments = array($postView->GetTitle(), $postView->GetPublic(),
                                $filteredContent, $postView->GetPostID());
         }
 
@@ -70,8 +68,8 @@ class BusinessLogic_Post_PostDataAccess
     public function ProcessDeletePost($postID)
     {
         //Updates the Posts table with the new data.
-        $query = 'delete from [0] where PostID=[1]';
-        $arguments = array($this->TABLE, $postID);
+        $query = 'delete from Posts where PostID=[0]';
+        $arguments = array($postID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Delete($query, $arguments);
@@ -80,8 +78,8 @@ class BusinessLogic_Post_PostDataAccess
     private function GetSinglePost($postID)
     {
         //Returns a single post's viewpostview.
-        $query = 'select * from [0] where PostID=[1]';
-        $arguments = array($this->TABLE, $postID);
+        $query = 'select * from Posts where PostID=[0]';
+        $arguments = array($postID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
@@ -100,8 +98,8 @@ class BusinessLogic_Post_PostDataAccess
             $extras = 'and Public=1 ';
         }
 
-        $query = 'select * from [0] where PostID=[1] and BlogID=[2] '.$extras.'order by Timestamp desc';
-        $arguments = array($this->TABLE, $postID, $blogID);
+        $query = 'select * from Posts where PostID=[0] and BlogID=[1] '.$extras.'order by Timestamp desc';
+        $arguments = array($postID, $blogID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
@@ -124,8 +122,8 @@ class BusinessLogic_Post_PostDataAccess
             $extras = 'and Public=true ';
         }
 
-        $query = 'select * from [0] where BlogID=[1] '.$extras.'order by Timestamp desc limit [2]';
-        $arguments = array($this->TABLE, $blogID, $postCount);
+        $query = 'select * from Posts where BlogID=[0] '.$extras.'order by Timestamp desc limit [1]';
+        $arguments = array($blogID, $postCount);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
@@ -143,9 +141,9 @@ class BusinessLogic_Post_PostDataAccess
             $extras = 'and Public=true ';
         }
 
-        $query = 'select * from [0] where BlogID=[1] '.$extras.'and Timestamp >= date_sub(curdate(),interval [2] day) order by Timestamp desc';
+        $query = 'select * from Posts where BlogID=[0] '.$extras.'and Timestamp >= date_sub(curdate(),interval [1] day) order by Timestamp desc';
 
-        $arguments = array($this->TABLE, $blogID, $daysOld);
+        $arguments = array($blogID, $daysOld);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
@@ -183,9 +181,9 @@ class BusinessLogic_Post_PostDataAccess
             $extras = 'and Public=true ';
         }
 
-        $query = 'select * from [0] where BlogID=[1] '.$extras.'and Timestamp >= [2] and Timestamp < [3]';
+        $query = 'select * from Posts where BlogID=[0] '.$extras.'and Timestamp >= [1] and Timestamp < [2]';
 
-        $arguments = array($this->TABLE, $blogID, $begdate, $enddate);
+        $arguments = array($blogID, $begdate, $enddate);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
@@ -208,9 +206,9 @@ class BusinessLogic_Post_PostDataAccess
             $extras = 'and Public=true ';
         }
 
-        $query = 'select Timestamp from [0] where BlogID=[1] '.$extras.'and Timestamp >= [2] and Timestamp <= [3]';
+        $query = 'select Timestamp from Posts where BlogID=[0] '.$extras.'and Timestamp >= [1] and Timestamp <= [2]';
 
-        $arguments = array($this->TABLE, $blogID, $begtime, $endtime);
+        $arguments = array($blogID, $begtime, $endtime);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);
@@ -240,8 +238,8 @@ class BusinessLogic_Post_PostDataAccess
     {
         //Returns the authorid of a given post.
         //Used by PostSecurity to determine if an Author can mess with a post.
-        $query = 'select UserID from [0] where PostID=[1] order by Timestamp desc';
-        $arguments = array($this->TABLE, $postID);
+        $query = 'select UserID from Posts where PostID=[0] order by Timestamp desc';
+        $arguments = array($postID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Select($query, $arguments);

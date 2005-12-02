@@ -79,15 +79,16 @@ class BusinessLogic_Blog_Blog
 	case 'ProcessNewBlog':
             $title = $_POST['title'];
             $about = $_POST['about'];
-            //TODO: before submitting new blog to data: clean the header/footer image (then make them img tags)
+            //TODO: before submitting new blog to data: clean the header/footer image urls
             $headerimg = $_POST['headerimg'];
             $footerimg = $_POST['footerimg'];
-            //TODO: also ensure that chosen theme is actually an available theme
+            //TODO: also ensure that chosen themeID is actually an available theme
             $theme = $_POST['theme'];
+            $this->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
 
-            //forward user to viewing newly created blog:
-            $newBlogID = $this->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
-            $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($newBlogID,10));
+            //forward user to viewing their dashboard:
+            $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
+            $aViewBlogView->SetContent($this->ViewDashboard($userID));
 	    break;
      case 'ViewSearch':
         $aViewBlogView->SetContent($this->ViewSearch());
