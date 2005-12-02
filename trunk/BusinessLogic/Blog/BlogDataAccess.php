@@ -215,7 +215,7 @@ class BusinessLogic_Blog_BlogDataAccess
     }
     
     //counter for a blog
-    public function BlogViewCountUpdate($blogID)
+    public function ProcessCount($blogID)
     {
         $query = "update Blogs set Count=Count+1 where BlogID=[0]";
         $arguments = array($blogID);

@@ -31,7 +31,7 @@ class BusinessLogic_Blog_Blog
 	{
 	case 'ViewBlog':
 	    $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],10));
-	    $this->BlogViewCountUpdate($_GET['blogID']);
+	    $this->ProcessCount($_GET['blogID']);
 	    break;		
 	case 'ViewArchive':
 	    //TODO
@@ -279,9 +279,9 @@ class BusinessLogic_Blog_Blog
         return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
     }
     
-    public function BlogViewCountUpdate($blogID)
+    public function ProcessCount($blogID)
     {
-    BusinessLogic_Blog_BlogDataAccess::GetInstance()->BlogViewCountUpdate($blogID);
+    BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessCount($blogID);
     }
 
 }
