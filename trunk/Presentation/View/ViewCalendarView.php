@@ -5,7 +5,7 @@ class Presentation_View_ViewPopularView extends Presentation_View_View
   private $blogs;
   private $linkprefix;
   
-  public function __construct($blogs)
+  public function __construct()
   {
     $this->blogs = $blogs;
     
