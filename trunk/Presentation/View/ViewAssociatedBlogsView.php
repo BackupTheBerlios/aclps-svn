@@ -11,22 +11,25 @@ class Presentation_View_ViewAssociatedBlogsView extends Presentation_View_View
 
     public function Display()
     {
-        if (count($associatedBlogs) > 0)
+        if (count($this->associatedBlogs) > 0)
         {
-            $ret = '<div id=associatedBlogs>'
-                    . '<a href="index.php?Action=ViewBlog&blogID=' . $this->blogID . '">' . $this->blogTitle . '</a>'
-                    . '</div>';
-
-            return $ret;
+            $ret = '<div id=associatedBlogs>';
+            
+            foreach ($this->associatedBlogs as $blogID => $title)
+            {
+                $ret = $ret . '<a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">' . $title . '</a><br />';
+            }
+            
+            $ret = $ret . '</div>';
         }
         else
         {
             $ret = '<div id=associatedBlogs>'
                     . 'You are not associated with any blogs.'
                     . '</div>';
-
-            return $ret;
         }
+        
+        return $ret;
     }
 }
 

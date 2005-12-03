@@ -73,7 +73,7 @@ class BusinessLogic_Blog_BlogDataAccess
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         
         // Get My Blog Information
-        if ($user->IsUserBlogOwner)
+        if ($user->IsUserBlogOwner())
         {
             $blogID = $user->GetUserBlogID();
             
@@ -93,7 +93,7 @@ class BusinessLogic_Blog_BlogDataAccess
         
         //Get Associated Blog Information
         $query = 'select BlogID from [0] where UserID=[1]';
-        $arguments = array('User_Auth', $userID);
+        $arguments = array('User_Auth', $user->GetUserID());
         $associatedBlogResult = $DataAccess->Select($query, $arguments);
         
         $associatedBlogs = array();

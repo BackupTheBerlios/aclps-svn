@@ -13,22 +13,20 @@ class Presentation_View_ViewMyBlogView extends Presentation_View_View
     
     public function Display()
     {
-        if ($blogID != 0 and $blogTitle != '')
+        if ($this->blogID != 0 and $this->blogTitle != '')
         {
             $ret = '<div id=myBlog>'
                     . '<a href="index.php?Action=ViewBlog&blogID=' . $this->blogID . '">' . $this->blogTitle . '</a>'
                     . '</div>';
-
-            return $ret;
         }
         else
         {
             $ret = '<div id=myBlog>'
                     . '<a href="index.php?Action=NewBlog&blogID=1">Create my blog</a>'
                     . '</div>';
-
-            return $ret;
         }
+        
+        return $ret;
     }
 }
 

@@ -262,6 +262,7 @@ class BusinessLogic_User_User
         print '<br />';
         print_r($this->permissions);
         print '<br />';
+
         return new Presentation_View_ViewTopBarView($this->CheckSignedIn());
     }
     
@@ -291,6 +292,9 @@ class BusinessLogic_User_User
     {
         if ($this->CheckSignedIn())
         {
+            $hasBlog = false;
+
+            
             foreach($this->permissions as $key=>$value)
             {
                 if ($value == 'Owner')
@@ -308,8 +312,8 @@ class BusinessLogic_User_User
     
     public function GetUserBlogID()
     {
-        if ($this->IsUserBlogOwner)
-        {
+      if ($this->IsUserBlogOwner())
+      {
             $blogID = -1;
             
             foreach($this->permissions as $key=>$value)
