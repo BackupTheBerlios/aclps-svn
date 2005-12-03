@@ -21,131 +21,134 @@ class BusinessLogic_Blog_Blog
         if (!isset($_GET['blogID']))
        	{
             throw new Exception('Malformed Request-View Blog');
-	}
+        }
 
-	$aViewBlogView = $this->ViewBlog($_GET['blogID']);
+    	$aViewBlogView = $this->ViewBlog($_GET['blogID']);
 
-	$request = $_GET['Action'];
+    	$request = $_GET['Action'];
 
-	switch($request)
-	{
-	case 'ViewBlog':
-	    $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],10));
-	    $this->ProcessCount($_GET['blogID']);
-	    break;		
-	case 'ViewArchive':
-	    //TODO
-	    break;
-        case 'ViewDashboard':
-            //GetUserID will throw an exception if the user is not logged in
-            $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
-            $aViewBlogView->SetContent($this->ViewDashboard($userID));
-            break;
-	case 'EditAbout':
-            $aViewBlogView->SetContent($this->EditAbout($_GET['blogID']));
-	    break;
-	case 'ProcessEditAbout':
-	    //TODO
-		//if it's not set throw exception
-	    break;
-	case 'EditBlogImages':
-            //TODO
-            break;
-	case 'ProcessEditBlogImages':
-            //TODO
-            break;
-	case 'EditBlogLayout':
-	    //TODO
-	    break;
-	case 'ProcessEditBlogLayout':
-	    //TODO
-	    break;
-	case 'EditLinks':
-	    //TODO
-	    break;
-	case 'ProcessEditLinks':
-	    //TODO
-	    break;
-	case 'EditMembers':
-	    //TODO
-	    break;
-	case 'ProcessEditMembers':
-	    //TODO
-	    break;
-	case 'NewBlog':
-            //blogid is passed solely for returning to system when user submits processnewblog form
-            $aViewBlogView->SetContent($this->NewBlog($_GET['blogID']));
-	    break;
-	case 'ProcessNewBlog':
-            $title = $_POST['title'];
-            $about = $_POST['about'];
-            $headerimg = $_POST['headerimg'];
-            $footerimg = $_POST['footerimg'];
+    	switch($request)
+    	{
+            case 'ViewBlog':
+    	       $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],10));
+        	    $this->ProcessCount($_GET['blogID']);
+        	    break;
 
-            //ensure that chosen themeID is actually an available theme
-            $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
-            foreach ($themeslist as $key=>$value)
-            {
-                if ($value['ThemeID'].'' == $_POST['theme'])
+        	case 'ViewArchive':
+        	    //TODO
+        	    break;
+
+          case 'ViewDashboard':
+              //GetUserID will throw an exception if the user is not logged in
+              $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
+              $aViewBlogView->SetContent($this->ViewDashboard($userID));
+              break;
+
+        	case 'EditBlogLayout':
+        	    //TODO
+        	    break;
+
+        	case 'ProcessEditBlogLayout':
+        	    //TODO
+        	    break;
+
+        	case 'EditLinks':
+                //TODO
+        	    break;
+
+        	case 'ProcessEditLinks':
+    	       //TODO
+    	       break;
+	    
+        	case 'EditMembers':
+        	    //TODO
+        	    break;
+	    
+            case 'ProcessEditMembers':
+        	    //TODO
+                break;
+	    
+            case 'NewBlog':
+                //blogid is passed solely for returning to system when user submits processnewblog form
+                $aViewBlogView->SetContent($this->NewBlog($_GET['blogID']));
+                break;
+	    
+            case 'ProcessNewBlog':
+                $title = $_POST['title'];
+                $about = $_POST['about'];
+                $headerimg = $_POST['headerimg'];
+                $footerimg = $_POST['footerimg'];
+
+                //ensure that chosen themeID is actually an available theme
+                $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
+                foreach ($themeslist as $key=>$value)
                 {
-                    $theme = $_POST['theme'];
-                    break;
+                    if ($value['ThemeID'].'' == $_POST['theme'])
+                    {
+                        $theme = $_POST['theme'];
+                        break;
+                    }
                 }
-            }
-            if (!isset($theme))
-            {
-                throw new Exception("Invalid Theme ID");
-            }
-            $newBlogID = $this->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
 
-            //forward user to viewing their new blog:
-            $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($newBlogID,10));
-	    break;
-        case 'ViewSearch':
-            $aViewBlogView->SetContent($this->ViewSearch($this->ViewPopular()));
-            break;
+                if (!isset($theme))
+                {
+                    throw new Exception("Invalid Theme ID");
+                }
+                $newBlogID = $this->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
 
-	default:
-	    $aViewBlogView->SetContent(BusinessLogic_User_User::GetInstance()->HandleRequest());
-	}
+                //forward user to viewing their new blog:
+                $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($newBlogID,10));
+                break;
 
-	return $aViewBlogView;
+            case 'ViewSearch':
+                $aViewBlogView->SetContent($this->ViewSearch($this->ViewPopular()));
+                break;
+
+        	default:
+        	    $aViewBlogView->SetContent(BusinessLogic_User_User::GetInstance()->HandleRequest());
+    	}
+
+	   return $aViewBlogView;
     }
-
+    
+    //************************************
+    //          ACTION FUNCTIONS
+    //************************************
+    
     public function ViewBlog($blogID)
     {
-	$aBlogSecurity = BusinessLogic_Blog_BlogSecurity::GetInstance();
+	   $aBlogSecurity = BusinessLogic_Blog_BlogSecurity::GetInstance();
 
-	switch($aBlogSecurity->ViewBlog($blogID))
-	{
-	case 'Owner':
-	    $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a>'
-		. ' : <a href="index.php?Action=EditMembers&blogID='.$blogID.'">Edit Memberships</a>'
-		. ' : <a href="index.php?Action=EditLayout&blogID='.$blogID.'">Edit Layout</a></a></div>';
-	    break;
+	   switch($aBlogSecurity->ViewBlog($blogID))
+	   {
+	       case 'Owner':
+	           $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a>'
+		      . ' : <a href="index.php?Action=EditMembers&blogID='.$blogID.'">Edit Memberships</a>'
+		      . ' : <a href="index.php?Action=EditLayout&blogID='.$blogID.'">Edit Layout</a></a></div>';
+	           break;
               
-	case 'Editor':
-	    $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a></div>';
-	    break;
+	       case 'Editor':
+	           $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a></div>';
+	           break;
               
-	case 'Author':
-	    $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a></div>';
-	    break;
+	       case 'Author':
+	           $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a></div>';
+	           break;
               
-	    //FALL THROUGH
-	case 'Nobody':
-	default:
-	    $contentOptions = '';
-	    break;
-	}
+	       //FALL THROUGH
+	       case 'Nobody':
+	       default:
+	           $contentOptions = '';
+	           break;
+	   }
           
-	$aBlogDataAccess = BusinessLogic_Blog_BlogDataAccess::GetInstance();
-	return $aBlogDataAccess->ViewBlog($blogID, $contentOptions);
+	   $aBlogDataAccess = BusinessLogic_Blog_BlogDataAccess::GetInstance();
+	   return $aBlogDataAccess->ViewBlog($blogID, $contentOptions);
     }
 
     public function ViewArchive()
     {
-	//TODO
+        //TODO
     }
 
     public function ViewDashboard($userID)
@@ -161,7 +164,7 @@ class BusinessLogic_Blog_Blog
         }
         else
         {
-            $result = "You have to enter something!!!";
+            $result = "Please Specify A Blog Name:";
         }
         
         return new Presentation_View_ViewSearchView($result, $more);
