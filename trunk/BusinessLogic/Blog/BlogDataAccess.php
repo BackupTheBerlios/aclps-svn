@@ -68,7 +68,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $data = $DataAccess->Select($query, $arguments);
-        return $data[0]['DefaultFooter'];
+        return $data[0]['DefaultHeader'];
     }
     public function GetThemeDefaultFooter($themeID)
     {
