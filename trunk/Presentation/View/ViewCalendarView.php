@@ -65,10 +65,10 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
       $set = true;
     
     //month and year
-    $cal .= '<div id="calendar_month_year">'.$wantday['month'].'&nbsp;&nbsp;'.$this->year
-        .'</div><table border="0" id="calendar_table" cellspacing="5"><tr id="calendar_week_row">'
-        .'<td><div id="calendar_week">Sun</div></td><td><div id="calendar_week">Mon</div></td><td><div id="calendar_week">Tue</div></td><td><div id="calendar_week">Wed</div></td><td><div id="calendar_week">Thu</div></td>'
-        .'<td><div id="calendar_week">Fri</div></td><td><div id="calendar_week">Sat</div></td></tr><tr>';
+    $cal .= "\n".'<div id="calendar_month_year">'.$wantday['month'].'&nbsp;&nbsp;'.$this->year
+        .'</div>'."\n".'<table border="0" id="calendar_table" cellspacing="5">'."\n".'<tr id="calendar_week_row">'."\n"
+        .'<td><div id="calendar_week">Sun</div></td>'."\n".'<td><div id="calendar_week">Mon</div></td>'."\n".'<td><div id="calendar_week">Tue</div></td>'."\n".'<td><div id="calendar_week">Wed</div></td>'."\n".'<td><div id="calendar_week">Thu</div></td>'."\n"
+        .'<td><div id="calendar_week">Fri</div></td>'."\n".'<td><div id="calendar_week">Sat</div></td></tr>'."\n".'<tr>'."\n";
         
     //1st row
     for($count=0; $count<7; ++$count)
@@ -81,13 +81,13 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
         else
             $temp = '';
 
-        $cal .= "<td>$temp</td>";
+        $cal .= "<td>$temp</td>\n";
     }
-    $cal .= '</tr>';
+    $cal .= "</tr>\n";
     //after 1st row
     while(!$done)
     {
-        $cal .= '<tr>';
+        $cal .= "<tr>\n";
         for($count=0; $count<7; ++$count)
         {
             if(!(($temp = $day++) <= $total_day))
@@ -98,12 +98,12 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
             else
                 $temp = $this->testnumber($found, $set, $temp);
                 
-            $cal .= "<td>$temp</td>";
+            $cal .= "<td>$temp</td>\n";
         }
-        $cal .= '</tr>';
+        $cal .= "<tr>\n";
     }
 
-    return $cal.'</table>';
+    return $cal."</table>\n";
   }
   
   public function ViewMonth()
@@ -118,7 +118,7 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
     $display = '<div id="calendar_last_mon"><a href="'
         .$this->linkprefix.'?Action='.$this->action.'&blogID='
         .$this->blogID.'&month='.$show.'">'
-        .strftime('%b', $day_one).'</a></div>';
+        .strftime('%b', $day_one).'</a></div>'."\n";
     
     if(($this->today['mon'] > $this->month)||($this->today['year'] > $this->year))
     {
@@ -129,7 +129,7 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
         else
             $show = ($this->month+1).'&year='.$this->year;
         
-        $display .= '<div id="calendar_last_mon"><a href="'
+        $display .= '<div id="calendar_next_mon"><a href="'
             .$this->linkprefix.'?Action='.$this->action.'&blogID='
             .$this->blogID.'&month='.$show.'">'
             .strftime('%b', $day_one).'</a></div>';
