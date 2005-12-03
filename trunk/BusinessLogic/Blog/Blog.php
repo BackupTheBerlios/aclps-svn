@@ -125,11 +125,11 @@ class BusinessLogic_Blog_Blog
 	    break;
               
 	case 'Editor':
-	    $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=$blogID">New Post</a></div>';
+	    $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a></div>';
 	    break;
               
 	case 'Author':
-	    $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=$blogID">New Post</a></div>';
+	    $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a></div>';
 	    break;
               
 	    //FALL THROUGH

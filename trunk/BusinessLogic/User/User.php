@@ -7,7 +7,7 @@ class BusinessLogic_User_User
     
     private function __construct()
     {
-        //Do Nothing
+        //Do nothing
     }
 
     static public function GetInstance()
@@ -107,7 +107,7 @@ class BusinessLogic_User_User
         }
         else
         {
-            return new Exception('User is not signed in.');
+            throw new Exception('User is not signed in.');
         }
     }
 
@@ -162,6 +162,10 @@ class BusinessLogic_User_User
                 header("Location: $path");
                 exit;
             }
+        }
+        else
+        {
+            throw new Exception('User is not signed in.');
         }
     }
     
