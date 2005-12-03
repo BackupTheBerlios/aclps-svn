@@ -47,11 +47,11 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
 
     public function Display()
     {
-        $displaystr = $this->controls.
+        $displaystr = '<div id="comment">'.$this->controls.
             '<div id="commenttitle">'.$this->title.'</div>'.
             '<div id="commentauthor">'.$this->authorName.'</div>'.
             '<div id="commenttime">'.$this->timestamp.'</div>'.
-            '<div id="commentcontent">'.$this->content.'</div>';
+            '<div id="commentcontent">'.$this->content.'</div></div>';
         return $displaystr;
     }
 

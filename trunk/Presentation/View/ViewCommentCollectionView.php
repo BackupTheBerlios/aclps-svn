@@ -21,7 +21,7 @@ class Presentation_View_ViewCommentCollectionView extends Presentation_View_View
             $ret = '<div id="commentcollection">';
             foreach($this->comments as $value)
             {
-                $ret = $ret.'<p id="comment">'.$value->Display()."</p>\n";
+                $ret = $ret.$value->Display()."\n";
             }
             $ret = $ret.'</div>';
             try {
