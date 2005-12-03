@@ -49,7 +49,9 @@ class BusinessLogic_Blog_Blog
         	    break;
 
         	case 'ProcessEditBlogLayout':
-        	    //TODO
+        	//TODO: wait for changes
+//                if (isset($_POST['blogTitle']) and isset($_POST['theme']) and isset($_POST['headerImage']) $_POST['footerImage'], $_POST[''], $_POST['about'])
+  //      	    $aViewBlogView->SetContent($this->ProcessEditBlogLayout($_GET['blogID'], $_POST['blogTitle'], $_POST['theme'], $_POST['headerImage'], $_POST['footerImage'], $_POST[''], $_POST['about']));
         	    break;
 
         	case 'EditLinks':
@@ -147,17 +149,26 @@ class BusinessLogic_Blog_Blog
 	   switch($aBlogSecurity->ViewBlog($blogID))
 	   {
 	       case 'Owner':
-	           $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a>'
-		      . ' : <a href="index.php?Action=EditMembers&blogID='.$blogID.'">Edit Memberships</a>'
-		      . ' : <a href="index.php?Action=EditBlogLayout&blogID='.$blogID.'">Edit Layout</a></a></div>';
+	           $contentOptions = '<div id="blogcontrols">'
+                    . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
+                    . ' | <a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a>'
+                    . ' | <a href="index.php?Action=EditMembers&blogID='.$blogID.'">Edit Memberships</a>'
+                    . ' | <a href="index.php?Action=EditBlogLayout&blogID='.$blogID.'">Edit Layout</a></a>'
+                    . '</div>';
 	           break;
               
 	       case 'Editor':
-	           $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a></div>';
+	           $contentOptions = '<div id="blogcontrols">'
+                    . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
+                    . ' | <a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a>'
+                    . '</div>';
 	           break;
               
 	       case 'Author':
-	           $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a></div>';
+	           $contentOptions = '<div id="blogcontrols">'
+                    . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
+                    . ' | <a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a>'
+                    . '</div>';
 	           break;
               
 	       //FALL THROUGH

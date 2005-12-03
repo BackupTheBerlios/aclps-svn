@@ -326,11 +326,6 @@ class BusinessLogic_User_User
     
     public function GetTopBar()
     {
-        print_r($this->userInfo);
-        print '<br />';
-        print_r($this->permissions);
-        print '<br />';
-
         return new Presentation_View_ViewTopBarView($_GET['blogID'], $this->CheckSignedIn());
     }
     
