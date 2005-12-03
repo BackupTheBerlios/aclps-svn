@@ -168,11 +168,11 @@ class BusinessLogic_Blog_BlogDataAccess
         }
     }
     
-    public function ViewCalendar($blogID, $year, $month)
+    public function ViewCalendar($action, $blogID, $year, $month)
     {
         $PostsObject = BusinessLogic_Post_Post::GetInstance();
         
-        return new Presentation_View_ViewCalendarView($blogID, $PostsObject, $year, $month);
+        return new Presentation_View_ViewCalendarView($action, $blogID, $PostsObject, $year, $month);
     }
 
     public function EditBlogLayout($blogID)

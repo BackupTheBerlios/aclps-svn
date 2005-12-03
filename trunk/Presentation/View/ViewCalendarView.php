@@ -9,12 +9,14 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
   private $today;
   private $linkprefix;
   private $aLink;
+  private $action;
 
   //$posts should be an object of BusinessLogic_Post_PostDataAccess
   //can modify and get the current calendar month and year in order
   //to change the display month and year of calendar
-  public function __construct($blogID, $posts, $year, $month)
+  public function __construct($action, $blogID, $posts, $year, $month)
   {
+    $this->action = $action;
     $this->today = getdate();
     $this->blogID = $blogID;
     $this->linkprefix = explode('?',$_SERVER['REQUEST_URI'], 2);
@@ -109,22 +111,27 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
     $day_one = mktime(0,0,0,$this->month-1,1,$this->year);
     
     if(($this->month-1) == 0)
-    {
-        $this->month = 13;
-        $show = '&year='.($this->year-1);
-    }
+        $show = '12&year='.($this->year-1);
+    else
+        $show = ($this->month-1).'&year='.$this->year;
     
     $display = '<div id="calendar_last_mon"><a href="'
-        .$this->linkprefix.'?Action=ViewBlog&blogID='
-        .$this->blogID.'&month='.($this->month-1).$show.'">'
+        .$this->linkprefix.'?Action='.$this->action.'&blogID='
+        .$this->blogID.'&month='.$show.'">'
         .strftime('%b', $day_one).'</a></div>';
     
     if(($this->today['mon'] > $this->month)||($this->today['year'] > $this->year))
     {
         $day_one = mktime(0,0,0,$this->month+1,1,$this->year);
+        
+        if(($this->month+1) == 13)
+            $show = '1&year='.($this->year+1);
+        else
+            $show = ($this->month+1).'&year='.$this->year;
+        
         $display .= '<div id="calendar_last_mon"><a href="'
-            .$this->linkprefix.'?Action=ViewBlog&blogID='
-            .$this->blogID.'&month='.($this->month+1).'">'
+            .$this->linkprefix.'?Action='.$this->action.'&blogID='
+            .$this->blogID.'&month='.$show.'">'
             .strftime('%b', $day_one).'</a></div>';
     }
 

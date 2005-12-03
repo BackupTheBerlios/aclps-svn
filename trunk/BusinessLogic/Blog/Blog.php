@@ -24,7 +24,7 @@ class BusinessLogic_Blog_Blog
         }
 
     	$aViewBlogView = $this->ViewBlog($_GET['blogID']);
-	    $this->ViewCalendar($_GET['blogID'], $aViewBlogView);
+	    $this->ViewCalendar($_GET['Action'], $_GET['blogID'], $aViewBlogView);
 
     	$request = $_GET['Action'];
 
@@ -212,14 +212,14 @@ class BusinessLogic_Blog_Blog
         return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewPopular();
     }
 
-    public function ViewCalendar($blogID, $aViewBlogView)
+    public function ViewCalendar($action, $blogID, $aViewBlogView)
     {
         if(isset($_GET['year']))
-            $aViewBlogView->SetSideContent(BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewCalendar($blogID, $_GET['year'], $_GET['month']));
+            $aViewBlogView->SetSideContent(BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewCalendar($action, $blogID, $_GET['year'], $_GET['month']));
         elseif(isset($_GET['month']))
-            $aViewBlogView->SetSideContent(BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewCalendar($blogID, '', $_GET['month']));
+            $aViewBlogView->SetSideContent(BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewCalendar($action, $blogID, '', $_GET['month']));
         else
-            $aViewBlogView->SetSideContent(BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewCalendar($blogID, '', ''));
+            $aViewBlogView->SetSideContent(BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewCalendar($action, $blogID, '', ''));
     }
 
     public function EditBlogLayout($blogID)
