@@ -108,12 +108,24 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
   {
     $day_one = mktime(0,0,0,$this->month-1,1,$this->year);
     
-    $display = '<div id="calendar_last_mon">'.strftime('%b', $day_one).'</div>';
+    if(($this->month-1) == 0)
+    {
+        $this->month = 13;
+        $show = '&year='.($this->year-1);
+    }
     
-    if($this->today['mon'] > $this->month)
+    $display = '<div id="calendar_last_mon"><a href="'
+        .$this->linkprefix.'?Action=ViewBlog&blogID='
+        .$this->blogID.'&month='.($this->month-1).$show.'">'
+        .strftime('%b', $day_one).'</a></div>';
+    
+    if(($this->today['mon'] > $this->month)||($this->today['year'] > $this->year))
     {
         $day_one = mktime(0,0,0,$this->month+1,1,$this->year);
-        $display .= '<div id="calendar_next_mon">'.strftime('%b', $day_one).'</div>';
+        $display .= '<div id="calendar_last_mon"><a href="'
+            .$this->linkprefix.'?Action=ViewBlog&blogID='
+            .$this->blogID.'&month='.($this->month+1).'">'
+            .strftime('%b', $day_one).'</a></div>';
     }
 
     return $display;
