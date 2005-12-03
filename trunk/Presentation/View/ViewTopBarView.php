@@ -15,7 +15,7 @@ class Presentation_View_ViewTopBarView extends Presentation_View_View
     {
         if ($this->signedIn)
         {
-            $ret =    '<a href=index.php?Action=ViewDashboard&blogID='    . $this->blogID . '>My DashBoard</a>'
+            $ret =    '<a href=index.php?Action=ViewDashboard&blogID='    . $this->blogID . '>My Dashboard</a>'
                     . '&nbsp;|&nbsp;'
                     . '<a href=index.php?Action=EditUserData&blogID='     . $this->blogID . '>Edit My Account</a>'
                     . '&nbsp;|&nbsp;'
