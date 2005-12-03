@@ -20,7 +20,7 @@ a
 {
   background-color: #003300;
   border-bottom: 1px solid #00FF00;
-  font-family: sans-serif;
+  font-family: monospace;
   font-size: 14px;
   padding: 5px;
   text-align: left;
@@ -61,7 +61,7 @@ a
   text-align: left;
   width: 500px;
   float: left;
-  font-family: sans-serif;
+  font-family: monospace;
   font-size: 14px;
   border: 1px solid #00FF00;
   padding: 0px 5px 5px 5px;
@@ -79,7 +79,7 @@ a
 {
   background-color: #003300;
   text-align: left;
-  font-family: sans-serif;
+  font-family: monospace;
   font-size: 12px;
   margin: 0px 0px 15px 0px;
   border: 1px solid #00FF00;
@@ -98,7 +98,7 @@ a
   background-color: #002200;
   width: 230px;
   text-align: center;
-  font-family: sans-serif;
+  font-family: monospace;
   font-size: 12px;
   margin: 0px 0px 15px 0px;
   border: 1px solid #00FF00;
@@ -107,6 +107,7 @@ a
 
 #calendar_month_year
 {
+  font-family: monospace;
   text-align: center;
   font-weight: bold;
   letter-spacing: 5;
@@ -166,7 +167,7 @@ a
 #posttitle
 {
   color: #00FF00;
-  font-family: serif;
+  font-family: monospace;
   font-size: 24px;
   font-weight: bold;
   padding: 5px 0px 0px 5px;
@@ -195,9 +196,8 @@ a
 
 #commentlabel
 { 
-  padding: 8px 5px 5px 5px;
+  padding: 10px 5px 7px 5px;
   font-size: 14px;
-  border-left: 1px dotted #00FF00;
 }
 
 #comment
@@ -217,7 +217,7 @@ a
 }
 #commenttitle
 {
-  font-family: serif;
+  font-family: monospace;
   font-size: 18px;
   font-weight: bold;
   padding: 5px 0px 0px 5px;
@@ -243,8 +243,14 @@ a
 
 fieldset
 {
+  font-size: 12px;
   text-align: center;
   border: 1px solid #00FF00;
+  margin-bottom: 5px;
+}
+fieldset input
+{
+  text-align: right;
 }
 legend
 {
@@ -260,8 +266,11 @@ label
 
 input, textarea, select
 {
+  color: #00FF00;
+  background-color: #003300;
   padding: 2px;
   margin: 2px;
   border: #00FF00 1px solid;
   font-size: 12px;
+  font-family: monospace;
 }
