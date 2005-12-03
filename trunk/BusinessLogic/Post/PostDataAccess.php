@@ -171,7 +171,7 @@ class BusinessLogic_Post_PostDataAccess
         $returnme = array();
         foreach ($response as $key=>$value)
         {
-            $returnme[$value['Timestamp']] = true;
+            $returnme[$value['DAYOFMONTH(Timestamp)']] = true;
         }
         return $returnme;
     }
