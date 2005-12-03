@@ -1,14 +1,24 @@
 <?php
 
-class Presentation_View_EditLayoutView extends Presentation_View_View
+class Presentation_View_EditBlogLayoutView extends Presentation_View_View
 {
     private $blogID;
     private $themes;
+    private $title;
+    private $about;
+    private $themeID;
+    private $headerImage;
+    private $footerImage;
 
-    public function __construct($blogID, $themes)
+    public function __construct($blogID, $themes, $title, $about, $themeID, $headerImage, $footerImage)
     {
         $this->blogID = $blogID;
         $this->blogID = $themes;
+        $this->title = $title;
+        $this->about = $about;
+        $this->themeID = $themeID;
+        $this->headerImage = $headerImage;
+        $this->footerImage = $headerImage;
     }
 
     public function Display()
@@ -16,7 +26,8 @@ class Presentation_View_EditLayoutView extends Presentation_View_View
         $form = '<form method="post" action="index.php?&Action=ProcessEditLayout&blogID=' . $this->blogID . '>'
             . '<fieldset>'
             . '<legend>&nbsp;Edit Your Blog</legend>'
-
+            . '<p><label for="blogTitle">Blog Title:</label>'
+            . '<input type="text" name="blogTitle"></p>'
             . '<p><label for="theme">Theme:</label>'
             . '<select name="theme">';
         foreach ($themes as $key=>$value)
@@ -25,11 +36,11 @@ class Presentation_View_EditLayoutView extends Presentation_View_View
         }
         
         $form = $form.'</select></p>'
-            . '<p><label for="headerimg">Custom Header Image URL (blank=theme default):</label>'
-            . '<input type="text" name="headerimg"></p>'
+            . '<p><label for="headerImage">Custom Header Image URL (blank=theme default):</label>'
+            . '<input type="text" name="headerImage"></p>'
 
-            . '<p><label for="footerimg">Custom Footer Image URL (blank=theme default):</label>'
-            . '<input type="text" name="footerimg"></p>'
+            . '<p><label for="footerImage">Custom Footer Image URL (blank=theme default):</label>'
+            . '<input type="text" name="footerImage"></p>'
 
             . '<p><label for="about">About Text (for sidebar):</label>'
             . '<textarea name="about" rows="3" cols="40"></textarea></p>'

@@ -32,7 +32,7 @@ class BusinessLogic_Blog_BlogSecurity
         //See Post.ViewPostsByMonth($blogID, $year, $month) and Post.ViewPostsByDay($blogID, $year, $month, $date) --nick
     }
     
-    public function EditAbout($blogID)
+    public function EditBlogLayout($blogID)
     {
         $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
         if($permission == 'Owner')
@@ -44,46 +44,6 @@ class BusinessLogic_Blog_BlogSecurity
         {
             return false;
     	}
-    }
-    
-    public function ProcessEditAbout($blogID)
-    {
-        $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
-        if($permission == 'Owner')
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    
-    public function EditBlogImages($blogID)
-    {
-        $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
-        if($permission == 'Owner')
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-	
-    }
-    
-    public function ProcessEditBlogImages($blogID)
-    {
-        $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
-        if($permission == 'Owner')
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
     
     public function EditLinks($blogID)
