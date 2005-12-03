@@ -129,9 +129,6 @@ class BusinessLogic_User_User
                 $_SESSION['BusinessLogic_User_User'] = serialize($this);
             }
 
-            print $oldPassword;
-            print $newPassword;
-            exit;
             //Does the user want to change their password, order is important in checking intent
             if ($oldPassword != '' and $newPassword != '')
             {
