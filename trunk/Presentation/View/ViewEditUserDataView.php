@@ -9,13 +9,14 @@ class Presentation_View_ViewEditUserDataView extends Presentation_View_View
 
     public function __construct($blogID, $email, $errorMessage)
     {
+
         $this->email = $email;
         $this->errorMessage = $errorMessage;
     }
 
     public function Display()
     {
-       $form = '<form method="post" action="index.php?Action=ProcessEditUserData&blogID="'. $this->blogID . '">'
+       $form = '<form method="post" action=index.php?Action=ProcessEditUserData&blogID='. $this->blogID . '>'
             . '<fieldset>'
             . '<legend>&nbsp;Edit Account</legend>'
             . '<p>';
@@ -28,24 +29,21 @@ class Presentation_View_ViewEditUserDataView extends Presentation_View_View
       }
 
         $form = $form
-            . '<center>Please fill in the fields below.</center>'
             . '</p>'
             . '<label for="email">Email:</label>'
-            . '<input type="text" name="email" value="'.$this->email.'">'
-            . '</fieldset>'
+            . '<input type="text" name="email" value="' . $this->email . '">'
             . '<br />'
-            . '<fieldset>'
-            . '<legend>&nbsp;Change Passowrd</legend>'
+            . '<br />'
             . '<label for="oldpassword">Old Password:</label>'
             . '<input type="password" name="oldpassword">'
             . '<br />'
             . '<label for="newPassword">New Password:</label>'
             . '<input type="password" name="newPassword">'
             . '<br />'
-            . '<label for="confirmNewPassword">Confirm New Password:</label>'
+            . '<label for="confirmNewPassword">Confirm:</label>'
             . '<input type="password" name="confirmNewPassword">'
             . '<br />'
-            . '<input type="submit" class="submit-register" value="Register">'
+            . '<input type="submit" class="submit-register" value="Submit Changes">'
             . '</fieldset>'
             . '</form>';
 

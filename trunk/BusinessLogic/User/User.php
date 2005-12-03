@@ -87,7 +87,7 @@ class BusinessLogic_User_User
     {
         if ($this->CheckSignedIn())
         {
-            return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['email'], '');
+            return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], '');
         }
         else
         {
