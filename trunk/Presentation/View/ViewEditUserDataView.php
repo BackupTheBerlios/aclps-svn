@@ -9,7 +9,7 @@ class Presentation_View_ViewEditUserDataView extends Presentation_View_View
 
     public function __construct($blogID, $email, $errorMessage)
     {
-
+        $this->blogID = $blogID;
         $this->email = $email;
         $this->errorMessage = $errorMessage;
     }

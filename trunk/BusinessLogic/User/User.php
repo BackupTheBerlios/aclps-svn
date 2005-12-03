@@ -29,11 +29,20 @@ class BusinessLogic_User_User
             return $this->EditUserData();
             break;
         case 'ProcessEditUserData':
-            return $this->ProcessEditUserData();
+            if ($_POST['newPassword'] == $_POST['confirmNewPassword'])
+            {
+                return $this->ProcessEditUserData($_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
+            }
+            else
+            {
+                return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'New Password and Confirmation Password do not match.');
+            }
             break;
+
         case 'ViewRegister':
             return $this->ViewRegister();
             break;
+
         case 'ProcessRegister':
             if ($_POST['username'] != '' and $_POST['email'] != ''
                 and $_POST['password'] != '' and $_POST['confirmPassword'] != '')
@@ -95,10 +104,55 @@ class BusinessLogic_User_User
         }
     }
 
-    public function ProcessEditUserData()
+    public function ProcessEditUserData($email, $oldPassword, $newPassword)
     {
-	   //Processes the form data in EditUserDataView and modifies the Users table.
-	   //TODO
+        if ($this->CheckSignedIn())
+        {
+            $aDataAccess = DataAccess_DataAccessFactory::GetInstance();
+            
+            //Do we need to update the user's email info
+            if ($email != $this->userInfo['Email'])
+            {
+                $query = "update [0] set Email='[1]' where UserID=[2]";
+                $arguments = array('Users', $email, $this->GetUserID());
+                $aDataAccess->Update($query, $arguments);
+                $this->userInfo['Email'] = $email;
+            }
+
+            //Does the user want to change their password, order is important in checking intent
+            if ($oldPassword != '' and $newPassword != '')
+            {
+                $query = "select * from [0] where UserID=[1] and Password=SHA1('[2]')";
+                $arguments = array('Users', $this->GetUserID(), $oldPassword);
+                $result = $aDataAccess->Select($query, $arguments);
+                
+                //Password match
+                if (count($result) > 0)
+                {
+                    $query = "update [0] set Password = SHA1('[1]') where UserID=[2]";
+                    $arguments = array('Users', $newPassword, $this->GetUserID());
+                    $aDataAccess->Update($query, $arguments);
+                }
+                else
+                {
+                    return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'Old Password provided is invalid.');
+                }
+                
+                $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $_GET['blogID'];
+                header("Location: $path");
+                exit;
+            }
+            elseif ($oldPassword != '' or $newPassword != '')
+            {
+                    return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'The password fields were not filled in correctly.');
+            }
+            else
+            {
+                $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $_GET['blogID'];
+                header("Location: $path");
+                exit;
+            }
+        }
     }
     
     public function ViewRegister()
