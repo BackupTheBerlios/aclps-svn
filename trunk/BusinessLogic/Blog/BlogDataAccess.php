@@ -40,12 +40,12 @@ class BusinessLogic_Blog_BlogDataAccess
 
         $themeRow = $themeResult[0];
 
-        $aViewBlogView = new Presentation_View_ViewBlogView($blogID, $contentOptions, $blogRow['HeaderImage'],
-                                                            $blogRow['FooterImage'], $themeRow['URL']);
-                                                            
+        $aViewBlogView = new Presentation_View_ViewBlogView($blogID, $contentOptions, $blogRow['HeaderImage'], $blogRow['FooterImage'], $themeRow['URL']);
+        $PostsObject = BusinessLogic_Post_Post::GetInstance();
+        
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
         $aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($blogRow['About']));
-        $aViewBlogView->SetSideContent(new Presentation_View_ViewCalendarView());
+        $aViewBlogView->SetSideContent(new Presentation_View_ViewCalendarView($blogID,$PostsObject, '', ''));
         
         return $aViewBlogView;
     }
