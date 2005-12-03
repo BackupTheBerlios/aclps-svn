@@ -4,13 +4,20 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
 {
   private $posts;
   private $year;
+  private $blogID;
   private $month;
   private $today;
-  private $day_one;
+  private $linkprefix;
 
+  //$posts should be an object of BusinessLogic_Post_PostDataAccess
+  //can modify and get the current calendar month and year in order
+  //to change the display month and year of calendar
   public function __construct($blogID, $posts, $year, $month)
   {
     $this->today = getdate();
+    $this->blogID = $blogID;
+    $this->linkprefix = explode('?',$_SERVER['REQUEST_URI'], 2);
+    $this->linkprefix = $this->linkprefix[0];
     
     if($year == '')
         $this->year = $this->today['year'];
@@ -21,11 +28,9 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
         $this->month = 11;//$this->today['mon'];
     else
         $this->month = $month;
-        
-    $this->day_one = mktime(0,0,0,$this->month,1,$this->year);
 
     if(is_object($posts)){
-        $this->posts = $posts->GetDatesWithPostsForMonth($blogID, $this->year, $this->month);
+        $this->posts = $posts;
     }
     else{
         throw new Exception("Incorrect used of Calendar.");
@@ -34,15 +39,18 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
   
   public function Display()
   {
+    $this->posts = $this->posts->GetDatesWithPostsForMonth($this->blogID, $this->year, $this->month);
+
     return $this->ViewCalendar();
   }
   
-  //Display the Calendar according to input month and year
+  //Display the Calendar
   public function ViewCalendar()
   {
-    $space = idate('w', $this->day_one);
-    $total_day = idate('t', $this->day_one);
-    $wantday = getdate($this->day_one);
+    $day_one = mktime(0,0,0,$this->month,1,$this->year);
+    $space = idate('w', $day_one);
+    $total_day = idate('t', $day_one);
+    $wantday = getdate($day_one);
     $day = 1;
     
     if(($this->month != $this->today['mon'])||($this->year != $this->today['year']))
@@ -72,7 +80,9 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
             }
             elseif((!$found || $set) && $this->posts[$temp])
             {
-                $temp = '<div id="calendar_posts">'.$temp.'</div>';
+                $temp = '<a href="'.$this->linkprefix.'?Action=ViewPost&blogID='
+                    .$this->blogID.'&year='.$this->year.'&month='.$this->month
+                    .'&date='.$temp.'"><div id="calendar_posts">'.$temp.'</div></a>';
             }
             else
                 $temp = '<div id="calendar_number">'.$temp.'</div>';
@@ -101,7 +111,9 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
             }
             elseif((!$found || $set) && $this->posts[$temp])
             {
-                $temp = '<div id="calendar_posts">'.$temp.'</div>';
+                $temp = '<a href="'.$this->linkprefix.'?Action=ViewPost&blogID='
+                    .$this->blogID.'&year='.$this->year.'&month='.$this->month
+                    .'&date='.$temp.'"><div id="calendar_posts">'.$temp.'</div></a>';
             }
             else
                 $temp = '<div id="calendar_number">'.$temp.'</div>';
@@ -109,8 +121,28 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
         }
         $cal .= '</tr>';
     }
-    
+
     return $cal.'</table>';
   }
   
+  public function getmonth()
+  {
+    return $this->month;
+  }
+  
+  public function getyear()
+  {
+    return $this->month;
+  }
+  
+  public function setmonth($month)
+  {
+    $this->month = $month;
+  }
+  
+  public function setyear($year)
+  {
+    $this->year = $year;
+  }
+
 }
