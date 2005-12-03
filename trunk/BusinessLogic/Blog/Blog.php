@@ -45,7 +45,7 @@ class BusinessLogic_Blog_Blog
                 break;
 
         	case 'EditBlogLayout':
-        	    return $this->EditBlogLayout($_GET['blogID']);
+        	    $aViewBlogView->SetContent($this->EditBlogLayout($_GET['blogID']));
         	    break;
 
         	case 'ProcessEditBlogLayout':
@@ -124,7 +124,7 @@ class BusinessLogic_Blog_Blog
 	       case 'Owner':
 	           $contentOptions = '<div id="blogcontrols"><a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a>'
 		      . ' : <a href="index.php?Action=EditMembers&blogID='.$blogID.'">Edit Memberships</a>'
-		      . ' : <a href="index.php?Action=EditLayout&blogID='.$blogID.'">Edit Layout</a></a></div>';
+		      . ' : <a href="index.php?Action=EditBlogLayout&blogID='.$blogID.'">Edit Layout</a></a></div>';
 	           break;
               
 	       case 'Editor':
@@ -175,7 +175,7 @@ class BusinessLogic_Blog_Blog
         return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewPopular();
     }
 
-    public function EditBlogLayout()
+    public function EditBlogLayout($blogID)
     {
 		if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditBlogLayout($blogID))
         {

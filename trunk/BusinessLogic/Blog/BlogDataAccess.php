@@ -139,7 +139,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function EditBlogLayout($blogID)
     {
-        //TODO
+        return 'Hi';
     }
 
     public function EditLinks($blogID)
