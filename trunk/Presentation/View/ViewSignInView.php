@@ -13,9 +13,9 @@ class Presentation_View_ViewSignInView extends Presentation_View_View
     {
         $form = '<form method="post" action="index.php?Action=ProcessSignIn&blogID=1">'
             . '<fieldset>'
-            . '<legend>Sign In</legend>'
+            . '<legend>Sign In</legend>';
 
-      if ($this->errorMessage != '')
+      if($this->errorMessage != '')
       {
         $form = $form
                 . '<p>'.$this->errorMessage.'</p>';
