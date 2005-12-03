@@ -119,7 +119,7 @@ class BusinessLogic_Blog_Blog
                     $footerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultFooter($themeid);
                 }
 
-                $newBlogID = $this->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
+                $newBlogID = $this->ProcessNewBlog($title,$about,$themeid,$headerimg,$footerimg);
 
                 //forward user to viewing their new blog:
                 $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($newBlogID,10));
