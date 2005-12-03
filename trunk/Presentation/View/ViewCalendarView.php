@@ -8,6 +8,7 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
   private $month;
   private $today;
   private $linkprefix;
+  private $aLink;
 
   //$posts should be an object of BusinessLogic_Post_PostDataAccess
   //can modify and get the current calendar month and year in order
@@ -52,15 +53,12 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
     $total_day = idate('t', $day_one);
     $wantday = getdate($day_one);
     $day = 1;
+    $this->aLink = '<a href="'.$this->linkprefix.'?Action=ViewPost&blogID='
+        .$this->blogID.'&year='.$this->year.'&month='.$this->month.'&date=';
     
     if(($this->month != $this->today['mon'])||($this->year != $this->today['year']))
-    {
-      $tag = '<div id="calendar_number">';
       $set = true;
-    }
-    else
-      $tag = '<div id="calendar_today">';
-
+    
     //month and year
     $cal .= '<div id="calendar_month_year">'.$wantday['month'].'&nbsp;&nbsp;'.$this->year
         .'</div><table border="0" id="calendar_table" cellspacing="5"><tr id="calendar_week_row">'
@@ -73,19 +71,7 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
         if($count >= $space)
         {
             $temp = $day++;
-            if(!$found && ($temp == $this->today['mday']))
-            {
-                $temp = $tag.$temp.'</div>';
-                $found = true;
-            }
-            elseif((!$found || $set) && $this->posts[$temp])
-            {
-                $temp = '<a href="'.$this->linkprefix.'?Action=ViewPost&blogID='
-                    .$this->blogID.'&year='.$this->year.'&month='.$this->month
-                    .'&date='.$temp.'"><div id="calendar_posts">'.$temp.'</div></a>';
-            }
-            else
-                $temp = '<div id="calendar_number">'.$temp.'</div>';
+            $temp = $this->testnumber($found, $set, $temp);
         }
         else
             $temp = '';
@@ -93,7 +79,7 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
         $cal .= "<td>$temp</td>";
     }
     $cal .= '</tr>';
-    //after 1sy row
+    //after 1st row
     while(!$done)
     {
         $cal .= '<tr>';
@@ -104,25 +90,34 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
                 $temp = '';
                 $done = true;
             }
-            if(!$found && ($temp == $this->today['mday']))
-            {
-                $temp = $tag.$temp.'</div>';
-                $found = true;
-            }
-            elseif((!$found || $set) && $this->posts[$temp])
-            {
-                $temp = '<a href="'.$this->linkprefix.'?Action=ViewPost&blogID='
-                    .$this->blogID.'&year='.$this->year.'&month='.$this->month
-                    .'&date='.$temp.'"><div id="calendar_posts">'.$temp.'</div></a>';
-            }
             else
-                $temp = '<div id="calendar_number">'.$temp.'</div>';
+                $temp = $this->testnumber($found, $set, $temp);
+                
             $cal .= "<td>$temp</td>";
         }
         $cal .= '</tr>';
     }
 
     return $cal.'</table>';
+  }
+  
+  private function testnumber($found, $set, $temp)
+  {
+    if(!$found && !$set && ($temp == $this->today['mday']))
+    {
+        if($this->posts[$temp])
+            $temp = $this->aLink.$temp.'"><div id="calendar_today">'.$temp.'</div></a>';
+        else
+            $temp = '<div id="calendar_today">'.$temp.'</div>';
+
+        $found = true;
+    }
+    elseif((!$found || $set) && $this->posts[$temp])
+        $temp = $this->aLink.$temp.'"><div id="calendar_posts">'.$temp.'</div></a>';
+    else
+        $temp = '<div id="calendar_number">'.$temp.'</div>';
+        
+    return $temp;
   }
   
   public function getmonth()
