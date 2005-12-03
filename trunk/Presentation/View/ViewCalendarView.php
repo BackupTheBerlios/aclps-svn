@@ -25,7 +25,7 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
         $this->year = $year;
         
     if($month == '')
-        $this->month = 11;//$this->today['mon'];
+        $this->month = $this->today['mon'];
     else
         $this->month = $month;
 
