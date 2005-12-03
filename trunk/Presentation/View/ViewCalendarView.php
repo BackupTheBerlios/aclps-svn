@@ -63,7 +63,7 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
 
     //month and year
     $cal .= '<div id="calendar_month_year">'.$wantday['month'].'&nbsp;&nbsp;'.$this->year
-        .'</div><table border="0" id="calendar_table" cellspacing="5"><tr>'
+        .'</div><table border="0" id="calendar_table" cellspacing="5"><tr id="calendar_week_row">'
         .'<td><div id="calendar_week">Sun</div></td><td><div id="calendar_week">Mon</div></td><td><div id="calendar_week">Tue</div></td><td><div id="calendar_week">Wed</div></td><td><div id="calendar_week">Thu</div></td>'
         .'<td><div id="calendar_week">Fri</div></td><td><div id="calendar_week">Sat</div></td></tr><tr>';
         
