@@ -28,7 +28,7 @@ class Presentation_View_EditLinksView extends Presentation_View_View
             		        . '<p><input type="text" name="Title" value="' . $this->titles[i] . '"></p>';
  
         }
-		   $form = . '<p><input type="submit" class="submit-login" value="Submit"></p>'
+		   $form = . '<p><input type="submit" id="submit" value="Submit"></p>'
             . '</fieldset>'
 			. '</form>';
 

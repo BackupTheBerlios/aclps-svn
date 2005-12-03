@@ -21,7 +21,7 @@ class Presentation_View_DeletePostView extends Presentation_View_View
             . '<legend>Post Deletion</legend>'
             . '<input type="hidden" name="postID" value="'.$this->post->GetPostID().'">'
             . '<p>Do you really want to delete this post?</p>'
-            . '<p><input type="submit" class="submit-register" value="Yes"></p>'
+            . '<p><input type="submit" id="submit" value="Yes"></p>'
             . '</fieldset>'
             . '</form>';
         return $this->post->Display().$form;

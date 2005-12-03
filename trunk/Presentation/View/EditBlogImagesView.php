@@ -22,7 +22,7 @@ class Presentation_View_EditBlogImagesView extends Presentation_View_View
             . '<p>Edit the field below:</p>'
             . '<p><input type="text" name="headerImage" value="' . $this->headerImage . '"></p>'
             . '<p><input type="text" name="footerImage" value="' . $this->footerImage . '"></p>'
-            . '<p><input type="submit" class="submit-login" value="Submit"></p>'
+            . '<p><input type="submit" id="submit" value="Submit"></p>'
             . '</fieldset>'
             . '</form>';
 

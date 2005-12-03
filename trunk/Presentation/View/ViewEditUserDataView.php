@@ -28,7 +28,7 @@ class Presentation_View_ViewEditUserDataView extends Presentation_View_View
         $form = $form
             . '<p>Change Email</p>'
             . '<p><input type="text" name="email" value="' . $this->email . '"><label for="email">Email</label></p>'
-            . '<p>Change Password:</p>'
+            . '<p>Change Password</p>'
             . '<p><input type="password" name="oldPassword"><label for="oldPassword">Old Password</label></p>'
             . '<p><input type="password" name="newPassword"><label for="newPassword">New Password</label></p>'
             . '<p><input type="password" name="confirmNewPassword"><label for="confirmNewPassword">Confirm New Password</label></p>'
