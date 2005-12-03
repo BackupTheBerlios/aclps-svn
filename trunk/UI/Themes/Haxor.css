@@ -1,0 +1,267 @@
+body
+{
+  background-color: #001100;
+  margin: 0px;
+  text-align: center;
+  color: #00CC00;
+}
+
+a
+{
+  color: #00FF00;
+}
+
+#floatclear
+{
+  clear: both;
+}
+
+#topbar
+{
+  background-color: #003300;
+  border-bottom: 1px solid #00FF00;
+  font-family: sans-serif;
+  font-size: 14px;
+  padding: 5px;
+  text-align: left;
+}
+#topbar a
+{
+  font-weight: bold;
+}
+
+#headerimage
+{
+  text-align: center;
+  margin: 20px;
+}
+#blogheaderimg
+{ 
+  border: 0;
+}
+#footerimage
+{
+  text-align: center;
+  margin: 20px;
+}
+#blogfooterimg
+{ 
+  border: 0;
+}
+
+#container
+{
+  width: 770px;
+  margin: 0 auto 0 auto;
+  padding: 0;
+}
+
+#content
+{
+  text-align: left;
+  width: 500px;
+  float: left;
+  font-family: sans-serif;
+  font-size: 14px;
+  border: 1px solid #00FF00;
+  padding: 0px 5px 5px 5px;
+}
+
+#sidecontent
+{
+  text-align: center;
+  width: 230px;  
+  float: right;
+  margin: 10px;
+}
+
+#abouttext
+{
+  background-color: #003300;
+  text-align: left;
+  font-family: sans-serif;
+  font-size: 12px;
+  margin: 0px 0px 15px 0px;
+  border: 1px solid #00FF00;
+  padding: 5px;
+}
+
+#sidecontentbox
+{
+  width: 230px;
+  text-align: center;
+  border: 1px solid #00FF00;
+}
+
+#calendar_table
+{
+  background-color: #002200;
+  width: 230px;
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 12px;
+  margin: 0px 0px 15px 0px;
+  border: 1px solid #00FF00;
+  padding: 5px;
+}
+
+#calendar_month_year
+{
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 5;
+  margin-bottom: 4px;
+}
+
+#calendar_week
+{
+  color: #00FF00;
+}
+
+#calendar_today
+{
+  color: #00FF00;
+  font-weight: bold;
+}
+
+#calendar_number
+{
+  color: #009900;
+}
+
+#calendar_posts
+{
+  color: #00FF00;
+}
+
+#blogcontrols
+{
+  background-color: #003300;
+  border: 1px solid #00FF00;
+  padding: 5px;
+  margin: 5px 0px 5px 0px;
+}
+
+#blogcontrols a
+{ 
+  font-size: 12px;
+}
+
+#post
+{ 
+  margin-top: 5px;
+  border: 1px solid #00FF00;
+}
+
+#postcontrols
+{ 
+  background-color: #003300;
+  border-bottom: 1px solid #00FF00;
+  padding: 2px 5px 2px 5px;
+}
+#postcontrols a
+{ 
+  font-size: 11px;
+}
+#posttitle
+{
+  color: #00FF00;
+  font-family: serif;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 5px 0px 0px 5px;
+  background: #002200;
+  border-bottom: 1px solid #00FF00;
+}
+#postauthor, #posttime
+{
+  color: #009900;
+  margin-left: 10px;
+  padding-top:3px;
+  font-size: 11px;
+}
+#postcontent
+{ 
+  clear: left;
+  padding: 7px 5px 5px 5px;
+}
+#postcommentlink
+{ 
+  font-size: 11px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+  text-align: right;
+}
+
+#commentlabel
+{ 
+  padding: 8px 5px 5px 5px;
+  font-size: 14px;
+  border-left: 1px dotted #00FF00;
+}
+
+#comment
+{ 
+  margin-top: 5px;
+  border: 1px solid #00FF00;
+}
+#commentcontrols
+{ 
+  border-bottom: 1px solid #00FF00;
+  padding: 2px 5px 2px 5px;
+  float: clear;
+}
+#commentcontrols a
+{ 
+  font-size: 11px;
+}
+#commenttitle
+{
+  font-family: serif;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 5px 0px 0px 5px;
+  border-bottom: 1px solid #00FF00
+}
+#commentauthor
+{
+  margin-left: 10px;
+  padding-top:3px;
+  font-size: 11px;
+}
+#commenttime
+{
+  margin-left: 10px;
+  padding-top:3px;
+  font-size: 11px;
+}
+#commentcontent
+{ 
+  clear: left;
+  padding: 7px 5px 5px 5px;
+}
+
+fieldset
+{
+  text-align: center;
+  border: 1px solid #00FF00;
+}
+legend
+{
+  font-size: 12px;
+  font-weight: bold;
+}
+
+label
+{ 
+  font-size: 12px;
+  padding: 2px;
+}
+
+input, textarea, select
+{
+  padding: 2px;
+  margin: 2px;
+  border: #00FF00 1px solid;
+  font-size: 12px;
+}

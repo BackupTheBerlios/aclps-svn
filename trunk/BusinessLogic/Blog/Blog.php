@@ -76,8 +76,6 @@ class BusinessLogic_Blog_Blog
             case 'ProcessNewBlog':
                 $title = $_POST['title'];
                 $about = $_POST['about'];
-                $headerimg = $_POST['headerimg'];
-                $footerimg = $_POST['footerimg'];
 
                 //ensure that chosen themeID is actually an available theme
                 $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
@@ -85,15 +83,42 @@ class BusinessLogic_Blog_Blog
                 {
                     if ($value['ThemeID'].'' == $_POST['theme'])
                     {
-                        $theme = $_POST['theme'];
+                        $themeid = $_POST['theme'];
                         break;
                     }
                 }
-
-                if (!isset($theme))
+                if (!isset($themeid))
                 {
                     throw new Exception("Invalid Theme ID");
                 }
+
+                $headertog = $_POST['headertog'];
+                if ($headertog == "no")
+                {
+                    $headerimg = '';
+                }
+                elseif ($headertog == "cust")
+                {
+                    $headerimg = $_POST['headerimg'];
+                }
+                else
+                {
+                    $headerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultHeader($themeid);
+                }
+                $footertog = $_POST['footertog'];
+                if ($footertog == "no")
+                {
+                    $footerimg = '';
+                }
+                elseif ($footertog == "cust")
+                {
+                    $footerimg = $_POST['headerimg'];
+                }
+                else
+                {
+                    $footerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultFooter($themeid);
+                }
+
                 $newBlogID = $this->ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg);
 
                 //forward user to viewing their new blog:

@@ -29,11 +29,15 @@ class Presentation_View_NewBlogView extends Presentation_View_View
         }
         $form = $form.'</select></p>'
             
-            . '<p><label for="headerimg">Custom Header Image URL (blank=theme default):</label>'
-            . '<input type="text" name="headerimg"></p>'
-            
-            . '<p><label for="footerimg">Custom Footer Image URL (blank=theme default):</label>'
-            . '<input type="text" name="footerimg"></p>'
+            . '<p><label for="headertog">Header Image:</label>'
+            . '<input type="radio" name="headertog" value="no"> None<br />'
+            . '<input type="radio" name="headertog" value="def"> Theme Default<br />'
+            . '<input type="radio" name="headertog" value="cust"> Custom URL: <input type="text" name="headerimg"></p>'
+
+            . '<p><label for="footertog">Footer Image:</label>'
+            . '<input type="radio" name="footertog" value="no"> None<br />'
+            . '<input type="radio" name="footertog" value="def"> Theme Default<br />'
+            . '<input type="radio" name="footertog" value="cust"> Custom URL: <input type="text" name="footerimg"></p>'
             
             . '<p><label for="about">About Text (for sidebar):</label>'
             . '<textarea name="about" rows="3" cols="40"></textarea></p>'

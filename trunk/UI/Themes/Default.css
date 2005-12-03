@@ -1,276 +1,86 @@
 body
 {
-  background-color: #FFFFFF;
-  margin: 0px;
-  text-align: center;
+        background-color: #404040;
+        margin: 0px;
 }
-
 
 #floatclear
 {
-  clear: both;
+        clear: both
 }
 
 #topbar
 {
-  background-color: #EEEEEE;
-  border-bottom: 1px solid #666666;
-  font-family: sans-serif;
-  font-size: 14px;
-  padding: 5px;
-  text-align: left;
-}
-#topbar a
-{
-  color: blue;
-  font-weight: bold;
+        width: 100%;
+        background-color: aliceblue;
+
+        font-size: medium;        
 }
 
-#headerimage
+#image
 {
-  text-align: center;
-  margin: 20px;
-}
-#blogheaderimg
-{ 
-  border: 0;
-}
-#footerimage
-{
-  text-align: center;
-  margin: 20px;
-}
-#blogfooterimg
-{ 
-  border: 0;
+        width: 800px;
 }
 
 #container
 {
-  width: 770px;
-  margin: 0 auto 0 auto;
-  padding: 0;
+        width: 800px;
+        margin: auto;
+        color: white;
 }
 
 #content
 {
-  text-align: left;
-  width: 500px;
-  float: left;
-  font-family: sans-serif;
-  font-size: 14px;
-  background-color: #EEEEEE;
-  border: 1px solid #666666;
-  padding: 0px 5px 5px 5px;
+        float: left;
+        width: 500px;
+        margin: 0px;
 }
 
 #sidecontent
 {
-  text-align: center;
-  width: 230px;  
-  float: right;
-  margin: 10px;
+	float: right;
+        margin-right: auto;
+        margin: 0px;
+	text-align: center;
 }
 
-#abouttext
+#contentbox
 {
-  text-align: left;
-  font-family: sans-serif;
-  font-size: 12px;
-  background-color: #EEEEEE;
-  margin: 0px 0px 15px 0px;
-  border: 1px solid #666666;
-  padding: 5px;
-}
-
-#sidecontentbox
-{
-  width: 230px;
-  text-align: center;
-  border: 1px solid black;
-}
-
-#calendar_table
-{
-  width: 230px;
-  text-align: center;
-  font-family: sans-serif;
-  font-size: 12px;
-  background-color: #EEEEEE;
-  margin: 0px 0px 15px 0px;
-  border: 1px solid #666666;
-  padding: 5px;
+        width: 450px;
+        margin: 10px 0px;
+        text-align: left;
 }
 
 #calendar_month_year
 {
-  text-align: center;
-  font-weight: bold;
-  letter-spacing: 5;
-  margin-bottom: 4px;
+    text-align: center;
+    color: green;
 }
 
 #calendar_week
 {
-  color: #333333;
+    color: yellow;
+    text-decoration: underline;
 }
 
 #calendar_today
 {
-  font-weight: bold;
+    color: red;
 }
 
 #calendar_number
 {
-  color: black;
+    color: white;
 }
 
-#calendar_posts
+#headerimage, #footerimage
 {
-  color: blue;
+    text-align: center;
+    margin: 20px;
 }
 
-#blogcontrols
-{ 
-  background-color: #DDDDDD;
-  border: 1px solid #BBBBBB;
-  padding: 5px;
-  margin: 5px 0px 5px 0px;
-}
-
-#blogcontrols a
-{ 
-  color: blue;
-  font-size: 12px;
-}
-
-#post
-{ 
-  margin-top: 5px;
-  border: 1px solid #CCCCCC;
-}
-
-#postcontrols
-{ 
-  background-color: #DDDDDD;
-  border-bottom: 1px solid #CCCCCC;
-  padding: 2px 5px 2px 5px;
-}
-#postcontrols a
-{ 
-  color: blue;
-  font-size: 11px;
-}
-#posttitle
+#abouttext
 {
-  font-family: serif;
-  font-size: 24px;
-  font-weight: bold;
-  padding: 5px 0px 0px 5px;
-  background: #E5E5E5;
-  border-bottom: 1px solid #CCCCCC
-}
-#postauthor
-{
-  color: #333333;
-  margin-left: 10px;
-  padding-top:3px;
-  font-size: 11px;
-}
-#posttime
-{
-  color: #333333;
-  margin-left: 10px;
-  padding-top:3px;
-  font-size: 11px;
-}
-#postcontent
-{ 
-  clear: left;
-  padding: 5px 5px 0px 5px;
-}
-#postcommentlink
-{ 
-  font-size: 11px;
-  padding: 0px 5px 5px 0px;
-  text-align: right;
-}
-
-#commentlabel
-{ 
-  padding: 8px 5px 5px 5px;
-  font-size: 14px;
-  border-left: 1px dotted #CCCCCC;
-}
-
-#comment
-{ 
-  margin-bottom: 5px;
-  border: 1px solid #CCCCCC;
-}
-#commentcontrols
-{ 
-  background-color: #DDDDDD;
-  border-bottom: 1px solid #CCCCCC;
-  padding: 2px 5px 2px 5px;
-  float: clear;
-}
-#commentcontrols a
-{ 
-  color: blue;
-  font-size: 11px;
-}
-#commenttitle
-{
-  font-family: serif;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 5px 0px 0px 5px;
-  background: #E5E5E5;
-  border-bottom: 1px solid #CCCCCC
-}
-#commentauthor
-{
-  color: #333333;
-  margin-left: 10px;
-  padding-top:3px;
-  font-size: 11px;
-}
-#commenttime
-{
-  color: #333333;
-  margin-left: 10px;
-  padding-top:3px;
-  font-size: 11px;
-}
-#commentcontent
-{ 
-  clear: left;
-  padding: 7px 5px 5px 5px;
-}
-
-fieldset
-{
-  text-align: center;
-  border: 1px solid #CCCCCC;
-}
-legend
-{
-  font-size: 12px;
-  font-weight: bold;
-}
-
-label
-{ 
-  font-size: 12px;
-  padding: 2px;
-}
-
-input, textarea, select
-{
-  padding: 2px;
-  margin: 2px;
-  border: #000000 1px solid;
-  background: #FFFFFF;
-  font-size: 12px;
+    text-align: left;
+    padding: 10px;
 }

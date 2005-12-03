@@ -60,7 +60,26 @@ class BusinessLogic_Blog_BlogDataAccess
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         return $DataAccess->Select($query, array());
     }
-        
+    public function GetThemeDefaultHeader($themeID)
+    {
+        //Given a themeID, returns that theme's default header image url.
+    	$query = 'select DefaultHeader from Themes where ThemeID=[0]';
+        $arguments = array($themeID);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $data = $DataAccess->Select($query, $arguments);
+        return $data[0]['DefaultFooter'];
+    }
+    public function GetThemeDefaultFooter($themeID)
+    {
+        //Given a themeID, returns that theme's default footer image url.
+    	$query = 'select DefaultFooter from Themes where ThemeID=[0]';
+        $arguments = array($themeID);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $data = $DataAccess->Select($query, $arguments);
+        return $data[0]['DefaultFooter'];
+    }
 
     public function ViewArchive()
     {
