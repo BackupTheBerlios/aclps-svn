@@ -31,7 +31,14 @@ class BusinessLogic_User_User
         case 'ProcessEditUserData':
             if ($_POST['newPassword'] == $_POST['confirmNewPassword'])
             {
-                return $this->ProcessEditUserData($_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
+                if ($_POST['email'] != '')
+                {
+                    return $this->ProcessEditUserData($_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
+                }
+                else
+                {
+                    return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'Email cannot be blank.');
+                }
             }
             else
             {
@@ -115,10 +122,16 @@ class BusinessLogic_User_User
             {
                 $query = "update [0] set Email='[1]' where UserID=[2]";
                 $arguments = array('Users', $email, $this->GetUserID());
-                $aDataAccess->Update($query, $arguments);
+                $result = $aDataAccess->Update($query, $arguments);
                 $this->userInfo['Email'] = $email;
+
+                //Need to store all this information
+                $_SESSION['BusinessLogic_User_User'] = serialize($this);
             }
 
+            print $oldPassword;
+            print $newPassword;
+            exit;
             //Does the user want to change their password, order is important in checking intent
             if ($oldPassword != '' and $newPassword != '')
             {
