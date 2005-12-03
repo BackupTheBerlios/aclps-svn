@@ -87,7 +87,7 @@ class BusinessLogic_User_User
     {
         if ($this->CheckSignedIn())
         {
-            return new Presentation_View_EditUserDataView($this->userInfo);
+            return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['email'], '');
         }
         else
         {
@@ -263,7 +263,7 @@ class BusinessLogic_User_User
         print_r($this->permissions);
         print '<br />';
 
-        return new Presentation_View_ViewTopBarView($this->CheckSignedIn());
+        return new Presentation_View_ViewTopBarView($_GET['blogID'], $this->CheckSignedIn());
     }
     
     public static function ConvertUserIDToName($userID)
