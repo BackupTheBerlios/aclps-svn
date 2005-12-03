@@ -55,10 +55,23 @@ class BusinessLogic_Blog_BlogDataAccess
         //Returns a list of themes in a two dimensional array:
         //[0] => Array ( [ThemeID] => 1 [Title] => Default [URL] => UI/Themes/Default.css )
         //[1] => Array ( [ThemeID] => 2 [Title] => SomethingElse [URL] => Other/Theme.css )
-    	$query = 'select * from Themes where 1';
+    	$query = 'select ThemeID, Title from [0]';
+        $arguments = array('Themes');
+        
+        $result = DataAccess_DataAccessFactory::GetInstance()->Select($query, $arguments);
 
-        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
-        return $DataAccess->Select($query, array());
+        $themes = array();
+        foreach($result as $key=>$row)
+        {
+            $themes[$row['ThemeID']] = $row['Title'];
+        }
+        
+        print_r($themes);
+        print '<br />';
+        
+        return $themes;
+
+
     }
     public function GetThemeDefaultHeader($themeID)
     {
@@ -158,7 +171,14 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function EditBlogLayout($blogID)
     {
-        return 'Hi';
+        $query = "select * from [0] where BlogID=[1]";
+        $arguments = array('Blogs', $blogID);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $result = $DataAccess->Select($query, $arguments);
+        $row = $result[0];
+        
+        return new Presentation_View_EditBlogLayoutView($blogID, $this->GetThemesList(), $row['Title'], $row['About'], $row['ThemeID'], $row['HeaderImage'], $row['FooterImage']);
     }
 
     public function EditLinks($blogID)
