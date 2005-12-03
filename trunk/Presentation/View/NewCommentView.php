@@ -16,16 +16,16 @@ class Presentation_View_NewCommentView extends Presentation_View_View
     {
         $form = '<form method="post" action="index.php?blogID='.$this->blogID.'&Action=ProcessNewComment">'
             . '<fieldset>'
-            . '<legend>&nbsp;Add A Comment</legend>'
+            . '<legend>Add A Comment</legend>'
             . '<input type="hidden" name="postID" value="'.$this->postID.'">'
 
-            . '<p><label for="title">Title:</label>'
-            . '<input type="text" maxlength="30" name="title"></p>'
+            . '<p><input type="text" maxlength="30" name="title">'
+            . '<label for="title">Title</label></p>'
 
-            . '<p><label for="content">Content:</label>'
-            . '<textarea name="content" rows="5" cols="40"></textarea></p>'
+            . '<p><textarea name="content" rows="5" cols="40"></textarea>'
+            . '<label for="content">Content</label></p>'
 
-            . '<p><input type="submit" class="submit-register" value="Add Comment"></p>'
+            . '<p><input type="submit" id="submit" value="Add Comment"></p>'
             . '</fieldset>'
             . '</form>';
 

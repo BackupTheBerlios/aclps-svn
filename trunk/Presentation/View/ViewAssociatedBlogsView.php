@@ -17,7 +17,7 @@ class Presentation_View_ViewAssociatedBlogsView extends Presentation_View_View
             
             foreach ($this->associatedBlogs as $blogID => $title)
             {
-                $ret = $ret . '<a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">' . $title . '</a><br />';
+                $ret = $ret . '<p><a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">' . $title . '</a></p>';
             }
             
             $ret = $ret . '</div>';

@@ -25,26 +25,23 @@ class Presentation_View_EditPostView extends Presentation_View_View
         }
         $form = '<form method="post" action="index.php?blogID='.$this->post->GetBlogID().'&Action=ProcessEditPost">'
             . '<fieldset>'
-            . '<legend>&nbsp;Edit Post</legend>'
+            . '<legend>Edit Post</legend>'
             . '<input type="hidden" name="postID" value="'.$this->post->GetPostID().'">'
 
-            . '<p><label for="title">Title:</label>'
-            . '<input type="text" name="title" maxlength="30" value="'.$this->post->GetTitle().'"></p>'
+            . '<p><input type="text" name="title" maxlength="30" value="'.$this->post->GetTitle().'">'
+            . '<label for="title">Title</label></p>'
 
-            . '<p><label>Author:</label>'
-            . $this->post->GetAuthorName().'</p>'
+            . '<p><input type="checkbox" name="public" '.$checkmark.'>'
+            . '<label for="public">Public (Anonymous can view)</label></p>'
 
-            . '<p><label for="public">Public (Anonymous can view):</label>'
-            . '<input type="checkbox" name="public" '.$checkmark.'></p>'
+            . '<p><input type="radio" name="timestamp" value="now"> Change To Now</p>'
+            . '<p><input type="radio" name="timestamp" value="orig" checked> Leave Original ('.$this->post->GetTimestamp().')</p>'
+            . '<p><label for="timestamp">Timestamp</label></p>'
 
-            . '<p><label for="timestamp">Timestamp:</label>'
-            . 'Change To Now: <input type="radio" name="timestamp" value="now"><br />'
-            . 'Leave Original ('.$this->post->GetTimestamp().'): <input type="radio" name="timestamp" value="orig" checked></p>'
+            . '<p><textarea name="content" rows="5" cols="40">'.$this->post->GetContent().'</textarea>'
+            . '<label for="content">Content</label></p>'
 
-            . '<p><label for="content">Content:</label>'
-            . '<textarea name="content" rows="5" cols="40">'.$this->post->GetContent().'</textarea></p>'
-
-            . '<p><input type="submit" class="submit-register" value="Edit Post"></p>'
+            . '<p><input type="submit" id="submit" value="Edit Post"></p>'
             . '</fieldset>'
             . '</form>';
 

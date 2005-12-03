@@ -18,32 +18,21 @@ class Presentation_View_ViewEditUserDataView extends Presentation_View_View
     {
        $form = '<form method="post" action=index.php?Action=ProcessEditUserData&blogID='. $this->blogID . '>'
             . '<fieldset>'
-            . '<legend>&nbsp;Edit Account</legend>'
-            . '<p>';
+            . '<legend>Edit Account</legend>';
 
       if ($this->errorMessage != '')
       {
-        $form = $form
-            . $this->errorMessage
-            . '<br />';
+        $form = $form.'<p>'.$this->errorMessage.'</p>';
       }
 
         $form = $form
-            . '</p>'
-            . '<label for="email">Email:</label>'
-            . '<input type="text" name="email" value="' . $this->email . '">'
-            . '<br />'
-            . '<br />'
-            . '<label for="oldPassword">Old Password:</label>'
-            . '<input type="password" name="oldPassword">'
-            . '<br />'
-            . '<label for="newPassword">New Password:</label>'
-            . '<input type="password" name="newPassword">'
-            . '<br />'
-            . '<label for="confirmNewPassword">Confirm:</label>'
-            . '<input type="password" name="confirmNewPassword">'
-            . '<br />'
-            . '<input type="submit" class="submit-register" value="Submit Changes">'
+            . '<p>Change Email</p>'
+            . '<p><input type="text" name="email" value="' . $this->email . '"><label for="email">Email</label></p>'
+            . '<p>Change Password:</p>'
+            . '<p><input type="password" name="oldPassword"><label for="oldPassword">Old Password</label></p>'
+            . '<p><input type="password" name="newPassword"><label for="newPassword">New Password</label></p>'
+            . '<p><input type="password" name="confirmNewPassword"><label for="confirmNewPassword">Confirm New Password</label></p>'
+            . '<p><input type="submit" id="submit" value="Submit Changes"></p>'
             . '</fieldset>'
             . '</form>';
 

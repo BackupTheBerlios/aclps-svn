@@ -13,26 +13,23 @@ class Presentation_View_ViewSignInView extends Presentation_View_View
     {
         $form = '<form method="post" action="index.php?Action=ProcessSignIn&blogID=1">'
             . '<fieldset>'
-            . '<legend>&nbsp;Sign In</legend>'
-            . '<p>';
+            . '<legend>Sign In</legend>'
 
       if ($this->errorMessage != '')
       {
         $form = $form
-                . $this->errorMessage
-                . '<br />';
+                . '<p>'.$this->errorMessage.'</p>';
       }
 
         $form = $form
-            . '<center>Please Login:</center>'
-            . '</p>'
-            . '<label for="username">Username:</label>'
-            . '<input type="text" name="username">'
-            . '<br />'
-            . '<label for="password">Password:</label>'
-            . '<input type="password" name="password">'
-            . '<br />'
-            . '<input type="submit" class="submit-login" value="Sign In">'
+            . '<p>Please Login:</p>'
+            . '<p><input type="text" name="username">'
+            . '<label for="username">Username</label></p>'
+
+            . '<p><input type="password" name="password">'
+            . '<label for="password">Password</label></p>'
+
+            . '<p><input type="submit" id="submit" value="Sign In"></p>'
             . '</fieldset>'
             . '</form>';
             

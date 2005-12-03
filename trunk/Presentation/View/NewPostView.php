@@ -13,18 +13,18 @@ class Presentation_View_NewPostView extends Presentation_View_View
     {
         $form = '<form method="post" action="index.php?blogID='.$this->blogID.'&Action=ProcessNewPost">'
             . '<fieldset>'
-            . '<legend>&nbsp;Add A Post</legend>'
+            . '<legend>Add A Post</legend>'
 
-            . '<p><label for="title">Title:</label>'
-            . '<input type="text" maxlength="30" name="title"></p>'
+            . '<p><input type="text" maxlength="30" name="title">'
+            . '<label for="title">Title</label></p>'
 
-            . '<p><label for="public">Public (Anonymous can view):</label>'
-            . '<input type="checkbox" name="public" checked></p>'
+            . '<p><input type="checkbox" name="public" checked>'
+            . '<label for="public">Public (Anonymous can view)</label></p>'
 
-            . '<p><label for="content">Content:</label>'
-            . '<textarea name="content" rows="5" cols="40"></textarea></p>'
+            . '<p><textarea name="content" rows="5" cols="40"></textarea>'
+            . '<label for="content">Content</label></p>'
 
-            . '<p><input type="submit" class="submit-register" value="Add Post"></p>'
+            . '<p><input type="submit" id="submit" value="Add Post"></p>'
             . '</fieldset>'
             . '</form>';
 

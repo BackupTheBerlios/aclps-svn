@@ -18,9 +18,9 @@ class Presentation_View_DeletePostView extends Presentation_View_View
     {
         $form = '<form method="post" action="index.php?blogID='.$this->post->GetBlogID().'&Action=ProcessDeletePost">'
             . '<fieldset>'
-            . '<legend>&nbsp;Post Deletion</legend>'
+            . '<legend>Post Deletion</legend>'
             . '<input type="hidden" name="postID" value="'.$this->post->GetPostID().'">'
-            . '<p><center>Do you really want to delete this post?</center></p>'
+            . '<p>Do you really want to delete this post?</p>'
             . '<p><input type="submit" class="submit-register" value="Yes"></p>'
             . '</fieldset>'
             . '</form>';

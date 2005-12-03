@@ -27,7 +27,7 @@ abstract class Presentation_View_View
         $ret = '';
         foreach($this->Views as $key=>$value)
         {
-            $ret = $ret . '<br />' . $value->Display();
+            $ret = $ret . '<p>' . $value->Display() .'</p>';
         }
         return $ret;
     }

@@ -24,32 +24,27 @@ class Presentation_View_ViewRegisterView extends Presentation_View_View
     {
         $form = '<form method="post" action="index.php?Action=ProcessRegister&blogID=1">'
             . '<fieldset>'
-            . '<legend>&nbsp;Account Registration</legend>'
-            . '<p>';
+            . '<legend>Account Registration</legend>';
 
       if ($this->errorMessage != '')
       {
-        $form = $form
-            . $this->errorMessage
-            . '<br />';
+        $form = $form.'<p>'.$this->errorMessage.'</p>';
       }
       
         $form = $form
-            . '<center>Please fill in the fields below.</center>'
-            . '</p>'
-            . '<label for="username">Username:</label>'
-            . '<input type="text" name="username" value="'.$this->username.'">'
-            . '<br />'
-            . '<label for="email">Email:</label>'
-            . '<input type="text" name="email" value="'.$this->email.'">'
-            . '<br />'
-            . '<label for="password">Password:</label>'
-            . '<input type="password" name="password">'
-            . '<br />'
-            . '<label for="confirmPassword">Confirm Password:</label>'
-            . '<input type="password" name="confirmPassword">'
-            . '<br />'
-            . '<input type="submit" class="submit-register" value="Register">'
+            . '<p><input type="text" name="username" value="'.$this->username.'">'
+            . '<label for="username">Username</label></p>'
+
+            . '<p><input type="text" name="email" value="'.$this->email.'">'
+            . '<label for="email">Email</label></p>'
+
+            . '<p><input type="password" name="password">'
+            . '<label for="password">Password</label></p>'
+
+            . '<p><input type="password" name="confirmPassword">'
+            . '<label for="confirmPassword">Confirm Password</label></p>'
+
+            . '<p><input type="submit" id="submit" value="Register"></p>'
             . '</fieldset>'
             . '</form>';
 

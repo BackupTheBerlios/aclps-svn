@@ -19,22 +19,16 @@ class Presentation_View_EditLinksView extends Presentation_View_View
 
 		$form = '<form method="post" action="index.php?Action=EditLinks&blogID=' . $this->blogID . '">'
             	. '<fieldset>'
-            	. '<legend>&nbsp;Edit Links</legend>'
-            	. '<p>'
-            	. '<center>Edit the links below:</center>'
-           		. '</p>'
+            	. '<legend>Edit Links</legend>'
 
 					
 		for($i = 0; $i < $count; ++$i;)
 		{
-            
-			$form = . '<input type="text" name="Url" value="' . $this->urls[i] . '">'
-            		. '<br />'
-					. '<input type="text" name="Title" value="' . $this->titles[i] . '">'
-            		. '<br />'
+			$form = . '<p><input type="text" name="Url" value="' . $this->urls[i] . '"></p>'
+            		        . '<p><input type="text" name="Title" value="' . $this->titles[i] . '"></p>';
  
         }
-		   $form = . '<input type="submit" class="submit-login" value="Submit">'
+		   $form = . '<p><input type="submit" class="submit-login" value="Submit"></p>'
             . '</fieldset>'
 			. '</form>';
 

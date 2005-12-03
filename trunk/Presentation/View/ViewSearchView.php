@@ -20,29 +20,25 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
     public function Display()
     {
         $form = '<fieldset><legend>&nbsp;Search</legend>'
-            . '<form method="post" action="index.php?Action=ViewSearch&blogID='
-            . $this->blogid
-            . '"><p>';
+            . '<form method="post" action="index.php?Action=ViewSearch&blogID='.$this->blogid.'">';
 
         if(is_string($this->result))
         {
-            $form .= $this->result.'<br />';
+            $form .= '<p>'.$this->result.'</p>';
         }
         elseif(is_object($this->result))
         {
-            $ret = $this->result->Display();
+            $form .= '<p>'.$this->result->Display().'</p>';
         }
         else
         {
             throw new Exception("Search Failure.");
         }
 
-        $form .= '<center>Please enter the blog title you want to search:</center>'
-            . '</p>'
-            . '<label for="blog_title">Blog Title:</label>'
-            . '<input type="text" name="blog_title">'
-            . '<br />'
-            . '<input type="submit" class="submit-search" value="Search">'
+        $form .= '<p>Please enter the blog title you want to search:</p>'
+            . '<p><input type="text" name="blog_title">'
+            . '<label for="blog_title">Blog Title</label></p>'
+            . '<p><input type="submit" id="submit" value="Search"></p>'
             . '</form></fieldset>'
             . $ret.$this->popular->Display();
 
