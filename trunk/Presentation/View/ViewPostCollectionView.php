@@ -38,7 +38,7 @@ class Presentation_View_ViewPostCollectionView extends Presentation_View_View
             $ret = '<div id="postcollection">';
             if (count($this->posts) < 1)
             {
-                $ret = $ret."There aren't any posts here yet. Why don't you make one?\n";
+                $ret = $ret."There aren't any posts here yet.\n";
             } else {
                 foreach($this->posts as $value)
                 {
