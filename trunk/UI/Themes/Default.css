@@ -1,90 +1,128 @@
 body
 {
-	background-color: #FFFFFF;
-	margin: 0px;
+  background-color: #FFFFFF;
+  margin: 0px;
 }
+
 
 #floatclear
 {
-	clear: both
+  clear: both
 }
 
 #topbar
 {
-	width: 100%;
-	background-color: aliceblue;
-	margin-bottom: 50px;
-
-	font-size: medium;
-	
+  width: 100%;
+  background-color: #EEEEEE;
+  border: 1px solid #666666;
+  font-family: sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px;
+}
+#topbar a
+{
+  color: blue;
 }
 
-#image
+#headerimage
 {
-	width: 800px;
-	margin: 20px auto;
+  text-align: center;
+  border: 0;
+  width: 800px;
+  margin: 20px;
+}
+#blogheaderimg
+{ 
+  border: 0;
+}
+#footerimage
+{
+  text-align: center;
+  width: 800px;
+  margin: 20px;
+}
+#blogfooterimg
+{ 
+  border: 0;
 }
 
 #container
 {
-	width: 800px;
-	margin: 20px auto;
-	color: black;
-	border: 1px solid black; 
+  width: 800px;
 }
 
 #content
 {
-	float: left;
-	width: 500px;
-	margin: 0px;
-	border: 1px solid green;
+  width: 500px;
+  float: left;
+  font-family: sans-serif;
+  font-size: 14px;
+  background-color: #EEEEEE;
+  border: 1px solid #666666;
+  padding: 5px;
 }
 
 #sidecontent
 {
-	margin-left: 500px;
-	margin: 0px;
-	border: 1px solid red;
+  text-align: center;
+  width: 230px;  
+  float: right;
+  margin: 0px;
 }
 
-#contentbox
+#abouttext
 {
-	width: 450px;
-	margin: 10px 0px;
-	text-align: left;
-	border: 1px solid black;
+  font-family: sans-serif;
+  font-size: 12px;
+  background-color: #EEEEEE;
+  margin: 0px 0px 15px 0px;
+  border: 1px solid #666666;
+  padding: 5px;
 }
+
 
 #sidecontentbox
 {
-	width: 250px;
-	text-align: left;
-	border: 1px solid black;
+  width: 250px;
+  text-align: center;
+  border: 1px solid black;
+}
+
+#calendar_table
+{
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 12px;
+  background-color: #EEEEEE;
+  margin: 0px 0px 15px 0px;
+  border: 1px solid #666666;
+  padding: 5px;
 }
 
 #calendar_month_year
 {
-    color: green;
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 5;
 }
 
 #calendar_week
 {
-    color: yellow;
-    text-decoration:underline;
+  color: #333333;
 }
 
 #calendar_today
 {
-    color: red;
+  color: red;
 }
 
 #calendar_number
 {
-    color: black;
+  color: black;
 }
 
 #calendar_posts
 {
-    color: blue;
+  color: blue;
 }
