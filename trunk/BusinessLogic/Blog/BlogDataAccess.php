@@ -41,11 +41,10 @@ class BusinessLogic_Blog_BlogDataAccess
         $themeRow = $themeResult[0];
 
         $aViewBlogView = new Presentation_View_ViewBlogView($blogID, $contentOptions, $blogRow['HeaderImage'], $blogRow['FooterImage'], $themeRow['URL']);
-        $PostsObject = BusinessLogic_Post_Post::GetInstance();
+
         
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
         $aViewBlogView->SetSideContent(new Presentation_View_ViewAboutView($blogRow['About']));
-        $aViewBlogView->SetSideContent(new Presentation_View_ViewCalendarView($blogID,$PostsObject, '', ''));
         
         return $aViewBlogView;
     }
@@ -167,6 +166,13 @@ class BusinessLogic_Blog_BlogDataAccess
         {
           return new Presentation_View_ViewPopularView($result);
         }
+    }
+    
+    public function ViewCalendar($blogID, $year, $month)
+    {
+        $PostsObject = BusinessLogic_Post_Post::GetInstance();
+        
+        return new Presentation_View_ViewCalendarView($blogID, $PostsObject, $year, $month);
     }
 
     public function EditBlogLayout($blogID)

@@ -42,7 +42,10 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
   {
     $this->posts = $this->posts->GetDatesWithPostsForMonth($this->blogID, $this->year, $this->month);
 
-    return $this->ViewCalendar();
+    $display = $this->ViewCalendar();
+    $display .= $this->ViewMonth();
+    
+    return $display;
   }
   
   //Display the Calendar
@@ -99,6 +102,21 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
     }
 
     return $cal.'</table>';
+  }
+  
+  public function ViewMonth()
+  {
+    $day_one = mktime(0,0,0,$this->month-1,1,$this->year);
+    
+    $display = '<div id="calendar_last_mon">'.strftime('%b', $day_one).'</div>';
+    
+    if($this->today['mon'] > $this->month)
+    {
+        $day_one = mktime(0,0,0,$this->month+1,1,$this->year);
+        $display .= '<div id="calendar_next_mon">'.strftime('%b', $day_one).'</div>';
+    }
+
+    return $display;
   }
   
   private function testnumber($found, $set, $temp)
