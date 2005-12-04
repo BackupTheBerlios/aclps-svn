@@ -108,11 +108,11 @@ class BusinessLogic_Blog_Blog
             //TODO
             break;
 	    
-        case 'EditMembers':
-            //TODO
+        case 'EditMembership':
+            $aViewBlogView->SetContent($this->EditMembership($_GET['blogID']));
             break;
 	    
-        case 'ProcessEditMember':
+        case 'ProcessEditMembership':
             //TODO
             break;
 	    
@@ -303,9 +303,17 @@ class BusinessLogic_Blog_Blog
         }
     }
 
-    public function EditMembership()
+    public function EditMembership($blogID)
     {
-		//TODO
+        $aViewManageInvitationsView = Presentation_View_ViewManageInvitationsView($blogID);
+        $aViewManageMembersView = Presentation_View_ViewManageMembersView($blogID);
+        
+        $aViewEditMembershipView = new Presentation_View_ViewEditMembershipView();
+        
+        $aViewEditMembershipView->AddView($aViewManageInvitationsView);
+        $aViewEditMembershipView->AddView($aViewManageMembersView);
+        
+        return $aViewEditMembershipView;
     }
 
     public function ProcessEditMembership()
