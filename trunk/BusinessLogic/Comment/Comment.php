@@ -105,8 +105,9 @@ class BusinessLogic_Comment_Comment
             $view = new Presentation_View_ViewCommentView($blogID,$_POST['postID'],0,$authorID,$title,0,$_POST['content']);
             $this->ProcessNewComment($view);
             //forward user to viewing the post:
-            return BusinessLogic_Post_Post::GetInstance()->ViewPostsByID($blogID,$_POST['postID']);
-            break;
+            $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewPost&blogID='.$blogID.'&postID='.$_POST['postID'];
+            header("Location: $path");
+            exit;
         case 'EditComment':
             $commentID = $_GET['commentID'];
             return $this->EditComment($blogID,$commentID);
@@ -117,8 +118,9 @@ class BusinessLogic_Comment_Comment
             $view = new Presentation_View_ViewCommentView($blogID,0,$_POST['commentID'],$authorID,$title, 0, $_POST['content']);
             $this->ProcessEditComment($view);
             //forward user to viewing the post:
-            return BusinessLogic_Post_Post::GetInstance()->ViewPostsByID($blogID,$_POST['postID']);
-            break;
+            $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewPost&blogID='.$blogID.'&postID='.$_POST['postID'];
+            header("Location: $path");
+            exit;
         case 'DeleteComment':
             $commentID = $_GET['commentID'];
             $comment = $this->DeleteComment($blogID,$commentID);
@@ -128,8 +130,9 @@ class BusinessLogic_Comment_Comment
             $commentID = $_POST['commentID'];
             $this->ProcessDeleteComment($blogID,$commentID);
             //forward user to viewing the post:
-            return BusinessLogic_Post_Post::GetInstance()->ViewPostsByID($blogID,$_POST['postID']);
-            break;
+            $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewPost&blogID='.$blogID.'&postID='.$_POST['postID'];
+            header("Location: $path");
+            exit;
         default:
             throw new Exception('Unknown Request.');
 	}

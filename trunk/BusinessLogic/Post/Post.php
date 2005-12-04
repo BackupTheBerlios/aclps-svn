@@ -189,8 +189,9 @@ class BusinessLogic_Post_Post
             $view = new Presentation_View_ViewPostView($blogID,0,$authorID,$title,$_POST['public'],0,$_POST['content']);
             $this->ProcessNewPost($view);
             //forward user to viewing the blog that the post was just made in:
-            return $this->ViewPostsByRecentCount($blogID,10);
-            break;
+            $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$blogID;
+            header("Location: $path");
+            exit;
         case 'EditPost':
             $postID = $_GET['postID'];
             return $this->EditPost($blogID,$postID);
@@ -203,8 +204,9 @@ class BusinessLogic_Post_Post
             $updateTimestamp = ($_POST['timestamp'] == 'now');
             $this->ProcessEditPost($view,$updateTimestamp);
             //forward user to viewing newly edited post:
-            return $this->ViewPostsByID($blogID,$_POST['postID']);
-            break;
+            $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewPost&blogID='.$blogID.'&postID='.$_POST['postID'];
+            header("Location: $path");
+            exit;
         case 'DeletePost':
             $postID = $_GET['postID'];
             return $this->DeletePost($blogID,$postID);
@@ -213,8 +215,9 @@ class BusinessLogic_Post_Post
             $postID = $_POST['postID'];
             $this->ProcessDeletePost($blogID,$postID);
             //forward user to viewing posts in blog:
-            return $this->ViewPostsByRecentCount($blogID,10);
-            break;
+            $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$blogID;
+            header("Location: $path");
+            exit;
         default:
             return BusinessLogic_Comment_Comment::GetInstance()->HandleRequest();
         }

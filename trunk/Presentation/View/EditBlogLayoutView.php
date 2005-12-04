@@ -79,7 +79,7 @@ class Presentation_View_EditBlogLayoutView extends Presentation_View_View
             . '<tr><td colspan="2"><label for="footertog">Footer Image:</label></td></tr>'
             . '<tr><td><input type="radio" name="footertog" value="no" '.$footerNone.'></td><td>None</td></tr>'
             . '<tr><td><input type="radio" name="footertog" value="def" '.$footerDefault.'></td><td>Theme Default</td></tr>'
-            . '<tr><td><input type="radio" name="footertog" value="cust" '.$footerCustom.'></td><td>Custom URL: <input type="text" name="headerImage" value="'.$footerCustomURL.'" size="40"></td></tr>'
+            . '<tr><td><input type="radio" name="footertog" value="cust" '.$footerCustom.'></td><td>Custom URL: <input type="text" name="footerImage" value="'.$footerCustomURL.'" size="40"></td></tr>'
 
             . '<tr><td colspan="2"><label for="about">About Text (for sidebar):</label></td></tr>'
             . '<tr><td colspan="2" align="center"><textarea name="about" rows="3" cols="50">' . $this->about . '</textarea></td></tr>'

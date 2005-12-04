@@ -96,7 +96,7 @@ class BusinessLogic_Blog_Blog
             $this->ProcessEditBlogLayout($_GET['blogID'],$title,$about,$themeid,$headerimg,$footerimg);
             
             //forward user to viewing their modified blog:
-            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID='.$_GET['blogID'];
+            $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$_GET['blogID'];
             header("Location: $path");
             exit;
             
@@ -118,8 +118,9 @@ class BusinessLogic_Blog_Blog
 	    
         case 'NewBlog':
             //blogid is passed solely for returning to system when user submits processnewblog form
-            $aViewBlogView->SetContent($this->NewBlog($_GET['blogID']));
-            break;
+            $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$this->NewBlog($_GET['blogID']);
+            header("Location: $path");
+            exit;
 	    
         case 'ProcessNewBlog':
             $title = $_POST['title'];
@@ -157,8 +158,9 @@ class BusinessLogic_Blog_Blog
             $newBlogID = $this->ProcessNewBlog($title,$about,$themeid,$headerimg,$footerimg);
             
             //forward user to viewing their new blog:
-            $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($newBlogID,10));
-            break;
+            $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$newBlogID;
+            header("Location: $path");
+            exit;
             
         case 'ViewSearch':
             $aViewBlogView->SetContent($this->ViewSearch($this->ViewPopular()));
