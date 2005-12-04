@@ -366,12 +366,34 @@ class BusinessLogic_User_User
 
     }
     
-    public function DeleteInvitation($blogID)
+    public function RemoveInvitation($blogID)
     {
         $permission = $this->GetPermissionForBlog($this->GetUserID());
         if ($permission = 'Owner' or 'Editor')
         {
-            //
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+
+            $query = "select * from [0] where blogID='[1]'";
+            $arguments = array('Invitations', $blogID);
+            $invitationResult = $DataAccess->Select($query, $arguments);
+            
+            $aViewRemoveInvitationCollectionView = new Presentation_View_ViewRemoveInvitationCollectionView($blogID);
+
+            foreach($invitationResult as $key=>$value)
+            {
+                $userID = $value['UserID'];
+                $rank = $value['Rank'];
+                
+                $query = "select Username from [0] where UserID=[1]";
+                $arguments = array('Users', $userID);
+                $result = $DataAccess->Select($query, $arguments);
+                
+                $username = $result[0]['Username'];
+                
+                $aViewRemoveInvitationCollectionView->AddView(new Presentation_View_ViewRemoveInvitationView($userID, $username, $rank));
+            }
+            
+            return $aViewRemoveInvitationCollectionView;
         }
         else
         {
@@ -380,12 +402,30 @@ class BusinessLogic_User_User
 
     }
     
-    public function ProcessDeleteInvitation($blogID)
+    public function ProcessRemoveInvitation($blogID)
     {
         $permission = $this->GetPermissionForBlog($this->GetUserID());
         if ($permission = 'Owner' or 'Editor')
         {
-            //
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+
+            foreach ($_POST as $userID=>$value)
+            {
+                $query = "select * from [0] where UserID='[1]' and blogID='[2]'";
+                $arguments = array('Invitations', $userID, $blogID);
+                $result = $DataAccess->Select($query, $arguments);
+                
+                if (count($result) > 0)
+                {
+                    $query = "delete from [0] where UserID='[1]' and blogID='[2]'";
+                    $arguments = array('Invitations', $userID, $blogID);
+                    $result = $DataAccess->Delete($query, $arguments);
+                }
+            }
+            
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=EditMembership&blogID=' . $blogID;
+            header("Location: $path");
+            exit;
         }
         else
         {
@@ -780,6 +820,11 @@ class BusinessLogic_User_User
 
         case 'RemoveInvitation':
             return $this->RemoveInvitation($_GET['blogID']);
+            break;
+            
+        case 'ProcessRemoveInvitation':
+            return $this->ProcessRemoveInvitation($_GET['blogID']);
+            exit;
             break;
 
         default:
