@@ -165,7 +165,7 @@ class BusinessLogic_Blog_Blog
                     . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
                     . ' | <a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a>'
                     . ' | <a href="index.php?Action=EditBlogLayout&blogID='.$blogID.'">Edit Blog</a></a>'
-                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Edit Memberships</a>'
+                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Edit Membership</a>'
                     . '</div>';
 	           break;
               
@@ -173,7 +173,7 @@ class BusinessLogic_Blog_Blog
 	           $contentOptions = '<div id="blogcontrols">'
                     . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
                     . ' | <a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a>'
-                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Edit Memberships</a>'
+                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Edit Membership</a>'
                     . '</div>';
 	           break;
               
