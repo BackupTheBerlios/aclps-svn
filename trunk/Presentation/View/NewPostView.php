@@ -22,7 +22,7 @@ class Presentation_View_NewPostView extends Presentation_View_View
             . '<td><label for="public">Public (Anonymous can view)</label></td></tr>'
 
             . '<tr><td colspan="2"><label for="content">Content:</label></td></tr>'
-            . '<tr><td colspan="2"><textarea name="content" rows="5" cols="40">'.$this->post->GetContent().'</textarea></td></tr>'
+            . '<tr><td colspan="2"><textarea name="content" rows="5" cols="40"></textarea></td></tr>'
 
             . '<tr><td colspan="2" align="center"><input type="submit" id="submit" value="Add Post"></td></tr></table>'
             . '</fieldset>'
