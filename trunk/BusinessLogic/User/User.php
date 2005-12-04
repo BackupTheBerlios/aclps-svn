@@ -449,11 +449,88 @@ class BusinessLogic_User_User
 
     }
     
+    public function ChangeMemberRank($blogID)
+    {
+        $permission = $this->GetPermissionForBlog($blogID);
+        
+        if ($permission == 'Owner')
+        {
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+
+            $query = "select * from [0] where blogID='[1]' and Auth!='Owner'";
+            $arguments = array('User_Auth', $blogID);
+            $memberResult = $DataAccess->Select($query, $arguments);
+            
+            $aViewChangeMemberRankCollectionView = new Presentation_View_ViewChangeMemberRankCollectionView($blogID);
+
+            foreach($memberResult as $key=>$value)
+            {
+                $userID = $value['UserID'];
+                $rank = $value['Auth'];
+
+                $query = "select Username from [0] where UserID=[1]";
+                $arguments = array('Users', $userID);
+                $result = $DataAccess->Select($query, $arguments);
+
+                $username = $result[0]['Username'];
+
+                $aViewChangeMemberRankCollectionView->AddView(new Presentation_View_ViewChangeMemberRankView($userID, $username, $rank, $this->GetRankList($blogID)));
+            }
+            
+            print 'CHECK: ' . $aViewChangeMemberRankCollectionView;
+            return $aViewChangeMemberRankCollectionView;
+        }
+        else
+        {
+            throw new Exception('Access Denied');
+        }
+            
+    }
+    
+    public function ProcessChangeMemberRank($blogID)
+    {
+        $permission = $this->GetPermissionForBlog($blogID);
+        if ($permission == 'Owner')
+        {
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+
+            foreach ($_POST as $userID=>$auth)
+            {
+                $query = "select * from [0] where UserID='[1]' and blogID='[2]'";
+                $arguments = array('User_Auth', $userID, $blogID);
+                $result = $DataAccess->Select($query, $arguments);
+
+                if (count($result) > 0)
+                {
+                    //these are the only accaptable ranks
+                    if ($auth == 'Author' or $auth == 'Editor')
+                    {
+                        $query = "update [0] set Auth='[1]' where UserID='[2]' and blogID=[3]";
+                        $arguments = array('User_Auth', $auth, $userID, $blogID);
+                        $result = $DataAccess->Update($query, $arguments);
+                    }
+                    else
+                    {
+                        throw new Exception('Invalid rank selection');
+                    }
+                }
+            }
+
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=EditMembership&blogID=' . $blogID;
+            header("Location: $path");
+            exit;
+        }
+        else
+        {
+            throw new Exception('Access Denied');
+        }
+
+    }
+    
     public function RemoveMember($blogID)
     {
         $permission = $this->GetPermissionForBlog($blogID);
         
-        print $permission . '<br />';
         if ($permission == 'Owner' or $permission == 'Editor')
         {
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -468,7 +545,6 @@ class BusinessLogic_User_User
                 $query = "select * from [0] where blogID='[1]' and Auth='Author'";
             }
 
-            print $query . '<br />';
             $arguments = array('User_Auth', $blogID);
             $memberResult = $DataAccess->Select($query, $arguments);
 
@@ -988,6 +1064,14 @@ class BusinessLogic_User_User
             
         case 'ProcessRemoveInvitation':
             return $this->ProcessRemoveInvitation($_GET['blogID']);
+            break;
+            
+        case 'ChangeMemberRank':
+            return $this->ChangeMemberRank($_GET['blogID']);
+            break;
+
+        case 'ProcessChangeMemberRank':
+            return $this->ProcessChangeMemberRank($_GET['blogID']);
             break;
             
         case 'RemoveMember':

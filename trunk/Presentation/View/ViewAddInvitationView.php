@@ -33,7 +33,6 @@ class Presentation_View_ViewAddInvitationView extends Presentation_View_View
 
         foreach ($this->ranks as $key=>$value)
         {
-            print_r($this->ranks);
             $form = $form . '<option value='. $value . '>' . $value . '</option>';
         }
 
