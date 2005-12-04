@@ -308,7 +308,9 @@ class BusinessLogic_Blog_Blog
         if ($permission == 'Owner' or $permission == 'Editor')
         {
             $aViewManageInvitationsView = new Presentation_View_ViewManageInvitationsView($blogID);
-            $aViewManageMembersView = new Presentation_View_ViewManageMembersView($blogID);
+            
+            $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
+            $aViewManageMembersView = new Presentation_View_ViewManageMembersView($blogID, $permission);
 
             $aViewEditMembershipView = new Presentation_View_ViewEditMembershipView();
 

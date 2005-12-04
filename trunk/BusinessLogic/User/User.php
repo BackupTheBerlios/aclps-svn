@@ -260,8 +260,8 @@ class BusinessLogic_User_User
     
     public function ViewInvitation($blogID)
     {
-        $permission = $this->GetPermissionForBlog($this->GetUserID());
-        if ($permission = 'Owner' or 'Editor')
+        $permission = $this->GetPermissionForBlog($blogID);
+        if ($permission == 'Owner' or $permission == 'Editor')
         {
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
             
@@ -305,8 +305,8 @@ class BusinessLogic_User_User
     
     public function AddInvitation($blogID, $errorMessage)
     {
-        $permission = $this->GetPermissionForBlog($this->GetUserID());
-        if ($permission = 'Owner' or 'Editor')
+        $permission = $this->GetPermissionForBlog($blogID);
+        if ($permission == 'Owner' or $permission == 'Editor')
         {
             return new Presentation_View_ViewAddInvitationView($blogID, $this->GetRankList($blogID), $errorMessage);
         }
@@ -319,8 +319,8 @@ class BusinessLogic_User_User
     
     public function ProcessAddInvitation($blogID, $username, $rank)
     {
-        $permission = $this->GetPermissionForBlog($this->GetUserID());
-        if ($permission = 'Owner' or 'Editor')
+        $permission = $this->GetPermissionForBlog($blogID);
+        if ($permission == 'Owner' or $permission == 'Editor')
         {
             //username exists?
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -383,8 +383,8 @@ class BusinessLogic_User_User
     
     public function RemoveInvitation($blogID)
     {
-        $permission = $this->GetPermissionForBlog($this->GetUserID());
-        if ($permission = 'Owner' or 'Editor')
+        $permission = $this->GetPermissionForBlog($blogID);
+        if ($permission == 'Owner' or $permission == 'Editor')
         {
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
 
@@ -419,8 +419,8 @@ class BusinessLogic_User_User
     
     public function ProcessRemoveInvitation($blogID)
     {
-        $permission = $this->GetPermissionForBlog($this->GetUserID());
-        if ($permission = 'Owner' or 'Editor')
+        $permission = $this->GetPermissionForBlog($blogID);
+        if ($permission == 'Owner' or $permission == 'Editor')
         {
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
 
@@ -441,6 +441,54 @@ class BusinessLogic_User_User
             $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=EditMembership&blogID=' . $blogID;
             header("Location: $path");
             exit;
+        }
+        else
+        {
+            throw new Exception('Access Denied');
+        }
+
+    }
+    
+    public function RemoveMember($blogID)
+    {
+        $permission = $this->GetPermissionForBlog($blogID);
+        
+        print $permission . '<br />';
+        if ($permission == 'Owner' or $permission == 'Editor')
+        {
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+
+            //The owner can delete anyone (except himself), editors can delete authors
+            if ($permission == 'Owner')
+            {
+                $query = "select * from [0] where blogID='[1]' and Auth!='Owner'";
+            }
+            else //$permission == Editor
+            {
+                $query = "select * from [0] where blogID='[1]' and Auth='Author'";
+            }
+
+            print $query . '<br />';
+            $arguments = array('User_Auth', $blogID);
+            $memberResult = $DataAccess->Select($query, $arguments);
+
+            $aViewRemoveMemberCollectionView = new Presentation_View_ViewRemoveMemberCollectionView($blogID);
+
+            foreach($memberResult as $key=>$value)
+            {
+                $userID = $value['UserID'];
+                $rank = $value['Auth'];
+
+                $query = "select Username from [0] where UserID=[1]";
+                $arguments = array('Users', $userID);
+                $result = $DataAccess->Select($query, $arguments);
+
+                $username = $result[0]['Username'];
+
+                $aViewRemoveMemberCollectionView->AddView(new Presentation_View_ViewRemoveMemberView($userID, $username, $rank));
+            }
+
+            return $aViewRemoveMemberCollectionView;
         }
         else
         {
@@ -840,6 +888,10 @@ class BusinessLogic_User_User
         case 'ProcessRemoveInvitation':
             return $this->ProcessRemoveInvitation($_GET['blogID']);
             exit;
+            break;
+            
+        case 'RemoveMember':
+            return $this->RemoveMember($_GET['blogID']);
             break;
 
         default:
