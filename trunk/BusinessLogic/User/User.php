@@ -275,7 +275,7 @@ class BusinessLogic_User_User
             {
                 foreach ($invitationsResult as $key=>$value)
                 {
-                    $query = 'select Username from [0] where Username=[1]';
+                    $query = 'select Username from [0] where UserID=[1]';
                     $arguments = array('Users', $value['UserID']);
                     $result = $DataAccess->Select($query, $arguments);
 
@@ -303,12 +303,12 @@ class BusinessLogic_User_User
 
     }
     
-    public function AddInvitation($blogID)
+    public function AddInvitation($blogID, $errorMessage)
     {
         $permission = $this->GetPermissionForBlog($this->GetUserID());
         if ($permission = 'Owner' or 'Editor')
         {
-            return new Presentation_View_ViewAddInvitationView($blogID);
+            return new Presentation_View_ViewAddInvitationView($blogID, $this->GetRankList($blogID), $errorMessage);
         }
         else
         {
@@ -317,12 +317,47 @@ class BusinessLogic_User_User
 
     }
     
-    public function ProcessAddInvitation($blogID)
+    public function ProcessAddInvitation($blogID, $username, $rank)
     {
         $permission = $this->GetPermissionForBlog($this->GetUserID());
         if ($permission = 'Owner' or 'Editor')
         {
-            //
+            //username exists?
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+
+            $query = "select * from [0] where username='[1]'";
+            $arguments = array('Users', $username);
+            $result = $DataAccess->Select($query, $arguments);
+            
+            if (count($result) > 0)
+            {
+                $userID = $result[0]['UserID'];
+
+                //Is there already an invitation
+                $query = 'select * from [0] where UserID=[1]';
+                $arguments = array('Invitations', $userID);
+                $result = $DataAccess->Select($query, $arguments);
+                
+                if(count($result) < 1)
+                {
+                    //insert invitation
+                    $query = "insert into [0] (UserID, BlogID, Rank) VALUES('[1]', '[2]', '[3]')";
+                    $arguments = array('Invitations', $userID, $blogID, $rank);
+                    $result = $DataAccess->Insert($query, $arguments);
+                    
+                    $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=EditMembership&blogID=' . $blogID;
+                    header("Location: $path");
+                    exit;
+                }
+                else
+                {
+                    return $this->AddInvitation($blogID, 'An invitation already exists for this user.');
+                }
+            }
+            else
+            {
+                return $this->AddInvitation($blogID, 'Unknown user.');
+            }
         }
         else
         {
@@ -613,6 +648,19 @@ class BusinessLogic_User_User
         //TODO
     }
     
+    public function GetRankList($blogID)
+    {
+        switch($this->GetPermissionForBlog($blogID))
+        {
+            case 'Owner':
+                return array('Author', 'Editor');
+            case 'Editor':
+                return array('Author');
+            default:
+                throw new Exception('Access Denied.');
+        }
+    }
+    
     //****************************************
     //          The Handler
     //****************************************
@@ -715,7 +763,19 @@ class BusinessLogic_User_User
             break;
 
         case 'AddInvitation':
-            return $this->AddInvitation($_GET['blogID']);
+            return $this->AddInvitation($_GET['blogID'], '');
+            break;
+
+        case 'ProcessAddInvitation':
+            if (isset($_POST['username']) and $_POST['rank'])
+            {
+                return $this->ProcessAddInvitation($_GET['blogID'], $_POST['username'], $_POST['rank']);
+            }
+            else
+            {
+                return $this->AddInvitation($_GET['blogID'], 'Form not filled in completely.');
+            }
+
             break;
 
         case 'RemoveInvitation':

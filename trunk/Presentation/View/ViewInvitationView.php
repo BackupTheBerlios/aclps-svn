@@ -1,6 +1,6 @@
 <?php
 
-class Presentation_View_ViewDashboardInvitationView extends Presentation_View_View
+class Presentation_View_ViewInvitationView extends Presentation_View_View
 {
     private $username;
     private $rank;
