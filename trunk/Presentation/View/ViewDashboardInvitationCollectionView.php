@@ -1,6 +1,6 @@
 <?php
 
-class Presentation_View_ViewAssociatedBlogCollectionView extends Presentation_View_View
+class Presentation_View_ViewDashboardInvitationCollectionView extends Presentation_View_View
 {
 
     public function __construct()
@@ -10,7 +10,7 @@ class Presentation_View_ViewAssociatedBlogCollectionView extends Presentation_Vi
 
     public function Display()
     {
-        $ret = '<div id=associatedblogcollection>';
+        $ret = '<div id=dashboardinvitationcollection><div id=dashboardinvitationcollection_title>Invitations</div>';
 
         if (count($this->Views) > 0)
         {
@@ -21,7 +21,7 @@ class Presentation_View_ViewAssociatedBlogCollectionView extends Presentation_Vi
         }
         else
         {
-            $ret = $ret . 'You are not associated with any blogs.';
+            $ret = $ret . 'You have no outstanding invitations.';
         }
 
         $ret = $ret . '</div>';

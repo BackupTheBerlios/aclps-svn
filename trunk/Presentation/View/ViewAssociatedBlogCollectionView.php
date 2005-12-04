@@ -10,7 +10,7 @@ class Presentation_View_ViewAssociatedBlogCollectionView extends Presentation_Vi
     
     public function Display()
     {
-        $ret = '<div id=associatedblogcollection>';
+        $ret = '<div id=associatedblogcollection><div id=associatedblogcollection_title>Associated Blogs</div>';
         
         if (count($this->Views) > 0)
         {

@@ -13,18 +13,20 @@ class Presentation_View_ViewMyBlogView extends Presentation_View_View
     
     public function Display()
     {
+        $ret = '<div id=myblog><div id=myblog_title>My Blog</div>';
+        
         if ($this->blogID != 0 and $this->blogTitle != '')
         {
-            $ret = '<div id=myBlog>'
-                    . '<a href="index.php?Action=ViewBlog&blogID=' . $this->blogID . '">' . $this->blogTitle . '</a>'
-                    . '</div>';
+            $ret = $ret
+                    . '<a href="index.php?Action=ViewBlog&blogID=' . $this->blogID . '">' . $this->blogTitle . '</a>';
         }
         else
         {
-            $ret = '<div id=myBlog>'
-                    . '<a href="index.php?Action=NewBlog&blogID=1">Create my blog</a>'
-                    . '</div>';
+            $ret = $ret
+                    . '<a href="index.php?Action=NewBlog&blogID=1">Create my blog</a>';
         }
+        
+        $ret = $ret . '</div>';
         
         return $ret;
     }

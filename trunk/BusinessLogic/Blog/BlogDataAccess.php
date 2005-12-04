@@ -153,9 +153,14 @@ class BusinessLogic_Blog_BlogDataAccess
             $aViewAssociatedBlogCollectionView->AddView(new Presentation_View_ViewAssociatedBlogView($blogID, $arr['title'], $arr['rank']));
         }
         
+        //Get Invitations
+        
+        $aViewDashboardInvitationCollectionView = new Presentation_View_ViewDashboardInvitationCollectionView();
+        
         $ViewDashboardView = new Presentation_View_ViewDashboardView;
         $ViewDashboardView->AddView($ViewMyBlogView);
         $ViewDashboardView->AddView($aViewAssociatedBlogCollectionView);
+        $ViewDashboardView->AddView(aViewDashboardInvitationCollectionView);
 
         return $ViewDashboardView;
     }
