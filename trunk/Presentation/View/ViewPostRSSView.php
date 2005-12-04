@@ -12,22 +12,6 @@ class Presentation_View_ViewPostRSSView extends Presentation_View_View
             throw new Exception("ViewPostRSSView must be passed an array of ViewPostViews");
         }
         $this->posts = $posts;
-        $this->SetCommentCounts();
-    }
-
-    private function SetCommentCounts() {
-        //Sets the comment counts for each post in this collection.
-        foreach($this->posts as $key => $value)
-        {
-            $postIDs[$key] = $value->GetPostID();
-        }
-
-        $commentCounts = BusinessLogic_Comment_CommentDataAccess::GetInstance()->GetCommentCounts($postIDs);
-
-        foreach($this->posts as $key => $value)
-        {
-            $value->SetCommentCount($commentCounts[$key]);
-        }
     }
 
     public function Display()
@@ -56,11 +40,6 @@ class Presentation_View_ViewPostRSSView extends Presentation_View_View
         {
             throw new Exception("Contents of ViewPostCollectionView must either be an array or unset.");
         }
-    }
-
-    public function GetPosts()
-    {
-        return $this->posts;
     }
 }
 

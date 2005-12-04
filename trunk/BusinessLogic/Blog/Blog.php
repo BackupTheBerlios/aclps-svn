@@ -2,12 +2,10 @@
 
 class BusinessLogic_Blog_Blog
 {
-    $this->defaultpostcount;
 
     private function __construct()
     {
 	//Singleton
-        $this->defaultpostcount = 10;
     }
     
     static public function GetInstance()
@@ -24,12 +22,6 @@ class BusinessLogic_Blog_Blog
         if (!isset($_GET['blogID']))
        	{
             throw new Exception('Malformed Request-View Blog');
-        }
-
-        //stuck this up here so that we aren't building a blog view for no reason:
-        if ($_GET['Action'] == 'ViewRSS')
-        {
-            return $this->ViewRSS($_GET['blogID']);
         }
 
     	$aViewBlogView = $this->ViewBlog($_GET['blogID']);
@@ -51,7 +43,8 @@ class BusinessLogic_Blog_Blog
     	switch($request)
     	{
         case 'ViewBlog':
-            $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],$this->defaultpostcount));
+            print $this->defaultpostcount;
+            $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],10));
             $this->ProcessCount($_GET['blogID']);
             break;
             
@@ -246,7 +239,7 @@ class BusinessLogic_Blog_Blog
 
     public function ViewRSS($blogID)
     {
-        return BusinessLogic_Post_Post::GetInstance()->ViewRSS($blogID,$this->defaultpostcount);
+        return BusinessLogic_Post_Post::GetInstance()->ViewRSS($blogID,10);
     }
 
     public function EditBlogLayout($blogID)

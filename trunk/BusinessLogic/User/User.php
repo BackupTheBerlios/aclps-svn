@@ -430,6 +430,12 @@ class BusinessLogic_User_User
         {
             throw new Exception('No UserID was provided!');
         }
+        //check cache, return if its there
+        if (isset($_SESSION['BusinessLogic_User_User_UserIDTable'][$userID]))
+        {
+            return $_SESSION['BusinessLogic_User_User_UserIDTable'][$userID];
+        }
+        //find in DB if not in cache:
         $query = "select Username from [0] where UserID=[1]";
         $arguments = array('Users', $userID);
 
@@ -438,6 +444,8 @@ class BusinessLogic_User_User
         
         if (isset($result[0]['Username']))
         {
+            //store to cache
+            $_SESSION['BusinessLogic_User_User_UserIDTable'][$userID] = $result[0]['Username'];
             return $result[0]['Username'];
         }
         else
