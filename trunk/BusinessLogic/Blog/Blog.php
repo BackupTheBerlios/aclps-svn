@@ -161,6 +161,9 @@ class BusinessLogic_Blog_Blog
         case 'ViewSearch':
             $aViewBlogView->SetContent($this->ViewSearch($this->ViewPopular()));
             break;
+
+        case 'ViewRSS':
+            //TODO: rss functionality
             
         default:
             $aViewBlogView->SetContent(BusinessLogic_User_User::GetInstance()->HandleRequest());
@@ -229,10 +232,6 @@ class BusinessLogic_Blog_Blog
         if($_POST['blog_title'] != '')
         {
             $result = BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessSearch($_POST['blog_title']);
-        }
-        else
-        {
-            $result = "Please Specify A Blog Name:";
         }
         
         return new Presentation_View_ViewSearchView($result, $more);

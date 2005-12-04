@@ -97,9 +97,15 @@ body
   padding: 0px;
 }
 
+#calendar_table td
+{ 
+  padding: 2px;
+}
+
 tr#calendar_week_row
 {
   font-weight: bold;
+  background-color: #DDDDDD;
 }
 
 #calendar_month_year
@@ -108,6 +114,11 @@ tr#calendar_week_row
   font-weight: bold;
   letter-spacing: 5px;
   margin-bottom: 4px;
+}
+#calendar_month_year a
+{ 
+  text-decoration: none;
+  color: blue;
 }
 
 #calendar_week
@@ -120,23 +131,10 @@ tr#calendar_week_row
   font-weight: bold;
 }
 
-#calendar_number
+#calendar_posts a,#calendar_today a
 {
-  color: black;
-}
-
-#calendar_posts
-{
+  text-decoration: none;
   color: blue;
-}
-
-#calendar_last_mon
-{
-  font-weight: bold;
-}
-#calendar_next_mon
-{
-  font-weight: bold;
 }
 
 /* BLOG CRAP HERE */
@@ -291,12 +289,14 @@ legend
 
 label
 {
+  font-weight: normal;
   font-size: 12px;
   padding: 2px;
 }
 
 table#formtable
 {
+  font-weight: bold;
   margin: 0 auto 0 auto;
   font-size: 12px;
 }
