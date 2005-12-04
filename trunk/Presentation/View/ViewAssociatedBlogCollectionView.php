@@ -12,6 +12,8 @@ class Presentation_View_ViewAssociatedBlogCollectionView extends Presentation_Vi
     {
         $ret = '<div id=associatedblogcollection>';
         
+        print_r($this->Views);
+        
         if (count($this->Views) > 0)
         {
             foreach($this->Views as $view)
