@@ -2,23 +2,29 @@
 
 class Presentation_View_ViewBlogView extends Presentation_View_View
 {
+
+    private $theme;
     private $topBar;
     private $headerImage;
     private $footerImage;
-    private $content;
-    private $sideContent;
-    private $theme;
+
+    private $title;
+    private $rssurl;
+
     private $blogID;
     private $contentOptions;
+    private $content;
+    private $sideContent;
     
-    public function __construct($blogID, $contentOptions, $headerImage, $footerImage, $theme)
+    public function __construct($blogID, $contentOptions, $headerImage, $footerImage, $theme, $title, $rssurl)
     {
 	$this->blogID = $blogID;
 	$this->contentOptions = $contentOptions;
 	$this->headerImage = $headerImage;
 	$this->footerImage = $footerImage;
 	$this->theme = $theme;
-      
+        $this->title = $title;
+        $this->rssurl = $rssurl;
 	$this->content = '';
 	$this->sideContent = '';
     }
@@ -140,6 +146,38 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
 	{
 	    return '&nbsp;';
 	}
+    }
+
+    public function DisplayTitle()
+    {
+        if (is_object($this->title))
+        {
+            return $this->title->Display();
+        }
+        elseif (isset($this->title))
+        {
+            return $this->title;
+        }
+        else
+        {
+            return '';
+        }
+    }
+
+    public function DisplayRSSURL()
+    {
+        if (is_object($this->rssurl))
+        {
+            return $this->rssurl->Display();
+        }
+        elseif (isset($this->rssurl))
+        {
+            return $this->rssurl;
+        }
+        else
+        {
+            return '';
+        }
     }
 }
 

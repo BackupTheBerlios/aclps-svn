@@ -17,6 +17,7 @@ class Presentation_FrontController
             //we're looking at the blog in an entirely different mode than the "default" of loading the page in a browser,
             //so it'd make sense for the front controller to call a different display
             $rssView = BusinessLogic_Blog_Blog::GetInstance()->ViewRSS($_GET['blogID']);
+            header('Content-Type: application/xml');
             print $rssView->Display();
             exit;
         }

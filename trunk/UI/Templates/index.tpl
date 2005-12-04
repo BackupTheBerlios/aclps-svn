@@ -2,6 +2,7 @@
 <head>
 <title>ACLPS - {$title}</title>
 <style type="text/css" media="all">@import url({$theme});</style>
+<link rel="alternate" title="{$title} - RSS Feed" href="{$rssurl}" type="application/rss+xml">
 </head>
 <body>
 

@@ -21,7 +21,7 @@ class BusinessLogic_Blog_Blog
     {
         if (!isset($_GET['blogID']))
        	{
-            throw new Exception('Malformed Request-View Blog');
+            throw new Exception('Malformed Request: Missing BlogID');
         }
 
     	$aViewBlogView = $this->ViewBlog($_GET['blogID']);
@@ -209,7 +209,8 @@ class BusinessLogic_Blog_Blog
 	   }
           
 	   $aBlogDataAccess = BusinessLogic_Blog_BlogDataAccess::GetInstance();
-	   return $aBlogDataAccess->ViewBlog($blogID, $contentOptions);
+           $rssurl = $_SERVER['SCRIPT_URI'].'?Action=ViewRSS&blogID='.$blogID;
+	   return $aBlogDataAccess->ViewBlog($blogID, $contentOptions, $rssurl);
     }
 
     public function ViewDashboard($userID)
@@ -239,7 +240,12 @@ class BusinessLogic_Blog_Blog
 
     public function ViewRSS($blogID)
     {
-        return BusinessLogic_Post_Post::GetInstance()->ViewRSS($blogID,10);
+        $rssView = BusinessLogic_Post_Post::GetInstance()->ViewRSS($blogID,10);
+        $blogData = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetBlogInfo($blogID);
+        $blogurl = $_SERVER['SCRIPT_URI'].'?Action=ViewBlog&blogID='.$blogID;
+        $posturlprefix = $_SERVER['SCRIPT_URI'].'?Action=ViewPost&blogID='.$blogID.'&postID=';
+        $rssView->AddBlogInfo($blogData[0], $blogData[1], $blogurl, $posturlprefix);
+        return $rssView;
     }
 
     public function EditBlogLayout($blogID)

@@ -38,15 +38,16 @@ class Presentation_View_ViewPostCollectionView extends Presentation_View_View
             $ret = '<div id="postcollection">';
             if (count($this->posts) < 1)
             {
-                $ret = $ret."No posts found.\n";
-            } else {
+                $ret .= "No posts found.\n";
+            }
+            else
+            {
                 foreach($this->posts as $value)
                 {
-                    //If there's anything that should go between posts (newline or something), add it here
-                    $ret = $ret.$value->Display()."\n";
+                    $ret .= $value->Display()."\n";
                 }
             }
-            $ret = $ret.'</div>';
+            $ret .= '</div>';
             return $ret;
         }
         elseif (!isset($this->posts))

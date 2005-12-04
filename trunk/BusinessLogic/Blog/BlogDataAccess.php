@@ -19,7 +19,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     }
     
-    public function ViewBlog($blogID, $contentOptions)
+    public function ViewBlog($blogID, $contentOptions, $rssurl)
     {
     	$query = 'select * from [0] where BlogID=[1]';
         $arguments = array('Blogs', $blogID);
@@ -40,7 +40,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
         $themeRow = $themeResult[0];
 
-        $aViewBlogView = new Presentation_View_ViewBlogView($blogID, $contentOptions, $blogRow['HeaderImage'], $blogRow['FooterImage'], $themeRow['URL']);
+        $aViewBlogView = new Presentation_View_ViewBlogView($blogID, $contentOptions, $blogRow['HeaderImage'], $blogRow['FooterImage'], $themeRow['URL'], $blogRow['Title'], $rssurl);
 
         
         $aViewBlogView->SetTopBar(BusinessLogic_User_User::GetInstance()->GetTopBar());
@@ -48,6 +48,25 @@ class BusinessLogic_Blog_BlogDataAccess
         
         return $aViewBlogView;
     }
+
+    public function GetBlogInfo($blogID)
+    {
+        //Returns the an array title and about text (in that order) for a given blog
+        //Used by Blog->ViewRSS to populate information about a blog into the returned data
+    	$query = 'select Title,About from [0] where BlogID=[1]';
+        $arguments = array('Blogs', $blogID);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $blogResult = $DataAccess->Select($query, $arguments);
+        
+        if (count($blogResult) < 1)
+        {
+	    throw new Exception('Request for unknown blog.');
+        }
+
+        return array($blogResult[0]['Title'],$blogResult[0]['About']);
+    }
+
 
     public function GetThemesList()
     {
@@ -283,7 +302,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function ProcessSearch($blog_title)
     {
-        $query = "select BlogID, Title, About from Blogs where Title like '%[0]%'";
+        $query = "select BlogID, Title, About from Blogs where Title like '%[0]%' or About like '%[0]%'";
         $arguments = array($blog_title);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();

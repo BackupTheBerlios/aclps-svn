@@ -4,6 +4,10 @@
 class Presentation_View_ViewPostRSSView extends Presentation_View_View
 {
     private $posts;
+    private $title;
+    private $bloglink;
+    private $postlinkprefix;
+    private $about;
     
     public function __construct($posts)
     {
@@ -14,32 +18,41 @@ class Presentation_View_ViewPostRSSView extends Presentation_View_View
         $this->posts = $posts;
     }
 
+    public function AddBlogInfo($title, $about, $bloglink, $postlinkprefix) {
+        $this->title = $title;
+        $this->about = $about;
+        $this->bloglink = $bloglink;
+        $this->postlinkprefix = $postlinkprefix;
+    }
+
     public function Display()
     {
+        //blog information:
+        $ret = "<?xml version=\"1.0\"?>\n"
+            ."<rss version=\"2.0\"><channel>\n"
+            .'<title>'.$this->title."</title>\n"
+            .'<link><![CDATA['.$this->bloglink."]]></link>\n"//firefox freaks out with the "blogid=n" bit
+            .'<description>'.$this->about."</description>\n"
+            ."<docs>http://blogs.law.harvard.edu/tech/rss</docs>\n"
+            ."<generator>ACLPS</generator>\n";
         if (is_array($this->posts))
         {
-            $ret = '<div id="postcollection">';
-            if (count($this->posts) < 1)
+            foreach($this->posts as $value)
             {
-                $ret = $ret."No posts found.\n";
-            } else {
-                foreach($this->posts as $value)
-                {
-                    //If there's anything that should go between posts (newline or something), add it here
-                    $ret = $ret.$value->Display()."\n";
-                }
+                $ret .= '<item><title>'.$value->GetTitle().'</title>'
+                    .'<author>'.$value->GetAuthorName().'</author>'
+                    .'<link><![CDATA['.$this->postlinkprefix.$value->GetPostID().']]></link>'
+                    .'<description>'.$value->GetContent().'</description>'
+                    .'<pubDate>'.date("r", strtotime($value->GetTimestamp())).'</pubDate>'
+                    .'<guid><![CDATA['.$this->postlinkprefix.$value->GetPostID()."]]></guid></item>\n";
             }
-            $ret = $ret.'</div>';
-            return $ret;
         }
-        elseif (!isset($this->posts))
-        {
-            return '<div id="postcollection">No Posts</div>';
-        }
-        else
+        elseif (isset($this->posts))
         {
             throw new Exception("Contents of ViewPostCollectionView must either be an array or unset.");
         }
+        $ret .= '</channel></rss>';
+        return $ret;
     }
 }
 
