@@ -35,10 +35,9 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
             throw new Exception("Search Failure.");
         }
 
-        $form .= '<p>Please enter the blog title you want to search:</p>'
-            . '<p><input type="text" name="blog_title">'
-            . '<label for="blog_title">Blog Title</label></p>'
-            . '<p><input type="submit" id="submit" value="Search"></p>'
+        $form .= '<table id="formtable"><tr><td><label for="blog_title">Blog Title:</label></td>'
+            . '<td><input type="text" name="blog_title"></td></tr>'
+            . '<tr><td align="center"><input type="submit" id="submit" value="Search"></td></tr></table>>'
             . '</form></fieldset>'
             . $ret.$this->popular->Display();
 

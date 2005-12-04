@@ -32,19 +32,19 @@ class Presentation_View_ViewRegisterView extends Presentation_View_View
       }
       
         $form = $form
-            . '<p><input type="text" name="username" value="'.$this->username.'">'
-            . '<label for="username">Username</label></p>'
+            . '<table id="formtable"><tr><td><label for="username">Username:</label></td>'
+            . '<td><input type="text" name="username" value="'.$this->username.'"></td></tr>'
 
-            . '<p><input type="text" name="email" value="'.$this->email.'">'
-            . '<label for="email">Email</label></p>'
+            . '<tr><td><label for="email">Email:</label></td>'
+            . '<td><input type="text" name="email" value="'.$this->email.'"></td></tr>'
 
-            . '<p><input type="password" name="password">'
-            . '<label for="password">Password</label></p>'
+            . '<tr><td><label for="password">Password:</label></td>'
+            . '<td><input type="password" name="password"></td></tr>'
 
-            . '<p><input type="password" name="confirmPassword">'
-            . '<label for="confirmPassword">Confirm Password</label></p>'
+            . '<tr><td><label for="confirmPassword">Confirm Password</label></td>'
+            . '<td><input type="password" name="confirmPassword"></td></tr>'
 
-            . '<p><input type="submit" id="submit" value="Register"></p>'
+            . '<tr><td colspan="2" align="center"><input type="submit" id="submit" value="Register"></td></tr></table>'
             . '</fieldset>'
             . '</form>';
 

@@ -22,14 +22,13 @@ class Presentation_View_ViewSignInView extends Presentation_View_View
       }
 
         $form = $form
-            . '<p>Please Login:</p>'
-            . '<p><input type="text" name="username">'
-            . '<label for="username">Username</label></p>'
+            . '<table id="formtable"><tr><td><label for="username">Username</label></td>'
+            . '<td><input type="text" name="username"></td></tr>'
 
-            . '<p><input type="password" name="password">'
-            . '<label for="password">Password</label></p>'
+            . '<tr><td><input type="password" name="password"></td>'
+            . '<td><label for="password">Password</label></td></td>'
 
-            . '<p><input type="submit" id="submit" value="Sign In"></p>'
+            . '<tr><td colspan="2" align="center"><input type="submit" id="submit" value="Sign In"></td></tr></table>'
             . '</fieldset>'
             . '</form>';
             

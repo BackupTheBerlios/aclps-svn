@@ -26,25 +26,26 @@ class Presentation_View_EditBlogLayoutView extends Presentation_View_View
         $form = '<form method="post" action="index.php?&Action=ProcessEditLayout&blogID=' . $this->blogID . '>'
             . '<fieldset>'
             . '<legend>Edit Your Blog</legend>'
-            . '<p><input type="text" name="blogTitle" value=' . $this->title . '></p>'
-            . '<label for="blogTitle">Blog Title</label></p>'
-            . '<p><select name="theme">';
+            . '<table id="formtable"><tr><td><label for="blogTitle">Blog Title:</label></td>'
+            . '<td><input type="text" name="blogTitle" value=' . $this->title . '></td></tr>'
+            . '<tr><td><label for="theme">Theme:</label></td>'
+            . '<td><select name="theme">';
         foreach ($themes as $key=>$value)
         {
             $form = $form . '<option value="'.$value['ThemeID'].'">'.$value['Title'].'</option>';
         }
         
-        $form = $form.'</select><label for="theme">Theme:</label></p>'
-            . '<p><input type="text" name="headerImage" value="' . $this->headerImage . '">'
-            . '<label for="headerImage">Custom Header Image URL (blank=theme default)</label></p>'
+        $form = $form.'</select></td></tr>'
+            . '<tr><td><label for="headerImage">Custom Header Image URL (blank=theme default):</label></td>'
+            . '<td><input type="text" name="headerImage" value="' . $this->headerImage . '"></td></tr>'
 
-            . '<p><input type="text" name="footerImage" value="' . $this->footerImage . '">'
-            . '<label for="footerImage">Custom Footer Image URL (blank=theme default)</label></p>'
+            . '<tr><td><label for="footerImage">Custom Footer Image URL (blank=theme default):</label></td>'
+            . '<td><input type="text" name="footerImage" value="' . $this->footerImage . '"></td></tr>'
 
-            . '<p><textarea name="about" rows="3" cols="40">' . $this->about . '</textarea>'
-            . '<label for="about">About Text (for sidebar)</label></p>'
+            . '<tr><td colspan="2"><label for="about">About Text (for sidebar):</label></td></tr>'
+            . '<tr><td colspan="2"><textarea name="about" rows="3" cols="40">' . $this->about . '</textarea></td></tr>'
 
-            . '<p><input type="submit" id="submit" value="Submit Changes"></p>'
+            . '<tr><td colspan="2" align="center"><input type="submit" id="submit" value="Submit Changes"></td></tr></table>'
             . '</fieldset>'
             . '</form>';
 

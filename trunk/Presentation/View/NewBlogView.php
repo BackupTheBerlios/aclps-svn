@@ -16,31 +16,31 @@ class Presentation_View_NewBlogView extends Presentation_View_View
             . '<fieldset>'
             . '<legend>Create Your Blog</legend>'
             
-            . '<p><input type="text" name="title">'
-            . '<label for="title">Title</label></p>'
+            . '<table id="formtable"><tr><td colspan="2"><label for="title">Title:</label>'
+            . ' <input type="text" name="title"></td></tr>'
             
-            . '<p><select name="theme">';
+            . '<tr><td colspan="2"><label for="theme">Theme:</label> <select name="theme">';
         $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
         foreach ($themeslist as $key=>$value)
         {
             $form = $form.'<option value="'.$value['ThemeID'].'">'.$value['Title'].'</option>';
         }
-        $form = $form.'</select><label for="theme">Theme</label></p>'
+        $form = $form.'</select></td></tr>'
             
-            . '<p><label for="headertog">Header Image</label></p>'
-            . '<p><input type="radio" name="headertog" value="no"> None</p>'
-            . '<p><input type="radio" name="headertog" value="def"> Theme Default</p>'
-            . '<p><input type="radio" name="headertog" value="cust"> Custom URL: <input type="text" name="headerimg"></p>'
+            . '<tr><td colspan="2"><label for="headertog">Header Image:</label></td></tr>'
+            . '<tr><td><input type="radio" name="headertog" value="no"></td><td>None</td></tr>'
+            . '<tr><td><input type="radio" name="headertog" value="def" checked></td><td>Theme Default</td></tr>'
+            . '<tr><td><input type="radio" name="headertog" value="cust"></td><td>Custom URL: <input type="text" name="headerimg"></td></tr>'
 
-            . '<p><label for="footertog">Footer Image</label></p>'
-            . '<p><input type="radio" name="footertog" value="no"> None</p>'
-            . '<p><input type="radio" name="footertog" value="def"> Theme Default</p>'
-            . '<p><input type="radio" name="footertog" value="cust"> Custom URL: <input type="text" name="footerimg"></p>'
+            . '<tr><td colspan="2"><label for="footertog">Footer Image:</label></td></tr>'
+            . '<tr><td>None</td><td><input type="radio" name="footertog" value="no"></td></tr>'
+            . '<tr><td><input type="radio" name="footertog" value="def" checked></td><td>Theme Default</td></tr>'
+            . '<tr><td><input type="radio" name="footertog" value="cust"></td><td>Custom URL: <input type="text" name="footerimg"></td></tr>'
             
-            . '<p><textarea name="about" rows="3" cols="40"></textarea>'
-            . '<label for="about">About Text (for sidebar)</label></p>'
+            . '<tr><td colspan="2"><label for="about">About Text (for sidebar):</label></td></tr>'
+            . '<tr><td colspan="2"><textarea name="about" rows="3" cols="40"></textarea></td></tr>'
             
-            . '<p><input type="submit" id="submit" value="Create Blog"></p>'
+            . '<tr><td colspan="2" align="center"><input type="submit" id="submit" value="Create Blog"></td></tr></table>'
             . '</fieldset>'
             . '</form>';
         

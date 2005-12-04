@@ -246,12 +246,9 @@ fieldset
   font-size: 12px;
   text-align: center;
   border: 1px solid #00FF00;
-  margin-bottom: 5px;
+  margin: 0 auto 5px auto;
 }
-fieldset input
-{
-  text-align: right;
-}
+
 legend
 {
   font-size: 12px;
@@ -260,12 +257,15 @@ legend
 
 label
 { 
+  float: left;
   font-size: 12px;
   padding: 2px;
 }
 
 input, textarea, select
 {
+  clear: both;
+  float: right;
   color: #00FF00;
   background-color: #003300;
   padding: 2px;

@@ -26,13 +26,13 @@ class Presentation_View_ViewEditUserDataView extends Presentation_View_View
       }
 
         $form = $form
-            . '<p>Change Email</p>'
-            . '<p><input type="text" name="email" value="' . $this->email . '"><label for="email">Email</label></p>'
-            . '<p>Change Password</p>'
-            . '<p><input type="password" name="oldPassword"><label for="oldPassword">Old Password</label></p>'
-            . '<p><input type="password" name="newPassword"><label for="newPassword">New Password</label></p>'
-            . '<p><input type="password" name="confirmNewPassword"><label for="confirmNewPassword">Confirm New Password</label></p>'
-            . '<p><input type="submit" id="submit" value="Submit Changes"></p>'
+            . '<table id="formtable"><tr><td colspan="2">Change Email</td></tr>'
+            . '<tr><td><label for="email">Email:</label></td><td><input type="text" name="email" value="' . $this->email . '"></td></tr>'
+            . '<tr><td colspan="2">Change Password</td></tr>'
+            . '<tr><td><label for="oldPassword">Old Password:</label></td><td><input type="password" name="oldPassword"></td></tr>'
+            . '<tr><td><label for="newPassword">New Password:</label></td><td><input type="password" name="newPassword"></td></tr>'
+            . '<tr><td><label for="confirmNewPassword">Confirm New Password:</label></td><td><input type="password" name="confirmNewPassword"></td></tr>'
+            . '<tr><td colspan="2" align="center"><input type="submit" id="submit" value="Submit Changes"></td></tr></table>'
             . '</fieldset>'
             . '</form>';
 

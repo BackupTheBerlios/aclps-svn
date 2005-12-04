@@ -22,8 +22,8 @@ class Presentation_View_DeleteCommentView extends Presentation_View_View
             . '<legend>Comment Deletion</legend>'
             . '<input type="hidden" name="postID" value="'.$this->comment->GetPostID().'">'
             . '<input type="hidden" name="commentID" value="'.$this->comment->GetCommentID().'">'
-            . '<p>Do you really want to delete this comment?</p>'
-            . '<p><input type="submit" id="submit" value="Yes"></p>'
+            . '<table id="formtable"><tr><td align="center">Do you really want to delete this comment?</td></tr>'
+            . '<tr><td align="center"><input type="submit" id="submit" value="Yes"></td></tr></table>'
             . '</fieldset>'
             . '</form>';
         return $this->comment->Display().$form;
