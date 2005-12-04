@@ -30,10 +30,6 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
         {
             $form .= '<p>'.$this->result->Display().'</p>';
         }
-        else
-        {
-            throw new Exception("Search Failure.");
-        }
 
         $form .= '<table id="formtable"><tr><td><label for="blog_title">Blog Title:</label></td>'
             . '<td><input type="text" name="blog_title"></td></tr>'

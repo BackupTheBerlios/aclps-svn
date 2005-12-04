@@ -26,12 +26,6 @@ class BusinessLogic_Blog_BlogSecurity
     	return BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
     }
     
-    public function ViewArchive()
-    {
-	//TODO
-        //See Post.ViewPostsByMonth($blogID, $year, $month) and Post.ViewPostsByDay($blogID, $year, $month, $date) --nick
-    }
-    
     public function EditBlogLayout($blogID)
     {
         $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);

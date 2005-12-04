@@ -2,9 +2,12 @@
 
 class BusinessLogic_Blog_Blog
 {
+    $this->defaultpostcount;
+
     private function __construct()
     {
 	//Singleton
+        $this->defaultpostcount = 10;
     }
     
     static public function GetInstance()
@@ -23,9 +26,15 @@ class BusinessLogic_Blog_Blog
             throw new Exception('Malformed Request-View Blog');
         }
 
-    	$aViewBlogView = $this->ViewBlog($_GET['blogID']);
-        //add default side content here:
+        //stuck this up here so that we aren't building a blog view for no reason:
+        if ($_GET['Action'] == 'ViewRSS')
+        {
+            return $this->ViewRSS($_GET['blogID']);
+        }
 
+    	$aViewBlogView = $this->ViewBlog($_GET['blogID']);
+
+        //add additional default side content here (before/above or after/below the calendar):
         $today = getdate();
         if (isset($_GET['year']))
             $year = $_GET['year'];
@@ -42,12 +51,8 @@ class BusinessLogic_Blog_Blog
     	switch($request)
     	{
         case 'ViewBlog':
-            $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],10));
+            $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],$this->defaultpostcount));
             $this->ProcessCount($_GET['blogID']);
-            break;
-            
-        case 'ViewArchive':
-            //TODO
             break;
             
         case 'ViewDashboard':
@@ -161,9 +166,6 @@ class BusinessLogic_Blog_Blog
         case 'ViewSearch':
             $aViewBlogView->SetContent($this->ViewSearch($this->ViewPopular()));
             break;
-
-        case 'ViewRSS':
-            //TODO: rss functionality
             
         default:
             $aViewBlogView->SetContent(BusinessLogic_User_User::GetInstance()->HandleRequest());
@@ -186,8 +188,8 @@ class BusinessLogic_Blog_Blog
 	           $contentOptions = '<div id="blogcontrols">'
                     . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
                     . ' | <a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a>'
-                    . ' | <a href="index.php?Action=EditBlogLayout&blogID='.$blogID.'">Edit Blog</a></a>'
-                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Edit Membership</a>'
+                    . ' | <a href="index.php?Action=EditBlogLayout&blogID='.$blogID.'">Blog Layout</a></a>'
+                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Blog Membership</a>'
                     . '</div>';
 	           break;
               
@@ -195,7 +197,7 @@ class BusinessLogic_Blog_Blog
 	           $contentOptions = '<div id="blogcontrols">'
                     . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
                     . ' | <a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a>'
-                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Edit Membership</a>'
+                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Blog Membership</a>'
                     . '</div>';
 	           break;
               
@@ -215,11 +217,6 @@ class BusinessLogic_Blog_Blog
           
 	   $aBlogDataAccess = BusinessLogic_Blog_BlogDataAccess::GetInstance();
 	   return $aBlogDataAccess->ViewBlog($blogID, $contentOptions);
-    }
-
-    public function ViewArchive()
-    {
-        //TODO
     }
 
     public function ViewDashboard($userID)
@@ -245,6 +242,11 @@ class BusinessLogic_Blog_Blog
     public function ViewCalendar($blogID, $year, $month)
     {
         return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewCalendar($blogID, $year, $month);
+    }
+
+    public function ViewRSS($blogID)
+    {
+        return BusinessLogic_Post_Post::GetInstance()->ViewRSS($blogID,$this->defaultpostcount);
     }
 
     public function EditBlogLayout($blogID)
@@ -318,7 +320,7 @@ class BusinessLogic_Blog_Blog
         }
         else
         {
-            throw new Exception('You are not authorized to access this..')
+            throw new Exception('You are not authorized to access this..');
         }
     }
 

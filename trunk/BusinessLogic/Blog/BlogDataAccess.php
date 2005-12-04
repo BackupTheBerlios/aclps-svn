@@ -87,11 +87,6 @@ class BusinessLogic_Blog_BlogDataAccess
         return $data[0]['DefaultFooter'];
     }
 
-    public function ViewArchive()
-    {
-	//TODO
-    }
-
     public function ViewDashboard($userID)
     {
         $user = BusinessLogic_User_User::GetInstance();

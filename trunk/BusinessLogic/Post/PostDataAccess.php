@@ -109,6 +109,25 @@ class BusinessLogic_Post_PostDataAccess
         return new Presentation_View_ViewPostSingleView($posts[0],$commentView);
     }
 
+    public function ViewRSS($blogID, $count, $hideprivate)
+    {
+        //Returns a ViewPostRSSView with data from the Posts table.
+        $extras = '';
+        if ($hideprivate)
+        {
+            $extras = 'and Public=true ';
+        }
+
+        $query = 'select * from Posts where BlogID=[0] '.$extras.'order by Timestamp desc limit [1]';
+        $arguments = array($blogID, $count);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        $response = $DataAccess->Select($query, $arguments);
+
+        $posts = $this->SQLResultsToViewPostViews($response);
+        return new Presentation_View_ViewPostRSSView($posts);
+    }
+
     public function ViewPostsByRecentCount($blogID, $postCount, $hideprivate)
     {
         //Returns a ViewPostCollectionView with data from the Posts table.

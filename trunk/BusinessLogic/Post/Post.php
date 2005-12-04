@@ -80,6 +80,13 @@ class BusinessLogic_Post_Post
         BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessDeleteAllComments($postID);
     }
 
+    public function ViewRSS($blogID,$count)
+    {
+        //Calls the PostSecurity class to determine the user's permissions. If so, PostDataAccess is called and a ViewPostRSSView is returned. Otherwise, an exception is thrown.
+        $permission = BusinessLogic_Post_PostSecurity::GetInstance()->ViewRSS($blogID);
+        return BusinessLogic_Post_PostDataAccess::GetInstance()->ViewRSS($blogID,$count,$permission[1]);
+    }
+
     public function ViewPostsByID($blogID, $postID)
     {
         //Calls the PostSecurity class to determine the user's permissions. If so, PostDataAccess is called and a ViewPostCollectionView is returned. Otherwise, an exception is thrown.

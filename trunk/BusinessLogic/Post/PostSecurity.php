@@ -90,6 +90,10 @@ class BusinessLogic_Post_PostSecurity
         $permissionlabel = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
         return array($permissionlabel,($permissionlabel == "Nobody"));
     }
+    public function ViewRSS($blogID)
+    {
+        return $this->ViewPost($blogID);
+    }
     public function ViewPostsByID($blogID)
     {
         return $this->ViewPost($blogID);
