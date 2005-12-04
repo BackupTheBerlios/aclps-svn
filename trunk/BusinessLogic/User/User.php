@@ -327,31 +327,46 @@ class BusinessLogic_User_User
 
             $query = "select * from [0] where username='[1]'";
             $arguments = array('Users', $username);
-            $result = $DataAccess->Select($query, $arguments);
+            $userResult = $DataAccess->Select($query, $arguments);
             
-            if (count($result) > 0)
+            //username exists
+            if (count($userResult) > 0)
             {
-                $userID = $result[0]['UserID'];
-
-                //Is there already an invitation
-                $query = 'select * from [0] where UserID=[1]';
-                $arguments = array('Invitations', $userID);
-                $result = $DataAccess->Select($query, $arguments);
+                $userID = $userResult[0]['UserID'];
                 
-                if(count($result) < 1)
+                //Is user already part of your blog
+                $query = "select * from [0] where UserID='[1]' and BlogID='[2]'";
+                $arguments = array('User_Auth', $userID, $blogID);
+                $authResult = $DataAccess->Select($query, $arguments);
+                
+                //the user is not part of your blog
+                if (count($authResult) < 1)
                 {
-                    //insert invitation
-                    $query = "insert into [0] (UserID, BlogID, Rank) VALUES('[1]', '[2]', '[3]')";
-                    $arguments = array('Invitations', $userID, $blogID, $rank);
-                    $result = $DataAccess->Insert($query, $arguments);
-                    
-                    $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=EditMembership&blogID=' . $blogID;
-                    header("Location: $path");
-                    exit;
+                    //Is there already an invitation?
+                    $query = 'select * from [0] where UserID=[1]';
+                    $arguments = array('Invitations', $userID);
+                    $result = $DataAccess->Select($query, $arguments);
+
+                    //there isn't a pre-existing invitation
+                    if(count($result) < 1)
+                    {
+                        //insert invitation
+                        $query = "insert into [0] (UserID, BlogID, Rank) VALUES('[1]', '[2]', '[3]')";
+                        $arguments = array('Invitations', $userID, $blogID, $rank);
+                        $result = $DataAccess->Insert($query, $arguments);
+
+                        $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=EditMembership&blogID=' . $blogID;
+                        header("Location: $path");
+                        exit;
+                    }
+                    else
+                    {
+                        return $this->AddInvitation($blogID, 'An invitation already exists for this user.');
+                    }
                 }
                 else
                 {
-                    return $this->AddInvitation($blogID, 'An invitation already exists for this user.');
+                    return $this->AddInvitation($blogID, 'This user is already a member of your blog.');
                 }
             }
             else

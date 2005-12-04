@@ -23,6 +23,9 @@ class Presentation_View_ViewRemoveInvitationCollectionView extends Presentation_
             {
                 $form = $form . $view->Display();
             }
+
+            $form = $form
+            . '<input type="submit" id="submit" value="Remove Invitations">';
         }
         else
         {
@@ -30,7 +33,6 @@ class Presentation_View_ViewRemoveInvitationCollectionView extends Presentation_
         }
 
         $form = $form
-            . '<input type="submit" id="submit" value="Remove Invitations">'
             . '</fieldset>'
             . '</form>'
             . '</div>';
