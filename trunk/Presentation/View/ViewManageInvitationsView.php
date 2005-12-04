@@ -20,7 +20,7 @@ class Presentation_View_ViewManageInvitationsView extends Presentation_View_View
                 . '<a href=index.php?Action=NewInvitation&blogID='      . $this->blogID . '>Add Invitation</a>'
                 . '</div>'
                 . '<div id=manageinvitations_delete>'
-                . '<a href=index.php?Action=DeleteInvitation&blogID='   . $this->blogID . '>Delete Invitation(s)</a>'
+                . '<a href=index.php?Action=DeleteInvitation&blogID='   . $this->blogID . '>Delete Invitations</a>'
                 . '</div>'
                 . '</div>';
         return $ret;

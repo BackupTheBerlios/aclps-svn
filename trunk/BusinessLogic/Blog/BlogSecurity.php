@@ -69,14 +69,9 @@ class BusinessLogic_Blog_BlogSecurity
 	return $this->EditLinks($blogID);
     }
 
-    public function EditMembers()
+    public function EditMembership($blogID)
     {
-	//TODO
-    }
-
-    public function ProcessEditMembers()
-    {
-	//TODO
+        return BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
     }
 
     public function NewBlog()

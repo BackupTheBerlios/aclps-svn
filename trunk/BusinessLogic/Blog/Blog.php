@@ -112,10 +112,6 @@ class BusinessLogic_Blog_Blog
             $aViewBlogView->SetContent($this->EditMembership($_GET['blogID']));
             break;
 	    
-        case 'ProcessEditMembership':
-            //TODO
-            break;
-	    
         case 'NewBlog':
             //blogid is passed solely for returning to system when user submits processnewblog form
             $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$this->NewBlog($_GET['blogID']);
@@ -305,20 +301,26 @@ class BusinessLogic_Blog_Blog
 
     public function EditMembership($blogID)
     {
-        $aViewManageInvitationsView = Presentation_View_ViewManageInvitationsView($blogID);
-        $aViewManageMembersView = Presentation_View_ViewManageMembersView($blogID);
+        $aBlogSecurity = BusinessLogic_Blog_BlogSecurity::GetInstance();
         
-        $aViewEditMembershipView = new Presentation_View_ViewEditMembershipView();
+        $permission = $aBlogSecurity->EditMembership($blogID);
         
-        $aViewEditMembershipView->AddView($aViewManageInvitationsView);
-        $aViewEditMembershipView->AddView($aViewManageMembersView);
-        
-        return $aViewEditMembershipView;
-    }
+        if ($permission == 'Owner' or $permission == 'Editor')
+        {
+            $aViewManageInvitationsView = new Presentation_View_ViewManageInvitationsView($blogID);
+            $aViewManageMembersView = new Presentation_View_ViewManageMembersView($blogID);
 
-    public function ProcessEditMembership()
-    {
-	//TODO
+            $aViewEditMembershipView = new Presentation_View_ViewEditMembershipView();
+
+            $aViewEditMembershipView->AddView($aViewManageInvitationsView);
+            $aViewEditMembershipView->AddView($aViewManageMembersView);
+
+            return $aViewEditMembershipView;
+        }
+        else
+        {
+            throw new Exception('You are not authorized to access this..')
+        }
     }
 
     public function NewBlog($blogID)

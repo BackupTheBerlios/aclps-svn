@@ -255,16 +255,6 @@ class BusinessLogic_Blog_BlogDataAccess
         return $DataAccess->Update($query, $arguments);
     }
 
-    public function EditMembers()
-    {
-	//TODO
-    }
-
-    public function ProcessEditMembers()
-    {
-	//TODO
-    }
-
     public function ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg)
     {
         //TODO: fyi: could have a "random" column in the blog table, pass random num to it, then ask for that random num back
