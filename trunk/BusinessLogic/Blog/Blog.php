@@ -78,7 +78,7 @@ class BusinessLogic_Blog_Blog
             //TODO
             break;
 	    
-        case 'ProcessEditMembers':
+        case 'ProcessEditMember':
             //TODO
             break;
 	    
@@ -164,8 +164,8 @@ class BusinessLogic_Blog_Blog
 	           $contentOptions = '<div id="blogcontrols">'
                     . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
                     . ' | <a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a>'
-                    . ' | <a href="index.php?Action=EditMembers&blogID='.$blogID.'">Edit Memberships</a>'
-                    . ' | <a href="index.php?Action=EditBlogLayout&blogID='.$blogID.'">Edit Layout</a></a>'
+                    . ' | <a href="index.php?Action=EditBlogLayout&blogID='.$blogID.'">Edit Blog</a></a>'
+                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Edit Memberships</a>'
                     . '</div>';
 	           break;
               
@@ -173,6 +173,7 @@ class BusinessLogic_Blog_Blog
 	           $contentOptions = '<div id="blogcontrols">'
                     . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
                     . ' | <a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a>'
+                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Edit Memberships</a>'
                     . '</div>';
 	           break;
               
@@ -267,12 +268,12 @@ class BusinessLogic_Blog_Blog
         }
     }
 
-    public function EditMembers()
+    public function EditMembership()
     {
 		//TODO
     }
 
-    public function ProcessEditMembers()
+    public function ProcessEditMembership()
     {
 	//TODO
     }

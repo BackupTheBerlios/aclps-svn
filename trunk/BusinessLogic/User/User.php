@@ -90,6 +90,29 @@ class BusinessLogic_User_User
         case 'ProcessSignOut':
             return $this->ProcessSignOut();
             break;
+            
+        case 'AcceptInvitation':
+            if (isset($_GET['invitingBlogID']))
+            {
+                return $this->AcceptInvitation($_GET['invitingBlogID']);
+            }
+            else
+            {
+                throw new Exception('Malformed Action Request.');
+            }
+            break;
+
+        case 'DeclineInvitation':
+            if (isset($_GET['invitingBlogID']))
+            {
+                return $this->DeclineInvitation($_GET['invitingBlogID']);
+            }
+            else
+            {
+                throw new Exception('Malformed Action Request.');
+            }
+            break;
+
         default:
             return BusinessLogic_Post_Post::GetInstance()->HandleRequest();
     	}
@@ -271,6 +294,66 @@ class BusinessLogic_User_User
         $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php';
         header("Location: $path");
         exit;
+    }
+    
+    public function AcceptInvitation($invitingBlogID)
+    {
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+        
+        $query = "select Rank from [0] where UserID=[1] and BlogID=[2]";
+        $arguments = array('Invitations', $this->GetUserID(), $invitingBlogID);
+        $result = $DataAccess->Select($query, $arguments);
+        
+        if (count($result) > 0)
+        {
+            $rank = $result[0]['Rank'];
+            
+            $query = "delete from [0] where UserID=[1] and BlogID=[2]";
+            $arguments = array('Invitations', $this->GetUserID(), $invitingBlogID);
+            $result = $DataAccess->Delete($query, $arguments);
+            
+            $query = "insert into [0](UserID, BlogID, Auth) VALUES('[1]', '[2]', '[3]')";
+            $arguments = array('User_Auth', $this->GetUserID(), $invitingBlogID, $rank);
+            $result = $DataAccess->Insert($query, $arguments);
+            
+            $this->UpdatePermissions();
+            
+            //Return to dashboard
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewDashboard&blogID=' . $_GET['blogID'];
+            header("Location: $path");
+            exit;
+        }
+        else
+        {
+            throw new Exception('Invalid invitation.');
+        }
+
+    }
+    
+    public function DeclineInvitation($invitingBlogID)
+    {
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+
+        $query = "select Rank from [0] where UserID=[1] and BlogID=[2]";
+        $arguments = array('Invitations', $this->GetUserID(), $invitingBlogID);
+        $result = $DataAccess->Select($query, $arguments);
+
+        if (count($result) > 0)
+        {
+            $query = "delete from [0] where UserID=[1] and BlogID=[2]";
+            $arguments = array('Invitations', $this->GetUserID(), $invitingBlogID);
+            $result = $DataAccess->Delete($query, $arguments);
+
+            //Return to dashboard
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewDashboard&blogID=' . $_GET['blogID'];
+            header("Location: $path");
+            exit;
+        }
+        else
+        {
+            throw new Exception('Invalid invitation.');
+        }
+
     }
 
     //**********************************
@@ -518,7 +601,6 @@ class BusinessLogic_User_User
     {
         //TODO
     }
-
 
 }
 
