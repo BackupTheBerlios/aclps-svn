@@ -123,7 +123,7 @@ class BusinessLogic_Blog_BlogDataAccess
         $ViewMyBlogView = new Presentation_View_ViewMyBlogView($blogID, $blogTitle);
         
         //Get Associated Blog Information
-        $query = 'select BlogID from [0] where UserID=[1]';
+        $query = 'select BlogID, Auth from [0] where UserID=[1]';
         $arguments = array('User_Auth', $user->GetUserID());
         $associatedBlogResult = $DataAccess->Select($query, $arguments);
         
@@ -136,15 +136,26 @@ class BusinessLogic_Blog_BlogDataAccess
                 $query = 'select Title from [0] where BlogID=[1]';
                 $arguments = array('Blogs', $value['BlogID']);
                 $result = $DataAccess->Select($query, $arguments);
-                $associatedBlogs[$value['BlogID']] = $result[0]['Title'];
+                
+                $blogID = $value['BlogID'];
+                $rank = $value['Auth'];
+                $title = $result[0]['Title'];
+                
+                $associatedBlogs[$blogID] = array('rank' => $rank, 'title' => $title);
+                
             }
         }
         
-        $ViewAssociatedBlogsView = new Presentation_View_ViewAssociatedBlogsView($associatedBlogs);
+        $aViewAssociatedBlogCollectionView = new Presentation_View_ViewAssociatedBlogCollectionView();
+        
+        foreach($associatedBlogs as $blogID=>$arr)
+        {
+            $aViewAssociatedBlogCollectionView->AddView(new Presentation_View_ViewAssociatedBlogView($blogID, $arr['title']), $arr['rank']);
+        }
         
         $ViewDashboardView = new Presentation_View_ViewDashboardView;
         $ViewDashboardView->AddView($ViewMyBlogView);
-        $ViewDashboardView->AddView($ViewAssociatedBlogsView);
+        $ViewDashboardView->AddView($aViewAssociatedBlogCollectionView);
 
         return $ViewDashboardView;
     }
