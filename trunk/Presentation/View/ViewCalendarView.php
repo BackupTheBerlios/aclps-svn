@@ -7,47 +7,24 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
   private $blogID;
   private $month;
   private $today;
-  private $linkprefix;
-  private $aLink;
-  private $action;
+  private $linkurl;
 
-  //$posts should be an object of BusinessLogic_Post_PostDataAccess
-  //can modify and get the current calendar month and year in order
-  //to change the display month and year of calendar
-  public function __construct($action, $blogID, $posts, $year, $month)
+  //$posts should be the array returned by GetDatesWithPostsForMonth
+  public function __construct($blogID, $posts, $year, $month)
   {
-    $this->action = $action;
     $this->today = getdate();
     $this->blogID = $blogID;
-    $this->linkprefix = explode('?',$_SERVER['REQUEST_URI'], 2);
-    $this->linkprefix = $this->linkprefix[0];
-    
-    if($year == '')
-        $this->year = $this->today['year'];
-    else
-        $this->year = $year;
-        
-    if($month == '')
-        $this->month = $this->today['mon'];
-    else
-        $this->month = $month;
-
-    if(is_object($posts)){
-        $this->posts = $posts;
-    }
-    else{
-        throw new Exception("Incorrect used of Calendar.");
-    }
+    $this->year = $year;
+    $this->month = $month;
+    $this->posts = $posts;
   }
   
   public function Display()
   {
-    $this->posts = $this->posts->GetDatesWithPostsForMonth($this->blogID, $this->year, $this->month);
-
-    $display = $this->ViewCalendar();
-    $display .= $this->ViewMonth();
-    
-    return $display;
+      $display = $this->ViewMonth();
+      $display .= $this->ViewCalendar();
+      
+      return $display;
   }
   
   //Display the Calendar
@@ -58,49 +35,58 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
     $total_day = idate('t', $day_one);
     $wantday = getdate($day_one);
     $day = 1;
-    $this->aLink = '<a href="'.$this->linkprefix.'?Action=ViewPost&blogID='
+    $this->linkurl = 'index.php?Action=ViewPost&blogID='
         .$this->blogID.'&year='.$this->year.'&month='.$this->month.'&date=';
     
     if(($this->month != $this->today['mon'])||($this->year != $this->today['year']))
-      $set = true;
+        $set = true;
     
-    //month and year
-    $cal .= "\n".'<div id="calendar_month_year">'.$wantday['month'].'&nbsp;&nbsp;'.$this->year
-        .'</div>'."\n".'<table border="0" id="calendar_table" cellspacing="5">'."\n".'<tr id="calendar_week_row">'."\n"
-        .'<td><div id="calendar_week">Sun</div></td>'."\n".'<td><div id="calendar_week">Mon</div></td>'."\n".'<td><div id="calendar_week">Tue</div></td>'."\n".'<td><div id="calendar_week">Wed</div></td>'."\n".'<td><div id="calendar_week">Thu</div></td>'."\n"
-        .'<td><div id="calendar_week">Fri</div></td>'."\n".'<td><div id="calendar_week">Sat</div></td></tr>'."\n".'<tr>'."\n";
+    //top row - static
+    $cal .= "\n".'<table id="calendar_table">'."\n"
+        .'<tr id="calendar_week_row">'."\n"
+        .'<td><div id="calendar_week">Sun</div></td>'."\n"
+        .'<td><div id="calendar_week">Mon</div></td>'."\n"
+        .'<td><div id="calendar_week">Tue</div></td>'."\n"
+        .'<td><div id="calendar_week">Wed</div></td>'."\n"
+        .'<td><div id="calendar_week">Thu</div></td>'."\n"
+        .'<td><div id="calendar_week">Fri</div></td>'."\n"
+        .'<td><div id="calendar_week">Sat</div></td>'."\n"
+        .'</tr><tr>'."\n";
         
-    //1st row
+    //1st row, skipping slots until we hit the 1st
     for($count=0; $count<7; ++$count)
     {
         if($count >= $space)
         {
-            $temp = $day++;
-            $temp = $this->testnumber($found, $set, $temp);
+            $daystr = $this->testnumber($found, $set, $daystr+1);
         }
         else
-            $temp = '';
+            $daystr = '';
 
-        $cal .= "<td>$temp</td>\n";
+        $cal .= "<td>$daystr</td>\n";
     }
     $cal .= "</tr>\n";
+
     //after 1st row
+    //for each row:
     while(!$done)
     {
         $cal .= "<tr>\n";
+        //for each day in a row:
         for($count=0; $count<7; ++$count)
         {
-            if(!(($temp = $day++) <= $total_day))
+            if(!(($daystr = $day++) <= $total_day))
             {
-                $temp = '';
+                $daystr = '';
                 $done = true;
             }
             else
-                $temp = $this->testnumber($found, $set, $temp);
-                
-            $cal .= "<td>$temp</td>\n";
+            {
+                $daystr = $this->testnumber($found, $set, $daystr);
+            }
+            $cal .= "<td>$daystr</td>\n";
         }
-        $cal .= "<tr>\n";
+        $cal .= "</tr>\n";
     }
 
     return $cal."</table>\n";
@@ -110,49 +96,62 @@ class Presentation_View_ViewCalendarView extends Presentation_View_View
   {
     $day_one = mktime(0,0,0,$this->month-1,1,$this->year);
     
+    //previous month link:
     if(($this->month-1) == 0)
-        $show = '12&year='.($this->year-1);
+    {
+        $prevmonth = 12;
+        $prevyear = $this->year-1;
+    }
     else
-        $show = ($this->month-1).'&year='.$this->year;
-    
+    {
+        $prevmonth = $this->month-1;
+        $prevyear = $this->year;
+    }
     $display = '<div id="calendar_last_mon"><a href="'
-        .$this->linkprefix.'?Action='.$this->action.'&blogID='
-        .$this->blogID.'&month='.$show.'">'
-        .strftime('%b', $day_one).'</a></div>'."\n";
+        .'index.php?Action=ViewPost&blogID='.$this->blogID
+        .'&month='.$prevmonth.'&year='.$prevyear.'">BACK</a></div>'."\n";
     
+    //current month text:
+    $display .= '<div id="calendar_month_year">'.$wantday['month'].' '.$this->year.'</div>'."\n";
+
+    //next month link:
     if(($this->today['mon'] > $this->month)||($this->today['year'] > $this->year))
     {
         $day_one = mktime(0,0,0,$this->month+1,1,$this->year);
         
-        if(($this->month+1) == 13)
-            $show = '1&year='.($this->year+1);
+        $nextmonth = ($this->month%12)+1;
+        if ($nextmonth == 1)
+            $nextyear = $this->year+1;
         else
-            $show = ($this->month+1).'&year='.$this->year;
+            $nextyear = $this->year;
         
         $display .= '<div id="calendar_next_mon"><a href="'
-            .$this->linkprefix.'?Action='.$this->action.'&blogID='
-            .$this->blogID.'&month='.$show.'">'
-            .strftime('%b', $day_one).'</a></div>';
+            .'index.php?Action=ViewPost&blogID='.$this->blogID
+            .'&month='.$nextmonth.'&year='.$nextyear.'">FORWARD</a></div>'."\n";
     }
-
     return $display;
   }
-  
+
+  //tests whether a given date is today or whether there are posts on that day
   private function testnumber($found, $set, $temp)
   {
     if(!$found && !$set && ($temp == $this->today['mday']))
     {
         if($this->posts[$temp])
-            $temp = $this->aLink.$temp.'"><div id="calendar_today">'.$temp.'</div></a>';
+            $temp = '<a href="'.$this->linkurl.$temp.'"><div id="calendar_today">'.$temp.'</div></a>';
         else
             $temp = '<div id="calendar_today">'.$temp.'</div>';
 
         $found = true;
     }
     elseif((!$found || $set) && $this->posts[$temp])
-        $temp = $this->aLink.$temp.'"><div id="calendar_posts">'.$temp.'</div></a>';
+    {
+        $temp = '<a href="'.$this->linkurl.$temp.'"><div id="calendar_posts">'.$temp.'</div></a>';
+    }
     else
+    {
         $temp = '<div id="calendar_number">'.$temp.'</div>';
+    }
         
     return $temp;
   }

@@ -1,10 +1,11 @@
+/* PAGE LAYOUT CRAP HERE */
+
 body
 {
   background-color: #FFFFFF;
   margin: 0px;
   text-align: center;
 }
-
 
 #floatclear
 {
@@ -82,6 +83,8 @@ body
   padding: 5px;
 }
 
+/* CALENDAR CRAP HERE */
+
 #calendar_table
 {
   width: 230px;
@@ -91,7 +94,12 @@ body
   background-color: #EEEEEE;
   margin: 0px 0px 15px 0px;
   border: 1px solid #666666;
-  padding: 5px;
+  padding: 0px;
+}
+
+tr#calendar_week_row
+{
+  font-weight: bold;
 }
 
 #calendar_month_year
@@ -121,6 +129,7 @@ body
 {
   color: blue;
 }
+
 #calendar_last_mon
 {
   font-weight: bold;
@@ -129,6 +138,9 @@ body
 {
   font-weight: bold;
 }
+
+/* BLOG CRAP HERE */
+
 #blogcontrols
 { 
   text-align: left;
@@ -143,6 +155,8 @@ body
   color: blue;
   font-size: 12px;
 }
+
+/* POST CRAP HERE */
 
 #post
 { 
@@ -201,6 +215,8 @@ body
   text-align: right;
 }
 
+/*COMMENT CRAP HERE*/
+
 #commentlabel
 { 
   text-align: left;
@@ -258,6 +274,8 @@ body
   padding: 7px 5px 5px 5px;
 }
 
+/* FORM CRAP HERE */
+
 fieldset
 {
   margin: 5px auto 0px auto;
@@ -279,7 +297,7 @@ label
 
 table#formtable
 {
-  float:center;
+  margin: 0 auto 0 auto;
   font-size: 12px;
 }
 

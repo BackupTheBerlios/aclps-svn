@@ -24,116 +24,127 @@ class BusinessLogic_Blog_Blog
         }
 
     	$aViewBlogView = $this->ViewBlog($_GET['blogID']);
-	    $this->ViewCalendar($_GET['Action'], $_GET['blogID'], $aViewBlogView);
+        //add default side content here:
+
+        $today = getdate();
+        if (isset($_GET['year']))
+            $year = $_GET['year'];
+        else
+            $year = $today['year'];
+        if (isset($_GET['month']))
+            $month = $_GET['month'];
+        else
+            $month = $today['mon'];
+        $aViewBlogView->SetSideContent($this->ViewCalendar($_GET['blogID'],$year,$month));
 
     	$request = $_GET['Action'];
 
     	switch($request)
     	{
-            case 'ViewBlog':
-    	       $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],10));
-        	    $this->ProcessCount($_GET['blogID']);
-        	    break;
-
-        	case 'ViewArchive':
-        	    //TODO
-        	    break;
-
-            case 'ViewDashboard':
-                //GetUserID will throw an exception if the user is not logged in
-                $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
-                $aViewBlogView->SetContent($this->ViewDashboard($userID));
-                break;
-
-        	case 'EditBlogLayout':
-        	    $aViewBlogView->SetContent($this->EditBlogLayout($_GET['blogID']));
-        	    break;
-
-        	case 'ProcessEditBlogLayout':
-        	//TODO: wait for changes
-//                if (isset($_POST['blogTitle']) and isset($_POST['theme']) and isset($_POST['headerImage']) $_POST['footerImage'], $_POST[''], $_POST['about'])
-  //      	    $aViewBlogView->SetContent($this->ProcessEditBlogLayout($_GET['blogID'], $_POST['blogTitle'], $_POST['theme'], $_POST['headerImage'], $_POST['footerImage'], $_POST[''], $_POST['about']));
-        	    break;
-
-        	case 'EditLinks':
-                //TODO
-        	    break;
-
-        	case 'ProcessEditLinks':
-    	       //TODO
-    	       break;
+        case 'ViewBlog':
+            $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($_GET['blogID'],10));
+            $this->ProcessCount($_GET['blogID']);
+            break;
+            
+        case 'ViewArchive':
+            //TODO
+            break;
+            
+        case 'ViewDashboard':
+            //GetUserID will throw an exception if the user is not logged in
+            $userID = BusinessLogic_User_User::GetInstance()->GetUserID();
+            $aViewBlogView->SetContent($this->ViewDashboard($userID));
+            break;
+            
+        case 'EditBlogLayout':
+            $aViewBlogView->SetContent($this->EditBlogLayout($_GET['blogID']));
+            break;
+            
+        case 'ProcessEditBlogLayout':
+            //TODO: wait for changes
+            //                if (isset($_POST['blogTitle']) and isset($_POST['theme']) and isset($_POST['headerImage']) $_POST['footerImage'], $_POST[''], $_POST['about'])
+            //      	    $aViewBlogView->SetContent($this->ProcessEditBlogLayout($_GET['blogID'], $_POST['blogTitle'], $_POST['theme'], $_POST['headerImage'], $_POST['footerImage'], $_POST[''], $_POST['about']));
+            break;
+            
+        case 'EditLinks':
+            //TODO
+            break;
+            
+        case 'ProcessEditLinks':
+            //TODO
+            break;
 	    
-        	case 'EditMembers':
-        	    //TODO
-        	    break;
+        case 'EditMembers':
+            //TODO
+            break;
 	    
-            case 'ProcessEditMembers':
-        	    //TODO
-                break;
+        case 'ProcessEditMembers':
+            //TODO
+            break;
 	    
-            case 'NewBlog':
-                //blogid is passed solely for returning to system when user submits processnewblog form
-                $aViewBlogView->SetContent($this->NewBlog($_GET['blogID']));
-                break;
+        case 'NewBlog':
+            //blogid is passed solely for returning to system when user submits processnewblog form
+            $aViewBlogView->SetContent($this->NewBlog($_GET['blogID']));
+            break;
 	    
-            case 'ProcessNewBlog':
-                $title = $_POST['title'];
-                $about = $_POST['about'];
-
-                //ensure that chosen themeID is actually an available theme
-                $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
-                foreach ($themeslist as $key=>$value)
+        case 'ProcessNewBlog':
+            $title = $_POST['title'];
+            $about = $_POST['about'];
+            
+            //ensure that chosen themeID is actually an available theme
+            $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
+            foreach ($themeslist as $key=>$value)
+            {
+                if ($value['ThemeID'].'' == $_POST['theme'])
                 {
-                    if ($value['ThemeID'].'' == $_POST['theme'])
-                    {
-                        $themeid = $_POST['theme'];
-                        break;
-                    }
+                    $themeid = $_POST['theme'];
+                    break;
                 }
-                if (!isset($themeid))
-                {
-                    throw new Exception("Invalid Theme ID");
-                }
-
-                $headertog = $_POST['headertog'];
-                if ($headertog == "no")
-                {
-                    $headerimg = '';
-                }
-                elseif ($headertog == "cust")
-                {
-                    $headerimg = $_POST['headerimg'];
-                }
-                else
-                {
-                    $headerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultHeader($themeid);
-                }
-                $footertog = $_POST['footertog'];
-                if ($footertog == "no")
-                {
-                    $footerimg = '';
-                }
-                elseif ($footertog == "cust")
-                {
-                    $footerimg = $_POST['headerimg'];
-                }
-                else
-                {
-                    $footerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultFooter($themeid);
-                }
-
-                $newBlogID = $this->ProcessNewBlog($title,$about,$themeid,$headerimg,$footerimg);
-
-                //forward user to viewing their new blog:
-                $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($newBlogID,10));
-                break;
-
-            case 'ViewSearch':
-                $aViewBlogView->SetContent($this->ViewSearch($this->ViewPopular()));
-                break;
-
-        	default:
-        	    $aViewBlogView->SetContent(BusinessLogic_User_User::GetInstance()->HandleRequest());
+            }
+            if (!isset($themeid))
+            {
+                throw new Exception("Invalid Theme ID");
+            }
+            
+            $headertog = $_POST['headertog'];
+            if ($headertog == "no")
+            {
+                $headerimg = '';
+            }
+            elseif ($headertog == "cust")
+            {
+                $headerimg = $_POST['headerimg'];
+            }
+            else
+            {
+                $headerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultHeader($themeid);
+            }
+            $footertog = $_POST['footertog'];
+            if ($footertog == "no")
+            {
+                $footerimg = '';
+            }
+            elseif ($footertog == "cust")
+            {
+                $footerimg = $_POST['headerimg'];
+            }
+            else
+            {
+                $footerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultFooter($themeid);
+            }
+            
+            $newBlogID = $this->ProcessNewBlog($title,$about,$themeid,$headerimg,$footerimg);
+            
+            //forward user to viewing their new blog:
+            $aViewBlogView->SetContent(BusinessLogic_Post_Post::GetInstance()->ViewPostsByRecentCount($newBlogID,10));
+            break;
+            
+        case 'ViewSearch':
+            $aViewBlogView->SetContent($this->ViewSearch($this->ViewPopular()));
+            break;
+            
+        default:
+            $aViewBlogView->SetContent(BusinessLogic_User_User::GetInstance()->HandleRequest());
     	}
 
 	   return $aViewBlogView;
@@ -212,14 +223,9 @@ class BusinessLogic_Blog_Blog
         return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewPopular();
     }
 
-    public function ViewCalendar($action, $blogID, $aViewBlogView)
+    public function ViewCalendar($blogID, $year, $month)
     {
-        if(isset($_GET['year']))
-            $aViewBlogView->SetSideContent(BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewCalendar($action, $blogID, $_GET['year'], $_GET['month']));
-        elseif(isset($_GET['month']))
-            $aViewBlogView->SetSideContent(BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewCalendar($action, $blogID, '', $_GET['month']));
-        else
-            $aViewBlogView->SetSideContent(BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewCalendar($action, $blogID, '', ''));
+        return BusinessLogic_Blog_BlogDataAccess::GetInstance()->ViewCalendar($blogID, $year, $month);
     }
 
     public function EditBlogLayout($blogID)

@@ -160,7 +160,7 @@ class BusinessLogic_Blog_BlogDataAccess
         $ViewDashboardView = new Presentation_View_ViewDashboardView;
         $ViewDashboardView->AddView($ViewMyBlogView);
         $ViewDashboardView->AddView($aViewAssociatedBlogCollectionView);
-        $ViewDashboardView->AddView(aViewDashboardInvitationCollectionView);
+        $ViewDashboardView->AddView($aViewDashboardInvitationCollectionView);
 
         return $ViewDashboardView;
     }
@@ -184,11 +184,10 @@ class BusinessLogic_Blog_BlogDataAccess
         }
     }
     
-    public function ViewCalendar($action, $blogID, $year, $month)
+    public function ViewCalendar($blogID, $year, $month)
     {
-        $PostsObject = BusinessLogic_Post_Post::GetInstance();
-        
-        return new Presentation_View_ViewCalendarView($action, $blogID, $PostsObject, $year, $month);
+        $postsarray = BusinessLogic_Post_Post::GetInstance()->GetDatesWithPostsForMonth($blogID, $year, $month);
+        return new Presentation_View_ViewCalendarView($blogID, $postsarray, $year, $month);
     }
 
     public function EditBlogLayout($blogID)
