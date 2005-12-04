@@ -16,7 +16,7 @@ class Presentation_View_NewPostView extends Presentation_View_View
             . '<legend>Add A Post</legend>'
 
             . '<table id="formtable"><tr><td colspan="2"><label for="title">Title:</label> '
-            . '<input type="text" maxlength="30" name="title"></td></tr>'
+            . '<input type="text" maxlength="30" size="30" name="title"></td></tr>'
 
             . '<tr><td><input type="checkbox" name="public" checked></td>'
             . '<td><label for="public">Public (Anonymous can view)</label></td></tr>'

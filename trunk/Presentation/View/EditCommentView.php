@@ -23,7 +23,7 @@ class Presentation_View_EditCommentView extends Presentation_View_View
             . '<input type="hidden" name="commentID" value="'.$this->comment->GetCommentID().'">'
 
             . '<table id="formtable"><tr><td><label for="title">Title:</label> '
-            . '<input type="text" name="title" maxlength="30" value="'.$this->comment->GetTitle().'"></td></tr>'
+            . '<input type="text" name="title" maxlength="30" size="30" value="'.$this->comment->GetTitle().'"></td></tr>'
 
             . '<tr><td><label for="content">Content:</label></td></tr>'
             . '<tr><td><textarea name="content" rows="5" cols="40">'.$this->comment->GetContent().'</textarea></td></tr>'

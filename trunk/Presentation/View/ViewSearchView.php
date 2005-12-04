@@ -37,7 +37,7 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
 
         $form .= '<table id="formtable"><tr><td><label for="blog_title">Blog Title:</label></td>'
             . '<td><input type="text" name="blog_title"></td></tr>'
-            . '<tr><td align="center"><input type="submit" id="submit" value="Search"></td></tr></table>>'
+            . '<tr><td colspan="2" align="center"><input type="submit" id="submit" value="Search"></td></tr></table>'
             . '</form></fieldset>'
             . $ret.$this->popular->Display();
 

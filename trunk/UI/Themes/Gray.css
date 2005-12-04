@@ -123,11 +123,11 @@ body
 }
 #calendar_last_mon
 {
-
+  font-weight: bold;
 }
 #calendar_next_mon
 {
-
+  font-weight: bold;
 }
 #blogcontrols
 { 
@@ -260,7 +260,7 @@ body
 
 fieldset
 {
-  margin: 0px auto 5px auto;
+  margin: 5px auto 0px auto;
   text-align: center;
   font-size: 12px;
   border: 1px solid #CCCCCC;
@@ -273,20 +273,18 @@ legend
 
 label
 {
-  float: left;
   font-size: 12px;
   padding: 2px;
 }
 
-table#radiotable
+table#formtable
 {
+  float:center;
   font-size: 12px;
 }
 
 input, textarea, select
 {
-  clear: both;
-  float: right;
   background-color: #FFFFFF;
   padding: 2px;
   margin: 2px;

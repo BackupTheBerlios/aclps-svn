@@ -20,9 +20,9 @@ class Presentation_View_NewCommentView extends Presentation_View_View
             . '<input type="hidden" name="postID" value="'.$this->postID.'">'
 
             . '<table id="formtable"><tr><td><label for="title">Title:</label> '
-            . '<input type="text" maxlength="30" name="title"></td></tr>'
+            . '<input type="text" maxlength="30" size="30" name="title"></td></tr>'
 
-            . '<tr><td><label for="content">Content</label></td></tr>'
+            . '<tr><td><label for="content">Content:</label></td></tr>'
             . '<tr><td><textarea name="content" rows="5" cols="40"></textarea></td></tr>'
 
             . '<tr><td><input type="submit" id="submit" value="Add Comment"></td></tr></table>'
