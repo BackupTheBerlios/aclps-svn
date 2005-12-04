@@ -45,10 +45,15 @@ class BusinessLogic_Blog_BlogSecurity
             return false;
     	}
     }
+
+    public function ProcessEditBlogLayout($blogID)
+    {
+        return $this->EditBlogLayout($blogID);
+    }
     
     public function EditLinks($blogID)
     {
-		 $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
+        $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
         if($permission == 'Owner')
         {
             return true;
@@ -61,15 +66,7 @@ class BusinessLogic_Blog_BlogSecurity
     
     public function ProcessEditLinks($blogID)
     {
-		$permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
-        if($permission == 'Owner')
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+	return $this->EditLinks($blogID);
     }
 
     public function EditMembers()

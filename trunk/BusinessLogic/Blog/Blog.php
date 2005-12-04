@@ -61,10 +61,44 @@ class BusinessLogic_Blog_Blog
             break;
             
         case 'ProcessEditBlogLayout':
-            //TODO: wait for changes
-            //                if (isset($_POST['blogTitle']) and isset($_POST['theme']) and isset($_POST['headerImage']) $_POST['footerImage'], $_POST[''], $_POST['about'])
-            //      	    $aViewBlogView->SetContent($this->ProcessEditBlogLayout($_GET['blogID'], $_POST['blogTitle'], $_POST['theme'], $_POST['headerImage'], $_POST['footerImage'], $_POST[''], $_POST['about']));
-            break;
+            $title = $_POST['blogTitle'];
+            $about = $_POST['about'];
+            
+            //ensure that chosen themeID is actually an available theme
+            $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
+            foreach ($themeslist as $key=>$value)
+            {
+                if ($key.'' == $_POST['theme'])
+                {
+                    $themeid = $_POST['theme'];
+                    break;
+                }
+            }
+            if (!isset($themeid))
+                throw new Exception("Invalid Theme ID");
+            
+            $headertog = $_POST['headertog'];
+            if ($headertog == "no")
+                $headerimg = '';
+            elseif ($headertog == "cust")
+                $headerimg = $_POST['headerImage'];
+            else
+                $headerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultHeader($themeid);
+
+            $footertog = $_POST['footertog'];
+            if ($footertog == "no")
+                $footerimg = '';
+            elseif ($footertog == "cust")
+                $footerimg = $_POST['footerImage'];
+            else
+                $footerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultFooter($themeid);
+            
+            $this->ProcessEditBlogLayout($_GET['blogID'],$title,$about,$themeid,$headerimg,$footerimg);
+            
+            //forward user to viewing their modified blog:
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID='.$_GET['blogID'];
+            header("Location: $path");
+            exit;
             
         case 'EditLinks':
             //TODO
@@ -95,43 +129,30 @@ class BusinessLogic_Blog_Blog
             $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
             foreach ($themeslist as $key=>$value)
             {
-                if ($value['ThemeID'].'' == $_POST['theme'])
+                if ($key.'' == $_POST['theme'])
                 {
                     $themeid = $_POST['theme'];
                     break;
                 }
             }
             if (!isset($themeid))
-            {
                 throw new Exception("Invalid Theme ID");
-            }
             
             $headertog = $_POST['headertog'];
             if ($headertog == "no")
-            {
                 $headerimg = '';
-            }
             elseif ($headertog == "cust")
-            {
                 $headerimg = $_POST['headerimg'];
-            }
             else
-            {
                 $headerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultHeader($themeid);
-            }
+
             $footertog = $_POST['footertog'];
             if ($footertog == "no")
-            {
                 $footerimg = '';
-            }
             elseif ($footertog == "cust")
-            {
-                $footerimg = $_POST['headerimg'];
-            }
+                $footerimg = $_POST['footerimg'];
             else
-            {
                 $footerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultFooter($themeid);
-            }
             
             $newBlogID = $this->ProcessNewBlog($title,$about,$themeid,$headerimg,$footerimg);
             
@@ -231,9 +252,21 @@ class BusinessLogic_Blog_Blog
 
     public function EditBlogLayout($blogID)
     {
-		if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditBlogLayout($blogID))
+        if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditBlogLayout($blogID))
         {
             return BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditBlogLayout($blogID);
+        }
+        else
+        {
+            throw new Exception('Authentication failed.');
+        }
+    }
+
+    public function ProcessEditBlogLayout($blogID,$title,$about,$themeid,$headerimg,$footerimg)
+    {
+        if (BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessEditBlogLayout($blogID))
+        {
+            BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditBlogLayout($blogID,$title,$about,$themeid,$headerimg,$footerimg);
         }
         else
         {
@@ -286,7 +319,8 @@ class BusinessLogic_Blog_Blog
             throw new Exception('You are already the owner of another blog, you may not own two blogs at once.');
         }
         //blogid is passed solely for returning to system when user submits processnewblog form
-        return new Presentation_View_NewBlogView($blogID);
+        $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
+        return new Presentation_View_NewBlogView($blogID,$themeslist);
     }
 
     public function ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg)

@@ -64,13 +64,7 @@ class BusinessLogic_Blog_BlogDataAccess
         {
             $themes[$row['ThemeID']] = $row['Title'];
         }
-        
-        print_r($themes);
-        print '<br />';
-        
         return $themes;
-
-
     }
     public function GetThemeDefaultHeader($themeID)
     {
@@ -226,7 +220,19 @@ class BusinessLogic_Blog_BlogDataAccess
         $result = $DataAccess->Select($query, $arguments);
         $row = $result[0];
         
-        return new Presentation_View_EditBlogLayoutView($blogID, $this->GetThemesList(), $row['Title'], $row['About'], $row['ThemeID'], $row['HeaderImage'], $row['FooterImage']);
+        $themeID = $row['ThemeID'];
+        $defaultHeader = $this->GetThemeDefaultHeader($themeID);
+        $defaultFooter = $this->GetThemeDefaultFooter($themeID);
+        return new Presentation_View_EditBlogLayoutView($blogID, $this->GetThemesList(), $row['Title'], $row['About'], $themeID, $row['HeaderImage'], $row['FooterImage'], $defaultHeader, $defaultFooter);
+    }
+
+    public function ProcessEditBlogLayout($blogID,$title,$about,$themeid,$headerimg,$footerimg)
+    {
+        $query = 'update [0] set Title="[1]", About="[2]", ThemeID=[3], HeaderImage="[4]", FooterImage="[5]" where BlogID=[6]';
+        $arguments = array('Blogs', $title, $about, $themeid, $headerimg, $footerimg, $blogID);
+
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
+        return $DataAccess->Update($query, $arguments);
     }
 
     public function EditLinks($blogID)
@@ -242,12 +248,12 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function ProcessEditLinks($blogID,$urls,$titles)
     {
-		$query = 'update [0] set URL = "[1]", Title = "[2]" where BlogID = [3]';
-		$arguments = array('Links',$urls,$titles);
-		
-		$DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
+        $query = 'update [0] set URL = "[1]", Title = "[2]" where BlogID = [3]';
+        $arguments = array('Links',$urls,$titles);
+	
+        $DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
         return $DataAccess->Update($query, $arguments);
-	}
+    }
 
     public function EditMembers()
     {

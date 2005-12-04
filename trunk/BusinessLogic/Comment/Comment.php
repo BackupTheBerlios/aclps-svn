@@ -122,7 +122,6 @@ class BusinessLogic_Comment_Comment
         case 'DeleteComment':
             $commentID = $_GET['commentID'];
             $comment = $this->DeleteComment($blogID,$commentID);
-            print_r($comment);
             return $comment;
             break;
         case 'ProcessDeleteComment':
