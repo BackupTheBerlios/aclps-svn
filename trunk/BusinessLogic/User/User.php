@@ -20,116 +20,6 @@ class BusinessLogic_User_User
         return unserialize($_SESSION['BusinessLogic_User_User']);
     }
 
-    public function HandleRequest()
-    {
-        $request = $_GET['Action'];
-        switch($request)
-    	{
-        case 'EditUserData':
-            return $this->EditUserData();
-            break;
-        case 'ProcessEditUserData':
-            if ($_POST['newPassword'] == $_POST['confirmNewPassword'])
-            {
-                if ($_POST['email'] != '')
-                {
-                    return $this->ProcessEditUserData($_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
-                }
-                else
-                {
-                    return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'Email cannot be blank.');
-                }
-            }
-            else
-            {
-                return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'New Password and Confirmation Password do not match.');
-            }
-            break;
-
-        case 'ViewRegister':
-            return $this->ViewRegister();
-            break;
-
-        case 'ProcessRegister':
-            if ($_POST['username'] != '' and $_POST['email'] != ''
-                and $_POST['password'] != '' and $_POST['confirmPassword'] != '')
-            {
-                if ($_POST['password'] == $_POST['confirmPassword'])
-                {
-                    return $this->ProcessRegister($_POST['username'], $_POST['email'],
-                                                  $_POST['password']);
-                }
-                else
-                {
-                    $tryagain = new Presentation_View_ViewRegisterView('Password and Confirmation Password do not match.');
-                    $tryagain->SetFields($_POST['username'],$_POST['email']);
-                    return $tryagain;
-                }
-            }
-            else
-            {
-                return new Presentation_View_ViewRegisterView('You must fill in the entire form.');
-            }
-            
-            break;
-            
-        case 'ViewSignIn':
-            return $this->ViewSignIn();
-            break;
-        case 'ProcessSignIn':
-            if ($_POST['username'] != '' and $_POST['password'] != '')
-            {
-                return $this->ProcessSignIn($_POST['username'], $_POST['password']);
-            }
-            else
-            {
-                return new Presentation_View_ViewSignInView('You must fill in the entire form.');
-            }
-            
-            break;
-        case 'ProcessSignOut':
-            return $this->ProcessSignOut();
-            break;
-            
-        case 'AcceptInvitation':
-            if (isset($_GET['invitingBlogID']))
-            {
-                return $this->AcceptInvitation($_GET['invitingBlogID']);
-            }
-            else
-            {
-                throw new Exception('Malformed Action Request.');
-            }
-            break;
-
-        case 'DeclineInvitation':
-            if (isset($_GET['invitingBlogID']))
-            {
-                return $this->DeclineInvitation($_GET['invitingBlogID']);
-            }
-            else
-            {
-                throw new Exception('Malformed Action Request.');
-            }
-            break;
-            
-        case 'ViewInvitation':
-            return $this->ViewInvitation($_GET['blogID']);
-            break;
-            
-        case 'AddInvitation':
-            return $this->ViewInvitation($_GET['blogID']);
-            break;
-
-        case 'RemoveInvitation':
-            return $this->ViewInvitation($_GET['blogID']);
-            break;
-            
-        default:
-            return BusinessLogic_Post_Post::GetInstance()->HandleRequest();
-    	}
-    }
-    
     //**********************************
     //ACTION FUNCTIONS
     //**********************************
@@ -290,7 +180,7 @@ class BusinessLogic_User_User
         }
         else
         {
-          return new Presentation_View_ViewSignInView('There is no one who matches the supplied credentials.');
+          return new Presentation_View_ViewSignInView('Unknown Username/Password combination.');
         }
         
 
@@ -364,6 +254,107 @@ class BusinessLogic_User_User
         else
         {
             throw new Exception('Invalid invitation.');
+        }
+
+    }
+    
+    public function ViewInvitation($blogID)
+    {
+        $permission = $this->GetPermissionForBlog($this->GetUserID());
+        if ($permission = 'Owner' or 'Editor')
+        {
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+            
+            $query = 'select UserID, Rank from [0] where BlogID=[1]';
+            $arguments = array('Invitations', $blogID);
+            $invitationsResult = $DataAccess->Select($query, $arguments);
+
+            $invitations = array();
+
+            if (count($invitationsResult) > 0)
+            {
+                foreach ($invitationsResult as $key=>$value)
+                {
+                    $query = 'select Username from [0] where Username=[1]';
+                    $arguments = array('Users', $value['UserID']);
+                    $result = $DataAccess->Select($query, $arguments);
+
+                    $username = $result[0]['Username'];
+                    $rank = $value['Rank'];
+
+                    $invitations[$username] = $rank;
+
+                }
+            }
+
+            $aViewInvitationCollectionView = new Presentation_View_ViewInvitationCollectionView();
+
+            foreach($invitations as $username=>$rank)
+            {
+                $aViewInvitationCollectionView->AddView(new Presentation_View_ViewInvitationView($username, $rank));
+            }
+            
+            return $aViewInvitationCollectionView;
+        }
+        else
+        {
+            throw new Exception('Access Denied.');
+        }
+
+    }
+    
+    public function AddInvitation($blogID)
+    {
+        $permission = $this->GetPermissionForBlog($this->GetUserID());
+        if ($permission = 'Owner' or 'Editor')
+        {
+            return new Presentation_View_ViewAddInvitationView($blogID);
+        }
+        else
+        {
+            throw new Exception('Access Denied');
+        }
+
+    }
+    
+    public function ProcessAddInvitation($blogID)
+    {
+        $permission = $this->GetPermissionForBlog($this->GetUserID());
+        if ($permission = 'Owner' or 'Editor')
+        {
+            //
+        }
+        else
+        {
+            throw new Exception('Access Denied');
+        }
+
+    }
+    
+    public function DeleteInvitation($blogID)
+    {
+        $permission = $this->GetPermissionForBlog($this->GetUserID());
+        if ($permission = 'Owner' or 'Editor')
+        {
+            //
+        }
+        else
+        {
+            throw new Exception('Access Denied');
+        }
+
+    }
+    
+    public function ProcessDeleteInvitation($blogID)
+    {
+        $permission = $this->GetPermissionForBlog($this->GetUserID());
+        if ($permission = 'Owner' or 'Editor')
+        {
+            //
+        }
+        else
+        {
+            throw new Exception('Access Denied');
         }
 
     }
@@ -620,6 +611,120 @@ class BusinessLogic_User_User
     public function ChangeOwnerShip($blogID, $currentOwner, $newOwner)
     {
         //TODO
+    }
+    
+    //****************************************
+    //          The Handler
+    //****************************************
+    
+    public function HandleRequest()
+    {
+        $request = $_GET['Action'];
+        switch($request)
+    	{
+        case 'EditUserData':
+            return $this->EditUserData();
+            break;
+        case 'ProcessEditUserData':
+            if ($_POST['newPassword'] == $_POST['confirmNewPassword'])
+            {
+                if ($_POST['email'] != '')
+                {
+                    return $this->ProcessEditUserData($_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
+                }
+                else
+                {
+                    return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'Email cannot be blank.');
+                }
+            }
+            else
+            {
+                return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'New Password and Confirmation Password do not match.');
+            }
+            break;
+
+        case 'ViewRegister':
+            return $this->ViewRegister();
+            break;
+
+        case 'ProcessRegister':
+            if ($_POST['username'] != '' and $_POST['email'] != ''
+                and $_POST['password'] != '' and $_POST['confirmPassword'] != '')
+            {
+                if ($_POST['password'] == $_POST['confirmPassword'])
+                {
+                    return $this->ProcessRegister($_POST['username'], $_POST['email'],
+                                                  $_POST['password']);
+                }
+                else
+                {
+                    $tryagain = new Presentation_View_ViewRegisterView('Password and Confirmation Password do not match.');
+                    $tryagain->SetFields($_POST['username'],$_POST['email']);
+                    return $tryagain;
+                }
+            }
+            else
+            {
+                return new Presentation_View_ViewRegisterView('You must fill in the entire form.');
+            }
+
+            break;
+
+        case 'ViewSignIn':
+            return $this->ViewSignIn();
+            break;
+        case 'ProcessSignIn':
+            if ($_POST['username'] != '' and $_POST['password'] != '')
+            {
+                return $this->ProcessSignIn($_POST['username'], $_POST['password']);
+            }
+            else
+            {
+                return new Presentation_View_ViewSignInView('You must fill in the entire form.');
+            }
+
+            break;
+        case 'ProcessSignOut':
+            return $this->ProcessSignOut();
+            break;
+
+        case 'AcceptInvitation':
+            if (isset($_GET['invitingBlogID']))
+            {
+                return $this->AcceptInvitation($_GET['invitingBlogID']);
+            }
+            else
+            {
+                throw new Exception('Malformed Action Request.');
+            }
+            break;
+
+        case 'DeclineInvitation':
+            if (isset($_GET['invitingBlogID']))
+            {
+                return $this->DeclineInvitation($_GET['invitingBlogID']);
+            }
+            else
+            {
+                throw new Exception('Malformed Action Request.');
+            }
+            break;
+
+        case 'ViewInvitation':
+            return $this->ViewInvitation($_GET['blogID']);
+            break;
+
+        case 'AddInvitation':
+            return $this->AddInvitation($_GET['blogID']);
+            break;
+
+        case 'RemoveInvitation':
+            return $this->RemoveInvitation($_GET['blogID']);
+            break;
+
+        default:
+            return BusinessLogic_Post_Post::GetInstance()->HandleRequest();
+    	}
     }
 
 }
