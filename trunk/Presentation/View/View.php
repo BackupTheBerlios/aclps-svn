@@ -2,11 +2,10 @@
 
 abstract class Presentation_View_View
 {
-    private $Views;
+    protected $Views;
   
     public function AddView($aView)
     {
-	//print_r( $this->Views);
 	$this->Views[] = $aView;
     }
 
@@ -27,7 +26,7 @@ abstract class Presentation_View_View
         $ret = '';
         foreach($this->Views as $key=>$value)
         {
-            $ret = $ret . '<p>' . $value->Display() .'</p>';
+            $ret = $ret . $value->Display();
         }
         return $ret;
     }

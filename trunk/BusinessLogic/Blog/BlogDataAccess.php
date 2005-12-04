@@ -150,7 +150,6 @@ class BusinessLogic_Blog_BlogDataAccess
         
         foreach($associatedBlogs as $blogID=>$arr)
         {
-            print $blogID . $arr['title'] . $arr['rank'] . '<br />';
             $aViewAssociatedBlogCollectionView->AddView(new Presentation_View_ViewAssociatedBlogView($blogID, $arr['title'], $arr['rank']));
         }
         
