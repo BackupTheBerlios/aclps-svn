@@ -112,7 +112,19 @@ class BusinessLogic_User_User
                 throw new Exception('Malformed Action Request.');
             }
             break;
+            
+        case 'ViewInvitation':
+            return $this->ViewInvitation($_GET['blogID']);
+            break;
+            
+        case 'AddInvitation':
+            return $this->ViewInvitation($_GET['blogID']);
+            break;
 
+        case 'RemoveInvitation':
+            return $this->ViewInvitation($_GET['blogID']);
+            break;
+            
         default:
             return BusinessLogic_Post_Post::GetInstance()->HandleRequest();
     	}
