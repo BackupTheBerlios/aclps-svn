@@ -496,6 +496,50 @@ class BusinessLogic_User_User
         }
 
     }
+    
+    public function ProcessRemoveMember($blogID)
+    {
+        $permission = $this->GetPermissionForBlog($blogID);
+        if ($permission == 'Owner' or $permission == 'Editor')
+        {
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+
+            foreach ($_POST as $userID=>$value)
+            {
+                //Is user in the system?
+                $query = "select * from [0] where UserID='[1]' and blogID='[2]'";
+                $arguments = array('User_Auth', $userID, $blogID);
+                $result = $DataAccess->Select($query, $arguments);
+
+                if (count($result) > 0)
+                {
+                    if ($this->CanDeleteUser($blogID, $userID))
+                    {
+                        $query = "delete from [0] where UserID='[1]' and blogID='[2]'";
+                        $arguments = array('User_Auth', $userID, $blogID);
+                        $result = $DataAccess->Delete($query, $arguments);
+                    }
+                    else
+                    {
+                        throw new Exception('You are not authorized to delete this user.');
+                    }
+                }
+                else
+                {
+                    //We are not throwing an exception since the there are other things in $_POST besides userids
+                }
+            }
+
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=EditMembership&blogID=' . $blogID;
+            header("Location: $path");
+            exit;
+        }
+        else
+        {
+            throw new Exception('Access Denied');
+        }
+
+    }
 
     //**********************************
     //NON-ACTION FUNCTIONS
@@ -764,6 +808,63 @@ class BusinessLogic_User_User
         }
     }
     
+    public function CanDeleteUser($blogID, $userID)
+    {
+
+        $permission = $this->GetPermissionForBlog($blogID);
+        if ($permission == 'Owner' or $permission == 'Editor')
+        {
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+
+            //get rank of user in blog
+            $query = 'select Auth from [0] where UserID=[1] and BlogID=[2]';
+            $arguments = array('User_Auth', $userID, $blogID);
+            $result = $DataAccess->Select($query, $arguments);
+
+            if (count($result) > 0)
+            {
+                $userAuth = $result[0]['Auth'];
+                
+                switch($userAuth)
+                {
+                    case 'Editor':
+                        if ($permission == 'Owner')
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        break;
+                    
+                    case 'Author':
+                        if ($permission == 'Owner' or $permission == 'Editor')
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        break;
+                    
+                    default:
+                        return false;
+                        break;
+                }
+            }
+            else
+            {
+                throw new Exception('User is not part of blog.');
+            }
+        }
+        else
+        {
+            throw new Exception('Access Denied.');
+        }
+    }
+
     //****************************************
     //          The Handler
     //****************************************
@@ -887,11 +988,14 @@ class BusinessLogic_User_User
             
         case 'ProcessRemoveInvitation':
             return $this->ProcessRemoveInvitation($_GET['blogID']);
-            exit;
             break;
             
         case 'RemoveMember':
             return $this->RemoveMember($_GET['blogID']);
+            break;
+
+        case 'ProcessRemoveMember':
+            return $this->ProcessRemoveMember($_GET['blogID']);
             break;
 
         default:
