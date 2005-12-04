@@ -11,7 +11,7 @@ class Presentation_View_ViewDashboardInvitationCollectionView extends Presentati
     public function Display()
     {
         $ret = '<div id=dashboardinvitationcollection><div id=dashboardinvitationcollection_title>Invitations</div>';
-
+        
         if (count($this->Views) > 0)
         {
             foreach($this->Views as $view)

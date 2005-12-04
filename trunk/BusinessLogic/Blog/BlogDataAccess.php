@@ -154,9 +154,36 @@ class BusinessLogic_Blog_BlogDataAccess
         }
         
         //Get Invitations
-        
+        $query = 'select * from [0] where UserID=[1]';
+        $arguments = array('Invitations', $user->GetUserID());
+        $invitationsResult = $DataAccess->Select($query, $arguments);
+
+        $invitations = array();
+
+        if (count($invitationsResult) > 0)
+        {
+            foreach ($invitationsResult as $key=>$value)
+            {
+                $query = 'select Title from [0] where BlogID=[1]';
+                $arguments = array('Blogs', $value['BlogID']);
+                $result = $DataAccess->Select($query, $arguments);
+
+                $blogID = $value['BlogID'];
+                $rank = $value['Rank'];
+                $title = $result[0]['Title'];
+
+                $invitations[$blogID] = array('rank' => $rank, 'title' => $title);
+
+            }
+        }
+
         $aViewDashboardInvitationCollectionView = new Presentation_View_ViewDashboardInvitationCollectionView();
-        
+
+        foreach($invitations as $blogID=>$arr)
+        {
+            $aViewDashboardInvitationCollectionView->AddView(new Presentation_View_ViewDashboardInvitationView($_GET['blogID'], $blogID, $arr['title'], $arr['rank']));
+        }
+
         $ViewDashboardView = new Presentation_View_ViewDashboardView;
         $ViewDashboardView->AddView($ViewMyBlogView);
         $ViewDashboardView->AddView($aViewAssociatedBlogCollectionView);

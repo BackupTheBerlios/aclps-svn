@@ -21,9 +21,9 @@ class Presentation_View_ViewDashboardInvitationView extends Presentation_View_Vi
                 . '<a href=index.php?Action=ViewBlog&blogID=' . $this->invitingBlogID . '>' . $this->title . '</a>'
                 . ' as an ' . $this->rank
                 . ' <a href=index.php?Action=AcceptInvitation&blogID=' . $this->cBlogID
-                . '&invitingBlogID=' . $this->invitingBlogID . '>'
+                . '&invitingBlogID=' . $this->invitingBlogID . '>Accept Invitation</a>'
                 . ' <a href=index.php?Action=DeclineInvitation&blogID=' . $this->cBlogID
-                . '&invitingBlogID=' . $this->invitingBlogID . '>'
+                . '&invitingBlogID=' . $this->invitingBlogID . '>Decline Invitation</a>'
                 . '</div>';
         return $ret;
     }
