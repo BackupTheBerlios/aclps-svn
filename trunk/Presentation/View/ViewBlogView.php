@@ -60,7 +60,9 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
             
         case 'Nobody':
         default:
-            $this->contentOptions = '';
+            $this->contentOptions = '<div id="blogcontrols">'
+                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />Blog Home</a> '
+                . '</div>';
             break;
         }
     }

@@ -20,16 +20,8 @@ class BusinessLogic_Comment_CommentSecurity
 
     public function NewComment($blogID)
     {
-        //Returns false if the user has privilege {Nobody}. Otherwise, true.
-        $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
-        if ($permission == "Nobody")
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        //Returns false if the user is not logged in. Otherwise, true.
+        return BusinessLogic_User_User::GetInstance()->CheckSignedIn();
     }
     public function ProcessNewComment($blogID)
     {
@@ -83,15 +75,11 @@ class BusinessLogic_Comment_CommentSecurity
     {
         $permission = BusinessLogic_User_User::GetInstance()->GetPermissionForBlog($blogID);
         //Depending on the user's permission level, adds controls to posts that should have them.
-        if ($permission == "Nobody")
-        {
-            return;
-        }
-        elseif ($permission == "Author")
+        if ($permission == "Nobody" or $permission == "Author")
         {
             foreach($commentCollectionView->GetComments() as $key => $value)
             {
-                $value->SetControls($value->GetAuthorID() == BusinessLogic_User_User::GetInstance()->GetUserID());
+                $value->SetControls(false);
             }
         }
         else

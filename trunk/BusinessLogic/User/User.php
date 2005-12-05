@@ -656,7 +656,7 @@ class BusinessLogic_User_User
         }
     }
     
-    private function CheckSignedIn()
+    public function CheckSignedIn()
     {
       if (isset($this->userInfo['UserID']))
       {
