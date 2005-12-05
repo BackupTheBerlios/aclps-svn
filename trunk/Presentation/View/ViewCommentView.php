@@ -37,12 +37,10 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
         {
             $editurl = $linkprefix.'?Action=EditComment&blogID='.$this->blogID.'&commentID='.$this->commentID;
             $deleteurl = $linkprefix.'?Action=DeleteComment&blogID='.$this->blogID.'&commentID='.$this->commentID;
-            $this->controls = '<div id="commentcontrols">'.
-                '<img src="UI/Themes/Images/Controls/editcomment.png" id="controlbarimg" /> '.
-                '<a href="'.$editurl.'">Edit Comment</a> | '.
-                '<img src="UI/Themes/Images/Controls/deletecomment.png" id="controlbarimg" /> '.
-                '<a href="'.$deleteurl.'">Delete Comment</a>'.
-                '</div>';
+            $this->controls = '<div id="commentcontrols">'
+                .'<a href="'.$editurl.'"><img src="UI/Themes/Images/Controls/editcomment.png" id="controlbarimg" />Edit Comment</a> '
+                .'<a href="'.$deleteurl.'"><img src="UI/Themes/Images/Controls/deletecomment.png" id="controlbarimg" />Delete Comment</a> '
+                .'</div>';
         }
         else
         {
@@ -56,13 +54,20 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
             '<div id="commenttitle">'.$this->title.'</div>'.
             '<div id="commentauthor">'.$this->authorName.'</div>'.
             '<div id="commenttime">'.$this->timestamp.'</div>'.
-            '<div id="commentcontent">'.$this->content.'</div></div>';
+            '<div id="commentcontent">'.$this->GetHTMLContent().'</div></div>';
         return $displaystr;
     }
 
-    public function GetContent()
+    public function GetACLPSContent()
     {
+        //returns UNEDITED, RAW CONTENT (keeping aclps code) (for editing)
         return $this->content;
+    }
+
+    public function GetHTMLContent()
+    {
+        //returns htmlized content (for display)
+        return BusinessLogic_ACLPSCodeConverter::NewLineToBreak($this->content);
     }
 
     public function GetAuthorID()

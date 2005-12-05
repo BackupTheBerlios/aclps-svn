@@ -47,11 +47,10 @@ class Presentation_View_ViewPostView extends Presentation_View_View
         {
             $editurl = 'index.php?Action=EditPost&blogID='.$this->blogID.'&postID='.$this->postID;
             $newurl = 'index.php?Action=DeletePost&blogID='.$this->blogID.'&postID='.$this->postID;
-            $controls = '<div id="postcontrols">'.
-                '<img src="UI/Themes/Images/Controls/editpost.png" id="controlbarimg" /> '.
-                '<a href="'.$editurl.'">Edit Post</a> | '.
-                '<img src="UI/Themes/Images/Controls/deletepost.png" id="controlbarimg" /> '.
-                '<a href="'.$newurl.'">Delete Post</a></div>';
+            $controls = '<div id="postcontrols">'
+                .'<a href="'.$editurl.'"><img src="UI/Themes/Images/Controls/editpost.png" id="controlbarimg" />Edit Post</a> '
+                .'<a href="'.$newurl.'"><img src="UI/Themes/Images/Controls/deletepost.png" id="controlbarimg" />Delete Post</a>'
+                .'</div>';
         }
         else
         {
@@ -63,15 +62,22 @@ class Presentation_View_ViewPostView extends Presentation_View_View
             '<div id="posttitle">'.$this->title.'</div>'.
             '<div id="postauthor">'.$this->authorName.'</div>'.
             '<div id="posttime">'.$this->timestamp.'</div>'.
-            '<div id="postcontent">'.$this->content.'</div>'.
+            '<div id="postcontent">'.$this->GetHTMLContent().'</div>'.
             '<div id="postcommentlink">'.$this->commentlink.'</div>'.
             '</div>';
         return $displaystr;
     }
 
-    public function GetContent()
+    public function GetACLPSContent()
     {
+        //returns UNEDITED, RAW CONTENT (keeping aclps code) (for editing)
         return $this->content;
+    }
+
+    public function GetHTMLContent()
+    {
+        //returns htmlized content (for display)
+        return BusinessLogic_ACLPSCodeConverter::ACLPSCodeToHTML($this->content);
     }
 
     public function GetAuthorID()

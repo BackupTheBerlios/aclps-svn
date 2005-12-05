@@ -31,7 +31,7 @@ class BusinessLogic_Comment_CommentDataAccess
         $query = 'insert into Comments (PostID,BlogID,UserID,Title,Timestamp,Content) VALUES ("[0]","[1]","[2]","[3]",NOW(),"[4]")';
         $arguments = array($commentView->GetPostID(), $commentView->GetBlogID(),
 			   $commentView->GetAuthorID(), $commentView->GetTitle(),
-                           $commentView->GetContent());
+                           $commentView->GetACLPSContent());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Insert($query, $arguments);
@@ -47,7 +47,7 @@ class BusinessLogic_Comment_CommentDataAccess
     {
         //Updates the Comments table with the new data.
         $query = 'update Comments set Title="[0]", Content="[1]" where CommentID=[2]';
-        $arguments = array($commentView->GetTitle(), $commentView->GetContent(), $commentView->GetCommentID());
+        $arguments = array($commentView->GetTitle(), $commentView->GetACLPSContent(), $commentView->GetCommentID());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Update($query, $arguments);

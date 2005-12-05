@@ -23,8 +23,7 @@ class Presentation_View_ViewRegisterView extends Presentation_View_View
     public function Display()
     {
         $form = '<form method="post" action="index.php?Action=ProcessRegister&blogID=1">'
-            . '<fieldset>'
-            . '<legend>Account Registration</legend>';
+            . '<fieldset><legend><img src="UI/Themes/Images/Controls/register.png" id="controlbarimg" /> Account Registration</legend>';
 
       if ($this->errorMessage != '')
       {

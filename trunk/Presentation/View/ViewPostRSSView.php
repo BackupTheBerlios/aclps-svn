@@ -42,7 +42,7 @@ class Presentation_View_ViewPostRSSView extends Presentation_View_View
                 $ret .= '<item><title>'.$value->GetTitle().'</title>'
                     .'<author>'.$value->GetAuthorName().'</author>'
                     .'<link><![CDATA['.$this->postlinkprefix.$value->GetPostID().']]></link>'
-                    .'<description>'.$value->GetContent().'</description>'
+                    .'<description>'.$value->GetHTMLContent().'</description>'
                     .'<pubDate>'.date("r", strtotime($value->GetTimestamp())).'</pubDate>'
                     .'<guid><![CDATA['.$this->postlinkprefix.$value->GetPostID()."]]></guid></item>\n";
             }

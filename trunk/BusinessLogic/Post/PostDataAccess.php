@@ -23,9 +23,8 @@ class BusinessLogic_Post_PostDataAccess
     {
         //Inserts data into the Posts table.
         $query = 'insert into Posts (BlogID,UserID,Title,Timestamp,Content) VALUES ("[0]","[1]","[2]",NOW(),"[3]")';
-        $filteredContent = BusinessLogic_ACLPSCodeConverter::ACLPSCodeToHTML($postView->GetContent());
         $arguments = array($postView->GetBlogID(), $postView->GetAuthorID(),
-                           $postView->GetTitle(), $filteredContent);
+                           $postView->GetTitle(), $postView->GetACLPSContent());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Insert($query, $arguments);
@@ -41,18 +40,17 @@ class BusinessLogic_Post_PostDataAccess
     public function ProcessEditPost($postView,$useNowForTimestamp)
     {
         //Updates the Posts table with the new data.
-        $filteredContent = BusinessLogic_ACLPSCodeConverter::ACLPSCodeToHTML($postView->GetContent());
         if ($useNowForTimestamp)
         {
             $query = 'update Posts set Title="[0]", Timestamp=NOW(), Public=[1], Content="[2]" where PostID=[3]';
             $arguments = array($postView->GetTitle(), $postView->GetPublic(),
-                               $filteredContent, $postView->GetPostID());
+                               $postView->GetACLPSContent(), $postView->GetPostID());
         }
         else
         {
             $query = 'update Posts set Title="[0]", Public=[1], Content="[2]" where PostID=[3]';
             $arguments = array($postView->GetTitle(), $postView->GetPublic(),
-                               $filteredContent, $postView->GetPostID());
+                               $postView->GetACLPSContent(), $postView->GetPostID());
         }
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();

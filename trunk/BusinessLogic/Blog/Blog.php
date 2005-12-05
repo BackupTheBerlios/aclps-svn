@@ -176,31 +176,9 @@ class BusinessLogic_Blog_Blog
     public function ViewBlog($blogID)
     {
 	   $aBlogSecurity = BusinessLogic_Blog_BlogSecurity::GetInstance();
-
-	   switch($aBlogSecurity->ViewBlog($blogID))
-	   {
-	       case 'Owner':
-	           $contentOptionsFlag = 3;
-	           break;
-              
-	       case 'Editor':
-	           $contentOptionsFlag = 2;
-	           break;
-              
-	       case 'Author':
-	           $contentOptionsFlag = 1;
-	           break;
-              
-	       //FALL THROUGH
-	       case 'Nobody':
-	       default:
-	           $contentOptionsFlag = 0;
-	           break;
-	   }
-          
 	   $aBlogDataAccess = BusinessLogic_Blog_BlogDataAccess::GetInstance();
            $rssurl = $_SERVER['SCRIPT_URI'].'?Action=ViewRSS&blogID='.$blogID;
-	   return $aBlogDataAccess->ViewBlog($blogID, $contentOptionsFlag, $rssurl);
+	   return $aBlogDataAccess->ViewBlog($blogID, $aBlogSecurity->ViewBlog($blogID), $rssurl);
     }
 
     public function ViewDashboard($userID)

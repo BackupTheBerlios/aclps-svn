@@ -7,6 +7,12 @@ body
   text-align: center;
 }
 
+#controlbarimg
+{ 
+  border-width: 0;
+  margin: 0px 2px 0px 5px;
+}
+
 #floatclear
 {
   clear: both;

@@ -11,7 +11,7 @@ class Presentation_View_ViewAboutView extends Presentation_View_View
     
     public function Display()
     {
-        return '<div id="abouttext">'.$this->aboutContent.'</div>';
+        return '<div id="abouttext">'.BusinessLogic_ACLPSCodeConverter::NewLineToBreak($this->aboutContent).'</div>';
     }
 }
 ?>

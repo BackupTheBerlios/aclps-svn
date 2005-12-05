@@ -146,7 +146,7 @@ class BusinessLogic_Post_PostSecurity
         }
         elseif ($permission == "Author")
         {
-            $postView->GetPost()->ActivateControls($postView->GetAuthorID() ==
+            $postView->GetPost()->ActivateControls($postView->GetPost()->GetAuthorID() ==
                                                    BusinessLogic_User_User::GetInstance()->GetUserID());
         }
         else

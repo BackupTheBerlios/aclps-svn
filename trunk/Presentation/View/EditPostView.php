@@ -39,7 +39,7 @@ class Presentation_View_EditPostView extends Presentation_View_View
             . '<tr><td><input type="radio" name="timestamp" value="orig" checked></td><td>Leave Original ('.$this->post->GetTimestamp().')</td></tr>'
 
             . '<tr><td colspan="2" valign="middle"><label for="content">Content:</label></td></tr>'
-            . '<tr><td colspan="2"><textarea name="content" rows="5" cols="40">'.$this->post->GetContent().'</textarea></td></tr>'
+            . '<tr><td colspan="2"><textarea name="content" rows="5" cols="40">'.$this->post->GetACLPSContent().'</textarea></td></tr>'
 
             . '<tr><td colspan="2" align="center"><input type="submit" id="submit" value="Edit Post"></td></tr></table>'
             . '</fieldset>'

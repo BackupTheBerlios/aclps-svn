@@ -33,40 +33,32 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     {
         switch($flag)
         {
-        case 3:
+        case 'Owner':
             $this->contentOptions = '<div id="blogcontrols">'
-                . '<img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" /> '
-                . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a> | '
-                . '<img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" /> '
-                . '<a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a> | '
-                . '<img src="UI/Themes/Images/Controls/admin2.png" id="controlbarimg" /> '
-                . '<a href="index.php?Action=EditBlogLayout&blogID='.$blogID.'">Blog Appearance</a></a> | 'x
-                . '<img src="UI/Themes/Images/Controls/editusers.png" id="controlbarimg" /> '
-                . '<a href="index.php?Action=EditMembership&blogID='.$blogID.'">Blog Membership</a>'
+                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />Home</a> '
+                . '<a href="index.php?Action=EditBlogLayout&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/admin2.png" id="controlbarimg" />Blog Appearance</a> '
+                . '<a href="index.php?Action=EditMembership&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/editusers2.png" id="controlbarimg" />Blog Membership</a> '
+                . '<a href="index.php?Action=NewPost&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" />New Post</a> '
                 . '</div>';
             break;
             
-        case 2:
+        case 'Editor':
             $this->contentOptions = '<div id="blogcontrols">'
-                . '<img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" /> '
-                . '<a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a> | '
-                . '<img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" /> '
-                . '<a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a> | '
-                . '<img src="UI/Themes/Images/Controls/editusers.png" id="controlbarimg" /> '
-                . '<a href="index.php?Action=EditMembership&blogID='.$blogID.'">Blog Membership</a>'
+                . ''
+                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />Home</a> '
+                . '<a href="index.php?Action=EditMembership&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/editusers2.png" id="controlbarimg" />Blog Membership</a> '
+                . '<a href="index.php?Action=NewPost&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" />New Post</a> '
                 . '</div>';
             break;
             
-        case 1:
+        case 'Author':
             $this->contentOptions = '<div id="blogcontrols">'
-                . '<img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" /> '
-                . '<a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a> | '
-                . '<img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" /> '
-                . '<a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a>'
+                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />Home</a> '
+                . '<a href="index.php?Action=NewPost&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" />New Post</a> '
                 . '</div>';
             break;
             
-        case 0:
+        case 'Nobody':
         default:
             $this->contentOptions = '';
             break;
