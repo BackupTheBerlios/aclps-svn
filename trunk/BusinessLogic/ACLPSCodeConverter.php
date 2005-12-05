@@ -15,6 +15,7 @@ class BusinessLogic_ACLPSCodeConverter
                                                 '[/subtitle]'   => '</h2>');
     public static function ACLPSCodeToHTML($content)
     {
+
         //simple cases
         foreach(self::$simpleConversions as $search=>$replace)
         {
@@ -25,12 +26,11 @@ class BusinessLogic_ACLPSCodeConverter
         while(strstr($content, '[img]'))
         {
         	$sub = strstr($content, '[img]');
-        	unset($offset);
         	$offset = strpos($sub, '[/img]');
-        	if (isset($offset))
+        	if ($offset)
         	{
         		$URL = substr($sub, 5, $offset - 5);
-        		$content = str_replace('[img]' . $URL . '[/img]', '<img src=' . $URL . '>' , $content);
+        		$content = str_replace('[img]' . $URL . '[/img]', '<img src="http://' . $URL . '">' , $content);
         	}
         	else
         	{
@@ -38,26 +38,34 @@ class BusinessLogic_ACLPSCodeConverter
         	}
         }
         
-        unset($sub);
-        unset($offset);
-        
-        //[link=URL]name[/link]
+        //[link=URL]name[/link] => <a href=URL>name</a>
         while(strstr($content, '[link='))
         {
-        	$sub = strstr($content, '[link=]');
-        	unset($offset);
+        	$sub = strstr($content, '[link=');
         	$offset = strpos($sub, ']');
-        	if (isset($offset))
+
+        	if ($offset)
         	{
         		$URL = substr($sub, 6, $offset - 6);
-        		
-        		$subsub = strstr($content, 'link=' . $URL . ']');
-        		
-        		$content = str_replace('[img]' . $URL . '[/img]', '<img src=' . $URL . '>' , $content);
+        		$length = strlen('link=' . $URL . ']') + 1;
+
+            	$offset = strpos($sub, '[/link]');
+
+            	if ($offset)
+            	{
+                    $name = substr($sub, $length, $offset - $length);
+                    $needle = '[link=' . $URL . ']' . $name . '[/link]';
+                    $new_needle = '<a href=http://' . $URL . '>' . $name . '</a>';
+                    $content = str_replace($needle, $new_needle, $content);
+                }
+        		else
+        		{
+                    $content = str_replace('[link=' . $URL .']', '', $content);
+                }
         	}
         	else
         	{
-        		$content = str_replace('[img]', '', $content);
+        		$content = str_replace('[link=', '', $content);
         	}
         }
         
