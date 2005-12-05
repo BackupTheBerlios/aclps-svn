@@ -22,8 +22,8 @@ class Presentation_View_ViewRegisterView extends Presentation_View_View
     
     public function Display()
     {
-        $form = '<form method="post" action="index.php?Action=ProcessRegister&blogID=1">'
-            . '<fieldset><legend><img src="UI/Themes/Images/Controls/register.png" id="controlbarimg" /> Account Registration</legend>';
+        $form = '<fieldset><legend><img src="UI/Themes/Images/Controls/register.png" id="controlbarimg" /> Account Registration</legend>'
+            . '<form method="post" action="index.php?Action=ProcessRegister&blogID=1">';
 
       if ($this->errorMessage != '')
       {
@@ -44,8 +44,7 @@ class Presentation_View_ViewRegisterView extends Presentation_View_View
             . '<td><input type="password" name="confirmPassword"></td></tr>'
 
             . '<tr><td colspan="2" align="center"><input type="submit" id="submit" value="Register"></td></tr></table>'
-            . '</fieldset>'
-            . '</form>';
+            . '</form></fieldset>';
 
         return $form;
     }

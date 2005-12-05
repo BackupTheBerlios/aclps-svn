@@ -15,10 +15,7 @@ class Presentation_View_ViewAssociatedBlogView extends Presentation_View_View
 
     public function Display()
     {
-        $ret = '<div id=associatedblog>'
-                . '<a href=index.php?Action=ViewBlog&blogID=' . $this->blogID . '>' . $this->title . '</a> as an ' . $this->rank
-                . '</div>';
-        return $ret;
+        return '<p><a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'">'.$this->title .'</a>: '.$this->rank.'</p>';
     }
 }
 

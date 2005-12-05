@@ -15,9 +15,7 @@ class Presentation_View_ViewRemoveMemberView extends Presentation_View_View
 
     public function Display()
     {
-        $ret = '<div id=removemember>'
-                . '<input type=checkbox name=' . $this->userID . '>' . $this->username . ' as an ' . $this->rank
-                . '</div>';
+        $ret = '<p><input type="checkbox" name="'.$this->userID.'">'.$this->username.' as an '.$this->rank.'</p>';
         return $ret;
     }
 }

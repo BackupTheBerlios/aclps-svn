@@ -13,7 +13,7 @@ class Presentation_View_ViewMyBlogView extends Presentation_View_View
     
     public function Display()
     {
-        $ret = '<div id=myblog><div id=myblog_title>My Blog</div>';
+        $ret = '<fieldset id="subset"><legend>My Blog</legend>';
         
         if ($this->blogID != 0 and $this->blogTitle != '')
         {
@@ -23,10 +23,10 @@ class Presentation_View_ViewMyBlogView extends Presentation_View_View
         else
         {
             $ret = $ret
-                    . '<a href="index.php?Action=NewBlog&blogID=1">Create my blog</a>';
+                    . '<a href="index.php?Action=NewBlog&blogID=1">Create My Blog</a>';
         }
         
-        $ret = $ret . '</div>';
+        $ret = $ret . '</fieldset>';
         
         return $ret;
     }

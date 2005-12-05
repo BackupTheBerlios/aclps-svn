@@ -14,20 +14,18 @@ class Presentation_View_NewCommentView extends Presentation_View_View
 
     public function Display()
     {
-        $form = '<form method="post" action="index.php?blogID='.$this->blogID.'&Action=ProcessNewComment">'
-            . '<fieldset>'
-            . '<legend>Add A Comment</legend>'
+        $form = '<fieldset><legend><img src="UI/Themes/Images/Controls/newcomment.png" id="controlbarimg" /> Add A Comment</legend>'
+            . '<form method="post" action="index.php?blogID='.$this->blogID.'&Action=ProcessNewComment">'
             . '<input type="hidden" name="postID" value="'.$this->postID.'">'
 
             . '<table id="formtable"><tr><td><label for="title">Title:</label> '
             . '<input type="text" maxlength="30" size="30" name="title"></td></tr>'
 
             . '<tr><td><label for="content">Content:</label></td></tr>'
-            . '<tr><td><textarea name="content" rows="5" cols="40"></textarea></td></tr>'
+            . '<tr><td><textarea name="content" rows="7" cols="40"></textarea></td></tr>'
 
             . '<tr><td align="center"><input type="submit" id="submit" value="Add Comment"></td></tr></table>'
-            . '</fieldset>'
-            . '</form>';
+            . '</form></fieldset>';
 
         return $form;
     }

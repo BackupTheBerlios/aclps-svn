@@ -14,10 +14,8 @@ class Presentation_View_NewBlogView extends Presentation_View_View
 
     public function Display()
     {
-        $form = '<form method="post" action="index.php?blogID='.$this->blogID.'&Action=ProcessNewBlog">'
-            . '<fieldset>'
-            . '<legend>Create Your Blog</legend>'
-            
+        $form = '<fieldset><legend>Create Your Blog</legend>'
+            . '<form method="post" action="index.php?blogID='.$this->blogID.'&Action=ProcessNewBlog">'
             . '<table id="formtable"><tr><td colspan="2"><label for="title">Title:</label>'
             . ' <input type="text" name="title"></td></tr>'
             
@@ -39,11 +37,10 @@ class Presentation_View_NewBlogView extends Presentation_View_View
             . '<tr><td><input type="radio" name="footertog" value="cust"></td><td>Custom URL: <input type="text" name="footerimg" size="40"></td></tr>'
             
             . '<tr><td colspan="2"><label for="about">About Text (for sidebar):</label></td></tr>'
-            . '<tr><td colspan="2" align="center"><textarea name="about" rows="3" cols="50"></textarea></td></tr>'
+            . '<tr><td colspan="2" align="center"><textarea name="about" rows="7" cols="50"></textarea></td></tr>'
             
             . '<tr><td colspan="2" align="center"><input type="submit" id="submit" value="Create Blog"></td></tr></table>'
-            . '</fieldset>'
-            . '</form>';
+            . '</form></fieldset>';
         
         return $form;
     }

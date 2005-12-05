@@ -10,7 +10,7 @@ class Presentation_View_ViewAssociatedBlogCollectionView extends Presentation_Vi
     
     public function Display()
     {
-        $ret = '<div id=associatedblogcollection><div id=associatedblogcollection_title>Associated Blogs</div>';
+        $ret = '<fieldset id="subset"><legend>Associated Blogs</legend>';
         
         if (count($this->Views) > 0)
         {
@@ -21,10 +21,10 @@ class Presentation_View_ViewAssociatedBlogCollectionView extends Presentation_Vi
         }
         else
         {
-            $ret = $ret . 'You are not associated with any blogs.';
+            $ret .= 'You are not associated with any blogs.';
         }
 
-        $ret = $ret . '</div>';
+        $ret .= '</fieldset>';
 
         return $ret;
     }

@@ -11,31 +11,25 @@ class Presentation_View_ViewRemoveInvitationCollectionView extends Presentation_
 
     public function Display()
     {
-        $form = '<div id=removeinvitationcollection>'
-            . '<form method="post" action="index.php?&Action=ProcessRemoveInvitation&blogID=' . $this->blogID . '">'
-            . '<fieldset>'
-            . '<legend>Remove Invitations</legend>';
+        $form = '<fieldset><legend>Remove Invitations</legend>'
+            . '<form method="post" action="index.php?&Action=ProcessRemoveInvitation&blogID=' . $this->blogID . '">';
 
         if (count($this->Views) > 0)
         {
 
             foreach($this->Views as $view)
             {
-                $form = $form . $view->Display();
+                $form .= $view->Display();
             }
 
-            $form = $form
-            . '<input type="submit" id="submit" value="Remove Invitations">';
+            $form .= '<input type="submit" id="submit" value="Remove Invitations">';
         }
         else
         {
-            $form = $form . 'You have no outstanding invitations.';
+            $form .= 'You have no pending invitations.';
         }
 
-        $form = $form
-            . '</fieldset>'
-            . '</form>'
-            . '</div>';
+        $form .= '</form></fieldset>';
 
         return $form;
     }

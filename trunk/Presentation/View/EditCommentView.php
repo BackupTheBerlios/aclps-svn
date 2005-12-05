@@ -16,9 +16,8 @@ class Presentation_View_EditCommentView extends Presentation_View_View
 
     public function Display()
     {
-        $form = '<form method="post" action="index.php?blogID='.$this->comment->GetBlogID().'&Action=ProcessEditComment">'
-            . '<fieldset>'
-            . '<legend>Edit Comment</legend>'
+        $form = '<fieldset><legend><img src="UI/Themes/Images/Controls/editcomment.png" id="controlbarimg" /> Edit Comment</legend>'
+            . '<form method="post" action="index.php?blogID='.$this->comment->GetBlogID().'&Action=ProcessEditComment">'
             . '<input type="hidden" name="postID" value="'.$this->comment->GetPostID().'">'
             . '<input type="hidden" name="commentID" value="'.$this->comment->GetCommentID().'">'
 
@@ -26,11 +25,10 @@ class Presentation_View_EditCommentView extends Presentation_View_View
             . '<input type="text" name="title" maxlength="30" size="30" value="'.$this->comment->GetTitle().'"></td></tr>'
 
             . '<tr><td><label for="content">Content:</label></td></tr>'
-            . '<tr><td><textarea name="content" rows="5" cols="40">'.$this->comment->GetACLPSContent().'</textarea></td></tr>'
+            . '<tr><td><textarea name="content" rows="7" cols="40">'.$this->comment->GetACLPSContent().'</textarea></td></tr>'
 
             . '<tr><td align="center"><input type="submit" id="submit" value="Edit Comment"></td></tr></table>'
-            . '</fieldset>'
-            . '</form>';
+            . '</form></fieldset>';
 
         return $form;
     }

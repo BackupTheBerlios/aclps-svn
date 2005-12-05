@@ -13,10 +13,7 @@ class Presentation_View_ViewInvitationView extends Presentation_View_View
 
     public function Display()
     {
-        $ret = '<div id=invitation>'
-                . $this->username . ' invited as an ' . $this->rank
-                . '</div>';
-        return $ret;
+        return '<p>'.$this->username.' invited as an '.$this->rank.'</p>';
     }
 }
 

@@ -9,8 +9,9 @@ body
 
 #controlbarimg
 { 
+  margin: 1px 2px 1px 2px;
   border-width: 0;
-  margin: 0px 2px 0px 5px;
+  vertical-align: middle;
 }
 
 #floatclear
@@ -24,12 +25,13 @@ body
   border-bottom: 1px solid #666666;
   font-family: sans-serif;
   font-size: 14px;
-  padding: 5px;
   text-align: left;
 }
 #topbar a
 {
+  margin-left: 4px;
   color: blue;
+  text-decoration: none;
   font-weight: bold;
 }
 
@@ -67,7 +69,7 @@ body
   font-size: 14px;
   background-color: #EEEEEE;
   border: 1px solid #666666;
-  padding: 0px 5px 5px 5px;
+  padding: 5px;
 }
 
 #sidecontent
@@ -84,7 +86,7 @@ body
   font-family: sans-serif;
   font-size: 12px;
   background-color: #EEEEEE;
-  margin: 0px 0px 15px 0px;
+  margin-bottom: 15px;
   border: 1px solid #666666;
   padding: 5px;
 }
@@ -98,7 +100,7 @@ body
   font-family: sans-serif;
   font-size: 12px;
   background-color: #EEEEEE;
-  margin: 0px 0px 15px 0px;
+  margin-bottom: 15px;
   border: 1px solid #666666;
   padding: 0px;
 }
@@ -150,13 +152,13 @@ tr#calendar_week_row
   text-align: left;
   background-color: #DDDDDD;
   border: 1px solid #BBBBBB;
-  padding: 5px;
-  margin: 5px 0px 5px 0px;
 }
 
 #blogcontrols a
 { 
+  margin-left: 4px;
   color: blue;
+  text-decoration: none;
   font-size: 12px;
 }
 
@@ -173,11 +175,12 @@ tr#calendar_week_row
   text-align: left;
   background-color: #DDDDDD;
   border-bottom: 1px solid #CCCCCC;
-  padding: 2px 5px 2px 5px;
 }
 #postcontrols a
 { 
+  margin-left: 4px;
   color: blue;
+  text-decoration: none;
   font-size: 11px;
 }
 #posttitle
@@ -213,11 +216,14 @@ tr#calendar_week_row
 }
 #postcommentlink
 { 
-  color: blue;
   font-size: 11px;
   padding-right: 5px;
   padding-bottom: 5px;
   text-align: right;
+}
+#postcommentlink a
+{ 
+  color: blue;
 }
 
 /*COMMENT CRAP HERE*/
@@ -239,11 +245,12 @@ tr#calendar_week_row
   text-align: left;
   background-color: #DDDDDD;
   border-bottom: 1px solid #CCCCCC;
-  padding: 2px 5px 2px 5px;
 }
 #commentcontrols a
-{ 
+{
+  margin-left: 4px;
   color: blue;
+  text-decoration: none;
   font-size: 11px;
 }
 #commenttitle
@@ -283,10 +290,14 @@ tr#calendar_week_row
 
 fieldset
 {
-  margin: 5px auto 0px auto;
+  margin: 5px 0px 0px 0px;
   text-align: center;
   font-size: 12px;
   border: 1px solid #CCCCCC;
+}
+fieldset a
+{ 
+  color: blue;
 }
 legend
 {
@@ -296,14 +307,14 @@ legend
 
 label
 {
-  font-weight: normal;
+  font-weight: bold;
   font-size: 12px;
   padding: 2px;
 }
 
 table#formtable
 {
-  font-weight: bold;
+  font-weight: normal;
   margin: 0 auto 0 auto;
   font-size: 12px;
 }

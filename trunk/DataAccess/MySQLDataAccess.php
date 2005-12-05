@@ -81,7 +81,7 @@ class DataAccess_MySQLDataAccess implements DataAccess_DataAccess
 
     private function Query($connection, $query)
     {
-        if ($_GET['Action'] != 'ViewRSS')//dont hurt rss, it freaks out
+        if ($_GET['Action'] != 'ViewRSS' && $_GET['debug'])//dont hurt rss, it freaks out
             print 'DBQUERY: '.$query.'<br />';//TODO: remove debug info when done
         $queryResult = $connection->query($query);
 	

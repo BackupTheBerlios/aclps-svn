@@ -13,21 +13,14 @@ class Presentation_View_ViewManageMembersView extends Presentation_View_View
 
     public function Display()
     {
-        $ret = '<div id=managemembers>'
-                . '<div id=managemembers_title>Manage Members</div>';
+        $ret = '<fieldset><legend>Manage Current Members</legend>';
         if ($this->permission == 'Owner')
         {
-            $ret = $ret
-                . '<div id=managemembers_change>'
-                . '<a href=index.php?Action=ChangeMemberRank&blogID='   . $this->blogID . '>Change Members\' Ranks</a>'
-                . '</div>';
+            $ret .= '<p><a href=index.php?Action=ChangeMemberRank&blogID='   . $this->blogID . '>Change Member Ranks</a></p>';
         }
 
-        $ret = $ret
-                . '<div id=managemembers_remove>'
-                . '<a href=index.php?Action=RemoveMember&blogID='       . $this->blogID . '>Remove Members</a>'
-                . '</div>'
-                . '</div>';
+        $ret .= '<p><a href=index.php?Action=RemoveMember&blogID='       . $this->blogID . '>Remove Members</a></p>'
+            . '</fieldset>';
         return $ret;
     }
 }

@@ -19,7 +19,7 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
     
     public function Display()
     {
-        $form = '<fieldset><legend>Search</legend>'
+        $form = '<fieldset><legend><img src="UI/Themes/Images/Controls/search.png" id="controlbarimg" /> Search For Blogs</legend>'
             .'<form method="post" action="index.php?Action=ViewSearch&blogID='.$this->blogid.'">';
 
         if(is_string($this->result))
@@ -31,8 +31,10 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
             $form .= '<p>'.$this->result->Display().'</p>';
         }
 
-        $form .= '<table id="formtable"><tr><td align="center"><input type="text" name="blog_title"></td></tr>'
-            . '<tr><td align="center"><input type="submit" id="submit" value="Search"></td></tr></table>'
+        $form .= '<table id="formtable"><tr><td align="center">'
+            .'<input type="text" name="blog_title" size="50"> '
+            .'<input type="submit" id="submit" value="Search">'
+            .'</td></tr></table>'
             . '</form></fieldset>'
             . $ret.$this->popular->Display();
 

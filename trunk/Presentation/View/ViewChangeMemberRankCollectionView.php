@@ -11,31 +11,25 @@ class Presentation_View_ViewChangeMemberRankCollectionView extends Presentation_
 
     public function Display()
     {
-        $form = '<div id=changememberrankcollection>'
-            . '<form method="post" action="index.php?&Action=ProcessChangeMemberRank&blogID=' . $this->blogID . '">'
-            . '<fieldset>'
-            . '<legend>Change Members\' Rank</legend>';
+        $form = '<fieldset><legend>Change Member Ranks</legend>'
+            . '<form method="post" action="index.php?&Action=ProcessChangeMemberRank&blogID=' . $this->blogID . '">';
 
         if (count($this->Views) > 0)
         {
 
             foreach($this->Views as $view)
             {
-                $form = $form . $view->Display();
+                $form .= $view->Display();
             }
 
-            $form = $form
-            . '<input type="submit" id="submit" value="Change Members\' Rank">';
+            $form .= '<input type="submit" id="submit" value="Change Member Ranks">';
         }
         else
         {
-            $form = $form . 'You have no outstanding members.';
+            $form .= 'There are no members that you can modify.';
         }
 
-        $form = $form
-            . '</fieldset>'
-            . '</form>'
-            . '</div>';
+        $form .= '</form></fieldset>';
 
         return $form;
     }

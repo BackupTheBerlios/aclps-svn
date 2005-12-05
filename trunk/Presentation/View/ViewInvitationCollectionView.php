@@ -10,21 +10,21 @@ class Presentation_View_ViewInvitationCollectionView extends Presentation_View_V
 
     public function Display()
     {
-        $ret = '<div id=invitationcollection><div id=invitationcollection_title>Invitations</div>';
+        $ret = '<fieldset><legend>Invitations</legend>';
 
         if (count($this->Views) > 0)
         {
             foreach($this->Views as $view)
             {
-                $ret = $ret . $view->Display();
+                $ret .= $view->Display();
             }
         }
         else
         {
-            $ret = $ret . 'You have no outstanding invitations.';
+            $ret .= 'You have no pending invitations.';
         }
 
-        $ret = $ret . '</div>';
+        $ret .= '</fieldset>';
 
         return $ret;
     }

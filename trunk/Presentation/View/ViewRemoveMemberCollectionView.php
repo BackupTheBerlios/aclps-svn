@@ -11,31 +11,25 @@ class Presentation_View_ViewRemoveMemberCollectionView extends Presentation_View
 
     public function Display()
     {
-        $form = '<div id=removemembercollection>'
-            . '<form method="post" action="index.php?&Action=ProcessRemoveMember&blogID=' . $this->blogID . '">'
-            . '<fieldset>'
-            . '<legend>Remove Members</legend>';
+        $form = '<fieldset><legend>Remove Members</legend>'
+            . '<form method="post" action="index.php?&Action=ProcessRemoveMember&blogID=' . $this->blogID . '">';
 
         if (count($this->Views) > 0)
         {
 
             foreach($this->Views as $view)
             {
-                $form = $form . $view->Display();
+                $form .= $view->Display();
             }
 
-            $form = $form
-            . '<input type="submit" id="submit" value="Remove Members">';
+            $form .= '<input type="submit" id="submit" value="Remove Members">';
         }
         else
         {
-            $form = $form . 'You have no outstanding members.';
+            $form .= 'There are no members that you can remove.';
         }
 
-        $form = $form
-            . '</fieldset>'
-            . '</form>'
-            . '</div>';
+        $form .= '</form></fieldset>';
 
         return $form;
     }

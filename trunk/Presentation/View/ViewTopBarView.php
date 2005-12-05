@@ -17,7 +17,7 @@ class Presentation_View_ViewTopBarView extends Presentation_View_View
         {
             $ret = ''
                 .'<a href="index.php?Action=ViewBlog&blogID=1"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />ACLPS Home</a> '
-                .'<a href="index.php?Action=ViewDashboard&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/dashboard.png" id="controlbarimg" />My Dashboard</a> '
+                .'<a href="index.php?Action=ViewDashboard&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/dashboard.png" id="controlbarimg" />Dashboard</a> '
                 .'<a href="index.php?Action=EditUserData&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/edituser.png" id="controlbarimg" />Edit My Account</a> '
                 .'<a href="index.php?Action=ProcessSignOut&blogID=1"><img src="UI/Themes/Images/Controls/signout.png" id="controlbarimg" />Sign Out</a> '
                 .'<a href="index.php?Action=ViewSearch&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/search.png" id="controlbarimg" />Search</a> ';
