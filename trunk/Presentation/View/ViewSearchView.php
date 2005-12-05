@@ -19,8 +19,8 @@ class Presentation_View_ViewSearchView extends Presentation_View_View
     
     public function Display()
     {
-        $form = '<fieldset><legend>&nbsp;Search</legend>'
-            . '<form method="post" action="index.php?Action=ViewSearch&blogID='.$this->blogid.'">';
+        $form = '<img src="UI/Themes/Images/Controls/search.png" id="controlbarimg" /> <fieldset><legend>Search</legend>'
+            .'<form method="post" action="index.php?Action=ViewSearch&blogID='.$this->blogid.'">';
 
         if(is_string($this->result))
         {

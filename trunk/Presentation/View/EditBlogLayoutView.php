@@ -56,7 +56,7 @@ class Presentation_View_EditBlogLayoutView extends Presentation_View_View
             . '<fieldset>'
             . '<legend>Edit Your Blog</legend>'
             . '<table id="formtable"><tr><td colspan="2"><label for="blogTitle">Title:</label> '
-            . '<input type="text" name="blogTitle" value=' . $this->title . '></td></tr>'
+            . '<input type="text" name="blogTitle" value="'.$this->title.'"></td></tr>'
             . '<tr><td colspan="2"><label for="theme">Theme:</label> '
             . '<select name="theme">';
         foreach ($this->themes as $key=>$value)

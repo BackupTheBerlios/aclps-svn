@@ -37,7 +37,12 @@ class Presentation_View_ViewCommentView extends Presentation_View_View
         {
             $editurl = $linkprefix.'?Action=EditComment&blogID='.$this->blogID.'&commentID='.$this->commentID;
             $deleteurl = $linkprefix.'?Action=DeleteComment&blogID='.$this->blogID.'&commentID='.$this->commentID;
-            $this->controls = '<div id="commentcontrols"><a href="'.$editurl.'">Edit Comment</a> <a href="'.$deleteurl.'">Delete Comment</a></div>';
+            $this->controls = '<div id="commentcontrols">'.
+                '<img src="UI/Themes/Images/Controls/editcomment.png" id="controlbarimg" /> '.
+                '<a href="'.$editurl.'">Edit Comment</a> | '.
+                '<img src="UI/Themes/Images/Controls/deletecomment.png" id="controlbarimg" /> '.
+                '<a href="'.$deleteurl.'">Delete Comment</a>'.
+                '</div>';
         }
         else
         {

@@ -207,6 +207,7 @@ tr#calendar_week_row
 }
 #postcommentlink
 { 
+  color: blue;
   font-size: 11px;
   padding-right: 5px;
   padding-bottom: 5px;
@@ -307,6 +308,7 @@ input, textarea, select
   padding: 2px;
   margin: 2px;
   border: #000000 1px solid;
+  font-weight: normal;
   font-size: 12px;
   font-family: sans-serif;
 }

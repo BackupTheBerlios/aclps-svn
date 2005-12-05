@@ -180,39 +180,27 @@ class BusinessLogic_Blog_Blog
 	   switch($aBlogSecurity->ViewBlog($blogID))
 	   {
 	       case 'Owner':
-	           $contentOptions = '<div id="blogcontrols">'
-                    . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
-                    . ' | <a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a>'
-                    . ' | <a href="index.php?Action=EditBlogLayout&blogID='.$blogID.'">Blog Layout</a></a>'
-                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Blog Membership</a>'
-                    . '</div>';
+	           $contentOptionsFlag = 3;
 	           break;
               
 	       case 'Editor':
-	           $contentOptions = '<div id="blogcontrols">'
-                    . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
-                    . ' | <a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a>'
-                    . ' | <a href="index.php?Action=EditMembership&blogID='.$blogID.'">Blog Membership</a>'
-                    . '</div>';
+	           $contentOptionsFlag = 2;
 	           break;
               
 	       case 'Author':
-	           $contentOptions = '<div id="blogcontrols">'
-                    . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a>'
-                    . ' | <a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a>'
-                    . '</div>';
+	           $contentOptionsFlag = 1;
 	           break;
               
 	       //FALL THROUGH
 	       case 'Nobody':
 	       default:
-	           $contentOptions = '';
+	           $contentOptionsFlag = 0;
 	           break;
 	   }
           
 	   $aBlogDataAccess = BusinessLogic_Blog_BlogDataAccess::GetInstance();
            $rssurl = $_SERVER['SCRIPT_URI'].'?Action=ViewRSS&blogID='.$blogID;
-	   return $aBlogDataAccess->ViewBlog($blogID, $contentOptions, $rssurl);
+	   return $aBlogDataAccess->ViewBlog($blogID, $contentOptionsFlag, $rssurl);
     }
 
     public function ViewDashboard($userID)

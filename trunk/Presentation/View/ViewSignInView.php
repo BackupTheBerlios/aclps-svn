@@ -22,10 +22,10 @@ class Presentation_View_ViewSignInView extends Presentation_View_View
       }
 
         $form = $form
-            . '<table id="formtable"><tr><td><label for="username">Username</label></td>'
+            . '<table id="formtable"><tr><td><label for="username">Username:</label></td>'
             . '<td><input type="text" name="username"></td></tr>'
 
-            . '<tr><td><label for="password">Password</label></td>'
+            . '<tr><td><label for="password">Password:</label></td>'
             . '<td><input type="password" name="password"></td></tr>'
 
             . '<tr><td colspan="2" align="center"><input type="submit" id="submit" value="Sign In"></td></tr></table>'

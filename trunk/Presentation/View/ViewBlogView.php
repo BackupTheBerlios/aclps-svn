@@ -16,10 +16,10 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     private $content;
     private $sideContent;
     
-    public function __construct($blogID, $contentOptions, $headerImage, $footerImage, $theme, $title, $rssurl)
+    public function __construct($blogID, $contentOptionsFlag, $headerImage, $footerImage, $theme, $title, $rssurl)
     {
 	$this->blogID = $blogID;
-	$this->contentOptions = $contentOptions;
+	$this->SetContentOptions($contentOptionsFlag);
 	$this->headerImage = $headerImage;
 	$this->footerImage = $footerImage;
 	$this->theme = $theme;
@@ -28,7 +28,51 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
 	$this->content = '';
 	$this->sideContent = '';
     }
-    
+
+    private function SetContentOptions($flag)
+    {
+        switch($flag)
+        {
+        case 3:
+            $this->contentOptions = '<div id="blogcontrols">'
+                . '<img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" /> '
+                . ' <a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a> | '
+                . '<img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" /> '
+                . '<a href="index.php?Action=NewPost&blogID='.$blogID.'">New Post</a> | '
+                . '<img src="UI/Themes/Images/Controls/admin2.png" id="controlbarimg" /> '
+                . '<a href="index.php?Action=EditBlogLayout&blogID='.$blogID.'">Blog Appearance</a></a> | 'x
+                . '<img src="UI/Themes/Images/Controls/editusers.png" id="controlbarimg" /> '
+                . '<a href="index.php?Action=EditMembership&blogID='.$blogID.'">Blog Membership</a>'
+                . '</div>';
+            break;
+            
+        case 2:
+            $this->contentOptions = '<div id="blogcontrols">'
+                . '<img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" /> '
+                . '<a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a> | '
+                . '<img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" /> '
+                . '<a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a> | '
+                . '<img src="UI/Themes/Images/Controls/editusers.png" id="controlbarimg" /> '
+                . '<a href="index.php?Action=EditMembership&blogID='.$blogID.'">Blog Membership</a>'
+                . '</div>';
+            break;
+            
+        case 1:
+            $this->contentOptions = '<div id="blogcontrols">'
+                . '<img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" /> '
+                . '<a href="index.php?Action=ViewBlog&blogID=' . $blogID . '">Home</a> | '
+                . '<img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" /> '
+                . '<a href="index.php?Action=NewPost&blogID=' . $blogID . '">New Post</a>'
+                . '</div>';
+            break;
+            
+        case 0:
+        default:
+            $this->contentOptions = '';
+            break;
+        }
+    }
+
     public function Display()
     {
         die("ViewBlogView does not display.");

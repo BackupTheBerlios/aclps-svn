@@ -17,7 +17,7 @@ class Presentation_View_ViewPopularView extends Presentation_View_View
   {
     if(is_array($this->blogs))
     {
-      $ret = '<fieldset><legend>Popular Blogs</legend>';
+      $ret = '<fieldset><legend>Most Visited Blogs</legend>';
       if(count($this->blogs) > 0)
       {
         $ret .= '<div id="popularcollection">';
@@ -36,7 +36,7 @@ class Presentation_View_ViewPopularView extends Presentation_View_View
     }
     else
     {
-        throw new Exception("Can't get Rank");
+        throw new Exception("Popularity information unavailable.");
     }
   }
   

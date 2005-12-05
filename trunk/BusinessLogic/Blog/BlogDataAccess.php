@@ -200,10 +200,10 @@ class BusinessLogic_Blog_BlogDataAccess
         return $ViewDashboardView;
     }
     
-    //get the most 3 popular blogs
+    //get the 5 most popular blogs
     public function ViewPopular()
     {
-        $query = "select [0], [1] from Blogs order by Count desc limit 10";
+        $query = "select [0], [1] from Blogs order by Count desc limit 5";
         $arguments = array('BlogID', 'Title');
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();

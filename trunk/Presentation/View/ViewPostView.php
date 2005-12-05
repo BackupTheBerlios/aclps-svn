@@ -47,12 +47,17 @@ class Presentation_View_ViewPostView extends Presentation_View_View
         {
             $editurl = 'index.php?Action=EditPost&blogID='.$this->blogID.'&postID='.$this->postID;
             $newurl = 'index.php?Action=DeletePost&blogID='.$this->blogID.'&postID='.$this->postID;
-            $controls = '<div id="postcontrols"><a href="'.$editurl.'">Edit Post</a> <a href="'.$newurl.'">Delete Post</a></div>';
+            $controls = '<div id="postcontrols">'.
+                '<img src="UI/Themes/Images/Controls/editpost.png" id="controlbarimg" /> '.
+                '<a href="'.$editurl.'">Edit Post</a> | '.
+                '<img src="UI/Themes/Images/Controls/deletepost.png" id="controlbarimg" /> '.
+                '<a href="'.$newurl.'">Delete Post</a></div>';
         }
         else
         {
             $controls = '';
         }
+
         $displaystr = '<div id="post">'.
             $controls.
             '<div id="posttitle">'.$this->title.'</div>'.
