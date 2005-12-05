@@ -13,6 +13,11 @@ class BusinessLogic_ACLPSCodeConverter
                                                 '[/title]'      => '</h1>',
                                                 '[subtitle]'    => '<h2>',
                                                 '[/subtitle]'   => '</h2>');
+                                                
+    public static function NewLineToBreak($content)
+    {
+        return str_replace("\n", '<br />', $content);
+    }
     public static function ACLPSCodeToHTML($content)
     {
 
