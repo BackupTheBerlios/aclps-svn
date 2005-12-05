@@ -111,10 +111,12 @@ class BusinessLogic_Blog_Blog
             break;
 	    
         case 'NewBlog':
+            $aViewBlogView->SetContent($this->NewBlog($_GET['blogID']));
+            break;
             //blogid is passed solely for returning to system when user submits processnewblog form
-            $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$this->NewBlog($_GET['blogID']);
-            header("Location: $path");
-            exit;
+            //$path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$this->NewBlog($_GET['blogID']);
+            //header("Location: $path");
+            //exit;
 	    
         case 'ProcessNewBlog':
             $title = $_POST['title'];
