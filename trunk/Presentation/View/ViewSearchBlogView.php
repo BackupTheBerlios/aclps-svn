@@ -23,10 +23,9 @@ class Presentation_View_ViewSearchBlogView extends Presentation_View_View
     
     public function Display()
     {
-        $name = '<div id="blogtitle">'.$this->title.'</div>';
-
-        $item = '<div id="search">'.$this->GetLink($name).
-            '<div id="blogabout">'.$this->about.'</div>';
+        $item = '<div id="search"><div id="blogtitle">'
+            .$this->GetLink($this->title).'</div><div id="blogabout">'
+            .$this->about.'</div>';
         
         $item .= '</div>';
         return $item;
