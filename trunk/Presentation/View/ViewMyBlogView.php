@@ -13,7 +13,7 @@ class Presentation_View_ViewMyBlogView extends Presentation_View_View
     
     public function Display()
     {
-        $ret = '<fieldset id="subset"><legend>My Blog</legend>';
+        $ret = '<fieldset><legend>My Blog</legend>';
         
         if ($this->blogID != 0 and $this->blogTitle != '')
         {

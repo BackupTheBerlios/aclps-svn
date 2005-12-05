@@ -10,7 +10,7 @@ class Presentation_View_ViewAssociatedBlogCollectionView extends Presentation_Vi
     
     public function Display()
     {
-        $ret = '<fieldset id="subset"><legend>Associated Blogs</legend>';
+        $ret = '<fieldset><legend>Associated Blogs</legend>';
         
         if (count($this->Views) > 0)
         {

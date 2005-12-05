@@ -10,7 +10,7 @@ class Presentation_View_ViewDashboardInvitationCollectionView extends Presentati
 
     public function Display()
     {
-        $ret = '<fieldset id="subset"><legend>Invitations</legend>';
+        $ret = '<fieldset><legend>Invitations</legend>';
         
         if (count($this->Views) > 0)
         {
