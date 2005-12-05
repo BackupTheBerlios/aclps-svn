@@ -12,7 +12,7 @@ class Presentation_View_ViewSignInView extends Presentation_View_View
     public function Display()
     {
         $form = '<fieldset><legend><img src="UI/Themes/Images/Controls/signin.png" id="controlbarimg" /> Sign In</legend>'
-            . '<form method="post" action="index.php?Action=ProcessSignIn&blogID=1">'
+            . '<form method="post" action="index.php?Action=ProcessSignIn&blogID=1">';
 
       if($this->errorMessage != '')
       {
