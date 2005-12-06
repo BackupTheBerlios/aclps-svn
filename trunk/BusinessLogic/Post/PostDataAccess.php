@@ -204,7 +204,7 @@ class BusinessLogic_Post_PostDataAccess
             $extras = 'and Public=1 ';
         }
 
-        $query = 'select * from Posts where BlogID="[0]" '.$extras.'and YEAR(Timestamp) = "[1]" and MONTH(Timestamp) = "[2]"';
+        $query = 'select * from Posts where BlogID="[0]" '.$extras.'and YEAR(Timestamp) = "[1]" and MONTH(Timestamp) = "[2]" order by Timestamp desc';
         $arguments = array($blogID, $year, $month);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -225,7 +225,7 @@ class BusinessLogic_Post_PostDataAccess
             $extras = 'and Public=true ';
         }
 
-        $query = 'select * from Posts where BlogID="[0]" '.$extras.'and YEAR(Timestamp) = "[1]" and MONTH(Timestamp) = "[2]" and DAYOFMONTH(Timestamp) = "[3]"';
+        $query = 'select * from Posts where BlogID="[0]" '.$extras.'and YEAR(Timestamp) = "[1]" and MONTH(Timestamp) = "[2]" and DAYOFMONTH(Timestamp) = "[3]" order by Timestamp desc';
 
         $arguments = array($blogID, $year, $month, $date);
 

@@ -108,7 +108,7 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ViewCommentsByID($commentID)
     {
         //Returns a ViewCommentCollectionView with data from the Comments table.
-        $query = 'select * from Comments where CommentID="[0]" order by Timestamp desc';
+        $query = 'select * from Comments where CommentID="[0]"';
         $arguments = array($commentID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
