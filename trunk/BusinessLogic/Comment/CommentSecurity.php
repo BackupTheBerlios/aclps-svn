@@ -13,9 +13,9 @@ class BusinessLogic_Comment_CommentSecurity
     {
         if (!isset($_SESSION['BusinessLogic_Comment_CommentSecurity']))
         {
-            $_SESSION['BusinessLogic_Comment_CommentSecurity'] = new BusinessLogic_Comment_CommentSecurity();
+            $_SESSION['BusinessLogic_Comment_CommentSecurity'] = serialize(new BusinessLogic_Comment_CommentSecurity());
         }
-        return $_SESSION['BusinessLogic_Comment_CommentSecurity'];
+        return unserialize($_SESSION['BusinessLogic_Comment_CommentSecurity']);
     }
 
     public function NewComment($blogID)

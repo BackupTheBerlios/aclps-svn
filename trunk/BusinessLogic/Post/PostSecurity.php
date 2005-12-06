@@ -13,9 +13,9 @@ class BusinessLogic_Post_PostSecurity
     {
         if (!isset($_SESSION['BusinessLogic_Post_PostSecurity']))
         {
-            $_SESSION['BusinessLogic_Post_PostSecurity'] = new BusinessLogic_Post_PostSecurity();
+            $_SESSION['BusinessLogic_Post_PostSecurity'] = serialize(new BusinessLogic_Post_PostSecurity());
         }
-        return $_SESSION['BusinessLogic_Post_PostSecurity'];
+        return unserialize($_SESSION['BusinessLogic_Post_PostSecurity']);
     }
 
     public function NewPost($blogID)

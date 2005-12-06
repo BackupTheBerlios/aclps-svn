@@ -43,6 +43,7 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 
     public function Display()
     {
+        $viewurl = 'index.php?Action=ViewPost&blogID='.$this->blogID.'&postID='.$this->postID;
         if ($this->showcontrols)
         {
             $editurl = 'index.php?Action=EditPost&blogID='.$this->blogID.'&postID='.$this->postID;
@@ -59,7 +60,7 @@ class Presentation_View_ViewPostView extends Presentation_View_View
 
         $displaystr = '<div id="post">'.
             $controls.
-            '<div id="posttitle">'.$this->title.'</div>'.
+            '<div id="posttitle"><a href="'.$viewurl.'">'.$this->title.'</a></div>'.
             '<div id="postauthor">'.$this->authorName.'</div>'.
             '<div id="posttime">'.$this->timestamp.'</div>'.
             '<div id="postcontent">'.$this->GetHTMLContent().'</div>'.

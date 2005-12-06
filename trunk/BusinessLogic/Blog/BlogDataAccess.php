@@ -2,26 +2,19 @@
 
 class BusinessLogic_Blog_BlogDataAccess
 {
-    private $TABLE;
-
-    private function __construct()
-    {
-	$this->$TABLE = 'Blogs';
-    }
 
     static public function GetInstance()
     {
 	if (!isset($_SESSION['BusinessLogic_Blog_BlogDataAccess']))
 	{
-	    $_SESSION['BusinessLogic_Blog_BlogDataAccess'] = new BusinessLogic_Blog_BlogDataAccess();
+	    $_SESSION['BusinessLogic_Blog_BlogDataAccess'] = serialize(new BusinessLogic_Blog_BlogDataAccess());
 	}
-        return $_SESSION['BusinessLogic_Blog_BlogDataAccess'];
-
+        return unserialize($_SESSION['BusinessLogic_Blog_BlogDataAccess']);
     }
     
     public function ViewBlog($blogID, $contentOptions, $rssurl)
     {
-    	$query = 'select * from [0] where BlogID=[1]';
+    	$query = 'select * from [0] where BlogID="[1]"';
         $arguments = array('Blogs', $blogID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -34,7 +27,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     	$blogRow = $blogResult[0];
 
-    	$query = 'select URL from [0] where ThemeID=[1]';
+    	$query = 'select URL from [0] where ThemeID="[1]"';
         $arguments = array('Themes', $blogRow['ThemeID']);
         $themeResult = $DataAccess->Select($query, $arguments);
 
@@ -53,7 +46,7 @@ class BusinessLogic_Blog_BlogDataAccess
     {
         //Returns the an array title and about text (in that order) for a given blog
         //Used by Blog->ViewRSS to populate information about a blog into the returned data
-    	$query = 'select Title,About from [0] where BlogID=[1]';
+    	$query = 'select Title,About from [0] where BlogID="[1]"';
         $arguments = array('Blogs', $blogID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -88,7 +81,7 @@ class BusinessLogic_Blog_BlogDataAccess
     public function GetThemeDefaultHeader($themeID)
     {
         //Given a themeID, returns that theme's default header image url.
-    	$query = 'select DefaultHeader from Themes where ThemeID=[0]';
+    	$query = 'select DefaultHeader from Themes where ThemeID="[0]"';
         $arguments = array($themeID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -98,7 +91,7 @@ class BusinessLogic_Blog_BlogDataAccess
     public function GetThemeDefaultFooter($themeID)
     {
         //Given a themeID, returns that theme's default footer image url.
-    	$query = 'select DefaultFooter from Themes where ThemeID=[0]';
+    	$query = 'select DefaultFooter from Themes where ThemeID="[0]"';
         $arguments = array($themeID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -116,7 +109,7 @@ class BusinessLogic_Blog_BlogDataAccess
         {
             $blogID = $user->GetUserBlogID();
             
-            $query = 'select Title from [0] where blogID=[1]';
+            $query = 'select Title from [0] where blogID="[1]"';
             $arguments = array('Blogs', $blogID);
             $result = $DataAccess->Select($query, $arguments);
             
@@ -131,7 +124,7 @@ class BusinessLogic_Blog_BlogDataAccess
         $ViewMyBlogView = new Presentation_View_ViewMyBlogView($blogID, $blogTitle);
         
         //Get Associated Blog Information
-        $query = 'select BlogID, Auth from [0] where UserID=[1]';
+        $query = 'select BlogID, Auth from [0] where UserID="[1]"';
         $arguments = array('User_Auth', $user->GetUserID());
         $associatedBlogResult = $DataAccess->Select($query, $arguments);
         
@@ -141,7 +134,7 @@ class BusinessLogic_Blog_BlogDataAccess
         {
             foreach ($associatedBlogResult as $key=>$value)
             {
-                $query = 'select Title from [0] where BlogID=[1]';
+                $query = 'select Title from [0] where BlogID="[1]"';
                 $arguments = array('Blogs', $value['BlogID']);
                 $result = $DataAccess->Select($query, $arguments);
                 
@@ -162,7 +155,7 @@ class BusinessLogic_Blog_BlogDataAccess
         }
         
         //Get Invitations
-        $query = 'select * from [0] where UserID=[1]';
+        $query = 'select * from [0] where UserID="[1]"';
         $arguments = array('Invitations', $user->GetUserID());
         $invitationsResult = $DataAccess->Select($query, $arguments);
 
@@ -172,7 +165,7 @@ class BusinessLogic_Blog_BlogDataAccess
         {
             foreach ($invitationsResult as $key=>$value)
             {
-                $query = 'select Title from [0] where BlogID=[1]';
+                $query = 'select Title from [0] where BlogID="[1]"';
                 $arguments = array('Blogs', $value['BlogID']);
                 $result = $DataAccess->Select($query, $arguments);
 
@@ -227,7 +220,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function EditBlogLayout($blogID)
     {
-        $query = "select * from [0] where BlogID=[1]";
+        $query = 'select * from [0] where BlogID="[1]"';
         $arguments = array('Blogs', $blogID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -242,7 +235,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function ProcessEditBlogLayout($blogID,$title,$about,$themeid,$headerimg,$footerimg)
     {
-        $query = 'update [0] set Title="[1]", About="[2]", ThemeID=[3], HeaderImage="[4]", FooterImage="[5]" where BlogID=[6]';
+        $query = 'update [0] set Title="[1]", About="[2]", ThemeID="[3]", HeaderImage="[4]", FooterImage="[5]" where BlogID="[6]"';
         $arguments = array('Blogs', $title, $about, $themeid, $headerimg, $footerimg, $blogID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
@@ -251,7 +244,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function EditLinks($blogID)
     {
-        $query = 'select URL, Title from [0] where blogID=[1]';
+        $query = 'select URL, Title from [0] where blogID="[1]"';
         $arguments = array('Links', $blogID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -262,7 +255,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function ProcessEditLinks($blogID,$urls,$titles)
     {
-        $query = 'update [0] set URL = "[1]", Title = "[2]" where BlogID = [3]';
+        $query = 'update [0] set URL = "[1]", Title = "[2]" where BlogID = "[3]"';
         $arguments = array('Links',$urls,$titles);
 	
         $DataAccess = DataAccess_DataAccessFactory::GetInstance(); 
@@ -288,7 +281,7 @@ class BusinessLogic_Blog_BlogDataAccess
     //counter for a blog
     public function ProcessCount($blogID)
     {
-        $query = "update Blogs set Count=Count+1 where BlogID=[0]";
+        $query = 'update Blogs set Count=Count+1 where BlogID="[0]"';
         $arguments = array($blogID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -302,7 +295,7 @@ class BusinessLogic_Blog_BlogDataAccess
 
     public function ProcessSearch($blog_title)
     {
-        $query = "select BlogID, Title, About from Blogs where Title like '%[0]%' or About like '%[0]%'";
+        $query = 'select BlogID, Title, About from Blogs where Title like "%[0]%" or About like "%[0]%"';
         $arguments = array($blog_title);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();

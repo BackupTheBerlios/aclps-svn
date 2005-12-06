@@ -21,15 +21,9 @@ class Presentation_View_ViewCommentCollectionView extends Presentation_View_View
             $ret = '<div id="commentcollection">';
             foreach($this->comments as $value)
             {
-                $ret = $ret.$value->Display()."\n";
+                $ret .= $value->Display()."\n";
             }
-            $ret = $ret.'</div>';
-            try {
-                //try to show a new comment form at end of list of comments:
-                $ret = $ret.BusinessLogic_Comment_Comment::GetInstance()->NewComment($blogID, $postID);
-            } catch (Exception $e) {
-                //don't show new comment form if user lacks permission
-            }
+            $ret .= '</div>';
             return $ret;
         }
         elseif (!isset($this->comments))

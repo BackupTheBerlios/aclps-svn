@@ -16,7 +16,6 @@ class BusinessLogic_User_User
         {
             $_SESSION['BusinessLogic_User_User'] = serialize(new BusinessLogic_User_User());
         }
-   	
         return unserialize($_SESSION['BusinessLogic_User_User']);
     }
 
@@ -45,7 +44,7 @@ class BusinessLogic_User_User
             //Do we need to update the user's email info
             if ($email != $this->userInfo['Email'])
             {
-                $query = "update [0] set Email='[1]' where UserID=[2]";
+                $query = 'update [0] set Email="[1]" where UserID="[2]"';
                 $arguments = array('Users', $email, $this->GetUserID());
                 $result = $aDataAccess->Update($query, $arguments);
                 $this->userInfo['Email'] = $email;
@@ -57,14 +56,14 @@ class BusinessLogic_User_User
             //Does the user want to change their password, order is important in checking intent
             if ($oldPassword != '' and $newPassword != '')
             {
-                $query = "select * from [0] where UserID=[1] and Password=SHA1('[2]')";
+                $query = 'select * from [0] where UserID="[1]" and Password=SHA1("[2]")';
                 $arguments = array('Users', $this->GetUserID(), $oldPassword);
                 $result = $aDataAccess->Select($query, $arguments);
                 
                 //Password match
                 if (count($result) > 0)
                 {
-                    $query = "update [0] set Password = SHA1('[1]') where UserID=[2]";
+                    $query = 'update [0] set Password = SHA1("[1]") where UserID="[2]"';
                     $arguments = array('Users', $newPassword, $this->GetUserID());
                     $aDataAccess->Update($query, $arguments);
                 }
@@ -72,7 +71,7 @@ class BusinessLogic_User_User
                 {
                     return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'Old Password provided is invalid.');
                 }
-                
+                //after change, forward user to blog frontpage:
                 $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $_GET['blogID'];
                 header("Location: $path");
                 exit;
@@ -83,6 +82,7 @@ class BusinessLogic_User_User
             }
             else
             {
+                //forward user to blog frontpage:
                 $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $_GET['blogID'];
                 header("Location: $path");
                 exit;
@@ -109,7 +109,7 @@ class BusinessLogic_User_User
 
     public function ProcessRegister($username, $email, $password)
     {
-        $query = "select * from [0] where Username='[1]'";
+        $query = 'select * from [0] where Username="[1]"';
         $arguments = array('Users', $username);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -118,7 +118,7 @@ class BusinessLogic_User_User
         //there is no matching record in the DB
         if (count($result) == 0)
         {
-            $query = "insert into [0] (Username, Email, Password) VALUES ('[1]','[2]',sha1('[3]'))";
+            $query = 'insert into [0] (Username, Email, Password) VALUES ("[1]","[2]",sha1("[3]"))';
             $arguments = array('Users', $username, $email, $password);
             $result = $DataAccess->Insert($query, $arguments);
             
@@ -140,13 +140,13 @@ class BusinessLogic_User_User
         }
         else
         {
-            return new Exception('You are not allowed to Sign In at this time.');
+            return new Exception('You are not allowed to sign in at this time.');
         }
     }
 
     public function ProcessSignIn($username, $password)
     {
-        $query = "select UserID,Username,Email from [0] where Username='[1]' and Password=sha1('[2]')";
+        $query = 'select UserID,Username,Email from [0] where Username="[1]" and Password=sha1("[2]")';
         $arguments = array('Users', $username, $password);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -161,7 +161,7 @@ class BusinessLogic_User_User
             $this->userInfo = $result[0];
 
             //Need to fill in permissions table
-            $query = 'select BlogID, Auth from [0] where UserID=[1]';
+            $query = 'select BlogID, Auth from [0] where UserID="[1]"';
             $arguments = array('User_Auth', $result[0]['UserID']);
             $result = $DataAccess->Select($query, $arguments);
             
@@ -202,7 +202,7 @@ class BusinessLogic_User_User
     {
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         
-        $query = "select Rank from [0] where UserID=[1] and BlogID=[2]";
+        $query = 'select Rank from [0] where UserID="[1]" and BlogID="[2]"';
         $arguments = array('Invitations', $this->GetUserID(), $invitingBlogID);
         $result = $DataAccess->Select($query, $arguments);
         
@@ -210,11 +210,11 @@ class BusinessLogic_User_User
         {
             $rank = $result[0]['Rank'];
             
-            $query = "delete from [0] where UserID=[1] and BlogID=[2]";
+            $query = 'delete from [0] where UserID="[1]" and BlogID="[2]"';
             $arguments = array('Invitations', $this->GetUserID(), $invitingBlogID);
             $result = $DataAccess->Delete($query, $arguments);
             
-            $query = "insert into [0](UserID, BlogID, Auth) VALUES('[1]', '[2]', '[3]')";
+            $query = 'insert into [0] (UserID, BlogID, Auth) VALUES("[1]", "[2]", "[3]")';
             $arguments = array('User_Auth', $this->GetUserID(), $invitingBlogID, $rank);
             $result = $DataAccess->Insert($query, $arguments);
             
@@ -236,13 +236,13 @@ class BusinessLogic_User_User
     {
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
 
-        $query = "select Rank from [0] where UserID=[1] and BlogID=[2]";
+        $query = 'select Rank from [0] where UserID="[1]" and BlogID="[2]"';
         $arguments = array('Invitations', $this->GetUserID(), $invitingBlogID);
         $result = $DataAccess->Select($query, $arguments);
 
         if (count($result) > 0)
         {
-            $query = "delete from [0] where UserID=[1] and BlogID=[2]";
+            $query = 'delete from [0] where UserID="[1]" and BlogID="[2]"';
             $arguments = array('Invitations', $this->GetUserID(), $invitingBlogID);
             $result = $DataAccess->Delete($query, $arguments);
 
@@ -265,7 +265,7 @@ class BusinessLogic_User_User
         {
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
             
-            $query = 'select UserID, Rank from [0] where BlogID=[1]';
+            $query = 'select UserID, Rank from [0] where BlogID="[1]"';
             $arguments = array('Invitations', $blogID);
             $invitationsResult = $DataAccess->Select($query, $arguments);
 
@@ -275,7 +275,7 @@ class BusinessLogic_User_User
             {
                 foreach ($invitationsResult as $key=>$value)
                 {
-                    $query = 'select Username from [0] where UserID=[1]';
+                    $query = 'select Username from [0] where UserID="[1]"';
                     $arguments = array('Users', $value['UserID']);
                     $result = $DataAccess->Select($query, $arguments);
 
@@ -325,7 +325,7 @@ class BusinessLogic_User_User
             //username exists?
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
 
-            $query = "select * from [0] where username='[1]'";
+            $query = 'select * from [0] where username="[1]"';
             $arguments = array('Users', $username);
             $userResult = $DataAccess->Select($query, $arguments);
             
@@ -335,7 +335,7 @@ class BusinessLogic_User_User
                 $userID = $userResult[0]['UserID'];
                 
                 //Is user already part of your blog
-                $query = "select * from [0] where UserID='[1]' and BlogID='[2]'";
+                $query = 'select * from [0] where UserID="[1]" and BlogID="[2]"';
                 $arguments = array('User_Auth', $userID, $blogID);
                 $authResult = $DataAccess->Select($query, $arguments);
                 
@@ -343,7 +343,7 @@ class BusinessLogic_User_User
                 if (count($authResult) < 1)
                 {
                     //Is there already an invitation?
-                    $query = 'select * from [0] where UserID=[1]';
+                    $query = 'select * from [0] where UserID="[1]"';
                     $arguments = array('Invitations', $userID);
                     $result = $DataAccess->Select($query, $arguments);
 
@@ -388,7 +388,7 @@ class BusinessLogic_User_User
         {
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
 
-            $query = "select * from [0] where blogID='[1]'";
+            $query = 'select * from [0] where blogID="[1]"';
             $arguments = array('Invitations', $blogID);
             $invitationResult = $DataAccess->Select($query, $arguments);
             
@@ -399,7 +399,7 @@ class BusinessLogic_User_User
                 $userID = $value['UserID'];
                 $rank = $value['Rank'];
                 
-                $query = "select Username from [0] where UserID=[1]";
+                $query = 'select Username from [0] where UserID="[1]"';
                 $arguments = array('Users', $userID);
                 $result = $DataAccess->Select($query, $arguments);
                 
@@ -426,13 +426,13 @@ class BusinessLogic_User_User
 
             foreach ($_POST as $userID=>$value)
             {
-                $query = "select * from [0] where UserID='[1]' and blogID='[2]'";
+                $query = 'select * from [0] where UserID="[1]" and blogID="[2]"';
                 $arguments = array('Invitations', $userID, $blogID);
                 $result = $DataAccess->Select($query, $arguments);
                 
                 if (count($result) > 0)
                 {
-                    $query = "delete from [0] where UserID='[1]' and blogID='[2]'";
+                    $query = 'delete from [0] where UserID="[1]" and blogID="[2]"';
                     $arguments = array('Invitations', $userID, $blogID);
                     $result = $DataAccess->Delete($query, $arguments);
                 }
@@ -457,7 +457,7 @@ class BusinessLogic_User_User
         {
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
 
-            $query = "select * from [0] where blogID='[1]' and Auth!='Owner'";
+            $query = 'select * from [0] where blogID="[1]" and Auth!="Owner"';
             $arguments = array('User_Auth', $blogID);
             $memberResult = $DataAccess->Select($query, $arguments);
             
@@ -468,7 +468,7 @@ class BusinessLogic_User_User
                 $userID = $value['UserID'];
                 $rank = $value['Auth'];
 
-                $query = "select Username from [0] where UserID=[1]";
+                $query = 'select Username from [0] where UserID="[1]"';
                 $arguments = array('Users', $userID);
                 $result = $DataAccess->Select($query, $arguments);
 
@@ -477,7 +477,7 @@ class BusinessLogic_User_User
                 $aViewChangeMemberRankCollectionView->AddView(new Presentation_View_ViewChangeMemberRankView($userID, $username, $rank, $this->GetRankList($blogID)));
             }
             
-            print 'CHECK: ' . $aViewChangeMemberRankCollectionView;
+            print 'CHECK: '.$aViewChangeMemberRankCollectionView;//TODO: remove debug printing thing
             return $aViewChangeMemberRankCollectionView;
         }
         else
@@ -496,7 +496,7 @@ class BusinessLogic_User_User
 
             foreach ($_POST as $userID=>$auth)
             {
-                $query = "select * from [0] where UserID='[1]' and blogID='[2]'";
+                $query = 'select * from [0] where UserID="[1]" and blogID="[2]"';
                 $arguments = array('User_Auth', $userID, $blogID);
                 $result = $DataAccess->Select($query, $arguments);
 
@@ -505,7 +505,7 @@ class BusinessLogic_User_User
                     //these are the only accaptable ranks
                     if ($auth == 'Author' or $auth == 'Editor')
                     {
-                        $query = "update [0] set Auth='[1]' where UserID='[2]' and blogID=[3]";
+                        $query = 'update [0] set Auth="[1]" where UserID="[2]" and blogID="[3]"';
                         $arguments = array('User_Auth', $auth, $userID, $blogID);
                         $result = $DataAccess->Update($query, $arguments);
                     }
@@ -538,11 +538,11 @@ class BusinessLogic_User_User
             //The owner can delete anyone (except himself), editors can delete authors
             if ($permission == 'Owner')
             {
-                $query = "select * from [0] where blogID='[1]' and Auth!='Owner'";
+                $query = 'select * from [0] where blogID="[1]" and Auth!="Owner"';
             }
             else //$permission == Editor
             {
-                $query = "select * from [0] where blogID='[1]' and Auth='Author'";
+                $query = 'select * from [0] where blogID="[1]" and Auth="Author"';
             }
 
             $arguments = array('User_Auth', $blogID);
@@ -555,7 +555,7 @@ class BusinessLogic_User_User
                 $userID = $value['UserID'];
                 $rank = $value['Auth'];
 
-                $query = "select Username from [0] where UserID=[1]";
+                $query = 'select Username from [0] where UserID="[1]"';
                 $arguments = array('Users', $userID);
                 $result = $DataAccess->Select($query, $arguments);
 
@@ -583,7 +583,7 @@ class BusinessLogic_User_User
             foreach ($_POST as $userID=>$value)
             {
                 //Is user in the system?
-                $query = "select * from [0] where UserID='[1]' and blogID='[2]'";
+                $query = 'select * from [0] where UserID="[1]" and blogID="[2]"';
                 $arguments = array('User_Auth', $userID, $blogID);
                 $result = $DataAccess->Select($query, $arguments);
 
@@ -591,7 +591,7 @@ class BusinessLogic_User_User
                 {
                     if ($this->CanDeleteUser($blogID, $userID))
                     {
-                        $query = "delete from [0] where UserID='[1]' and blogID='[2]'";
+                        $query = 'delete from [0] where UserID="[1]" and blogID="[2]"';
                         $arguments = array('User_Auth', $userID, $blogID);
                         $result = $DataAccess->Delete($query, $arguments);
                     }
@@ -685,7 +685,7 @@ class BusinessLogic_User_User
             return $_SESSION['BusinessLogic_User_User_UserIDTable'][$userID];
         }
         //find in DB if not in cache:
-        $query = "select Username from [0] where UserID=[1]";
+        $query = 'select Username from [0] where UserID="[1]"';
         $arguments = array('Users', $userID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -752,7 +752,7 @@ class BusinessLogic_User_User
         if (!$this->IsUserBlogOwner())
         {
             //TODO: Should also check that the blogID does't already have an owner...
-            $query = "insert into [0] (UserID, BlogID, Auth) values('[1]', '[2]', '[3]')";
+            $query = 'insert into [0] (UserID, BlogID, Auth) values("[1]", "[2]", "[3]")';
             $arguments = array('User_Auth', $this->GetUserID(), $blogID, 'Owner');
 
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -775,7 +775,7 @@ class BusinessLogic_User_User
         {
             if ($this->GetUserBlogID() == $blogID)
             {
-                $query = "delete from [0] where BlogID=[1]";
+                $query = 'delete from [0] where BlogID="[1]"';
                 $arguments = array('User_Auth', $blogID);
 
                 $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -801,7 +801,7 @@ class BusinessLogic_User_User
         //should use NewBlog for this case
         if ($auth != 'Owner')
         {
-            $query = "insert into [0] (UserID, BlogID, Auth) values('[1]', '[2]', '[3]')";
+            $query = 'insert into [0] (UserID, BlogID, Auth) values("[1]", "[2]", "[3]")';
             $arguments = array('User_Auth', $this->GetUserID(), $blogID, $auth);
 
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -822,7 +822,7 @@ class BusinessLogic_User_User
 
     public function RemovePermission($userID, $blogID)
     {
-        $query = "select Auth from [0] where UserID=[1] and BlogID=[2]";
+        $query = 'select Auth from [0] where UserID="[1]" and BlogID="[2]"';
         $arguments = array('User_Auth', $userID, $blogID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -831,7 +831,7 @@ class BusinessLogic_User_User
         
         if ($row['Auth'] != 'Owner')
         {
-            $query = "delete from [0] where UserID=[1] and BlogID=[2]";
+            $query = 'delete from [0] where UserID="[1]" and BlogID="[2]"';
             $arguments = array('User_Auth', $userID, $blogID);
             
             if ($userID == $this->GetUserID())
@@ -851,7 +851,7 @@ class BusinessLogic_User_User
     {
         $this->permissions = array();
         
-        $query = 'select BlogID, Auth from [0] where UserID=[1]';
+        $query = 'select BlogID, Auth from [0] where UserID="[1]"';
         $arguments = array('User_Auth', $this->GetUserID());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -893,7 +893,7 @@ class BusinessLogic_User_User
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
 
             //get rank of user in blog
-            $query = 'select Auth from [0] where UserID=[1] and BlogID=[2]';
+            $query = 'select Auth from [0] where UserID="[1]" and BlogID="[2]"';
             $arguments = array('User_Auth', $userID, $blogID);
             $result = $DataAccess->Select($query, $arguments);
 

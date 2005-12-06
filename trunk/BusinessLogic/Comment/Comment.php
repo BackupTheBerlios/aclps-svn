@@ -8,9 +8,9 @@ class BusinessLogic_Comment_Comment
     {
         if (!isset($_SESSION['BusinessLogic_Comment_Comment']))
         {
-            $_SESSION['BusinessLogic_Comment_Comment'] = new BusinessLogic_Comment_Comment();
+            $_SESSION['BusinessLogic_Comment_Comment'] = serialize(new BusinessLogic_Comment_Comment());
         }
-        return $_SESSION['BusinessLogic_Comment_Comment'];
+        return unserialize($_SESSION['BusinessLogic_Comment_Comment']);
     }
 
     public function NewComment($blogID, $postID)

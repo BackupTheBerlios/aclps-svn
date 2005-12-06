@@ -14,9 +14,9 @@ class BusinessLogic_Comment_CommentDataAccess
     {
         if (!isset($_SESSION['BusinessLogic_Comment_CommentDataAccess']))
         {
-            $_SESSION['BusinessLogic_Comment_CommentDataAccess'] = new BusinessLogic_Comment_CommentDataAccess();
+            $_SESSION['BusinessLogic_Comment_CommentDataAccess'] = serialize(new BusinessLogic_Comment_CommentDataAccess());
         }
-        return $_SESSION['BusinessLogic_Comment_CommentDataAccess'];
+        return unserialize($_SESSION['BusinessLogic_Comment_CommentDataAccess']);
     }
 
     public function NewComment($blogID, $postID)
@@ -46,7 +46,7 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ProcessEditComment($commentView)
     {
         //Updates the Comments table with the new data.
-        $query = 'update Comments set Title="[0]", Content="[1]" where CommentID=[2]';
+        $query = 'update Comments set Title="[0]", Content="[1]" where CommentID="[2]"';
         $arguments = array($commentView->GetTitle(), $commentView->GetACLPSContent(), $commentView->GetCommentID());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -62,7 +62,7 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ProcessDeleteComment($commentID)
     {
         //Updates the Comments table with the new data.
-        $query = 'delete from Comments where CommentID=[0]';
+        $query = 'delete from Comments where CommentID="[0]"';
         $arguments = array($commentID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -72,7 +72,7 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ProcessDeleteAllComments($postID)
     {
         //Deletes all comments associated with this post.
-        $query = 'delete from Comments where PostID=[0]';
+        $query = 'delete from Comments where PostID="[0]"';
         $arguments = array($postID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -82,7 +82,7 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ViewComments($blogID, $postID)
     {
         //Returns a ViewCommentCollectionView with data from the Comments table.
-        $query = 'select * from Comments where BlogID=[0] and PostID=[1] order by Timestamp asc';
+        $query = 'select * from Comments where BlogID="[0]" and PostID="[1]" order by Timestamp asc';
         $arguments = array($blogID, $postID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -95,7 +95,7 @@ class BusinessLogic_Comment_CommentDataAccess
     private function GetSingleComment($commentID)
     {
         //Returns a single comment's viewcommentview.
-        $query = 'select * from Comments where CommentID=[0]';
+        $query = 'select * from Comments where CommentID="[0]"';
         $arguments = array($commentID);
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -108,7 +108,7 @@ class BusinessLogic_Comment_CommentDataAccess
     public function ViewCommentsByID($commentID)
     {
         //Returns a ViewCommentCollectionView with data from the Comments table.
-        $query = 'select * from Comments where CommentID=[0] order by Timestamp desc';
+        $query = 'select * from Comments where CommentID="[0]" order by Timestamp desc';
         $arguments = array($commentID);
         
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
@@ -132,7 +132,7 @@ class BusinessLogic_Comment_CommentDataAccess
         $insertme = '0';//just to stick into OR statement
         foreach($postIDs as $key=>$value)
         {
-            $insertme = $insertme.' or PostID=['.$key.']';
+            $insertme = $insertme.' or PostID="['.$key.']"';
             array_push($arguments, $value);
         }
         $query = 'select count(CommentID),PostID from Comments where '.$insertme.' group by PostID';

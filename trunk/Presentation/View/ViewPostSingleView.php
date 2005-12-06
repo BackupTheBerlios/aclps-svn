@@ -25,11 +25,11 @@ class Presentation_View_ViewPostSingleView extends Presentation_View_View
     public function Display()
     {
         $ret = $this->post->Display();
-        $ret = $ret.'<div id="commentlabel">Comments:</div>';
-        $ret = $ret.$this->comments->Display();
+        $ret .= '<div id="commentlabel">Comments:</div>';
+        $ret .= $this->comments->Display();
         if (isset($this->commentform))
         {
-            $ret = $ret.$this->commentform->Display();
+            $ret .= $this->commentform->Display();
         }
         return $ret;
     }

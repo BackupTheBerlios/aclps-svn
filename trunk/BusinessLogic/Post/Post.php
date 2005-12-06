@@ -8,9 +8,9 @@ class BusinessLogic_Post_Post
     {
         if (!isset($_SESSION['BusinessLogic_Post_Post']))
         {
-            $_SESSION['BusinessLogic_Post_Post'] = new BusinessLogic_Post_Post();
+            $_SESSION['BusinessLogic_Post_Post'] = serialize(new BusinessLogic_Post_Post());
         }
-        return $_SESSION['BusinessLogic_Post_Post'];
+        return unserialize($_SESSION['BusinessLogic_Post_Post']);
     }
 
     public function NewPost($blogID)

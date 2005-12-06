@@ -12,9 +12,9 @@ class BusinessLogic_Blog_Blog
     {
 	if (!isset($_SESSION['BusinessLogic_Blog_Blog']))
 	{
-	    $_SESSION['BusinessLogic_Blog_Blog'] = new BusinessLogic_Blog_Blog();
+	    $_SESSION['BusinessLogic_Blog_Blog'] = serialize(new BusinessLogic_Blog_Blog());
 	}
-        return $_SESSION['BusinessLogic_Blog_Blog'];
+        return unserialize($_SESSION['BusinessLogic_Blog_Blog']);
     }
 
     public function HandleRequest()

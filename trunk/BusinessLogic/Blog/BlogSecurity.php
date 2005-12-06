@@ -9,16 +9,11 @@ class BusinessLogic_Blog_BlogSecurity
 
     static public function GetInstance()
     {
-	if (isset($_SESSION['BusinessLogic_Blog_BlogSecurity']))
-	{
-	    return $_SESSION['BusinessLogic_Blog_BlogSecurity'];
-	}
-	else
-	{
-	    $_SESSION['BusinessLogic_Blog_BlogSecurity'] = new BusinessLogic_Blog_BlogSecurity();
-	    return $_SESSION['BusinessLogic_Blog_BlogSecurity'];
-	}
-        
+    	if (!isset($_SESSION['BusinessLogic_Blog_BlogSecurity']))
+        {
+            $_SESSION['BusinessLogic_Blog_BlogSecurity'] = serialize(new BusinessLogic_Blog_BlogSecurity());
+        }
+        return unserialize($_SESSION['BusinessLogic_Blog_BlogSecurity']);
     }
     
     public function ViewBlog($blogID)

@@ -194,6 +194,11 @@ tr#calendar_week_row
   background: #E5E5E5;
   border-bottom: 1px solid #CCCCCC
 }
+#posttitle a
+{ 
+  text-decoration: none;
+  color: #000000;
+}
 #postauthor
 {
   text-align: left;
