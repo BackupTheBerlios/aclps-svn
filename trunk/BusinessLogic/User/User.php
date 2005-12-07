@@ -940,6 +940,38 @@ class BusinessLogic_User_User
             throw new Exception('Access Denied.');
         }
     }
+    
+    private function VerifyUsername($name)
+    {
+        //remove all whitespace
+        $name = str_replace(' ', '', $name);
+        
+        //name is in length range [5,15]
+        if (strlen($name) > 4 and strlen($name) < 16)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    private function VerifyPassword($password)
+    {
+        //remove all whitespace
+        $password = str_replace(' ', '', $password);
+
+        //name is in length range [6,20]
+        if (strlen($password) > 5 and strlen($password) < 21)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     //****************************************
     //          The Handler
@@ -954,21 +986,64 @@ class BusinessLogic_User_User
             return $this->EditUserData();
             break;
         case 'ProcessEditUserData':
-            if ($_POST['newPassword'] == $_POST['confirmNewPassword'])
+        
+            $newPasswordsSame = $_POST['newPassword'] == $_POST['confirmNewPassword'];
+
+            if ($_POST['email'] != '')
             {
-                if ($_POST['email'] != '')
+                if ($_POST['oldPassword'] == '')
                 {
-                    return $this->ProcessEditUserData($_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
+                    //want to change email but not password
+                    if ($_POST['newPassword'] == '' and $newPasswordSame)
+                    {
+                        return $this->ProcessEditUserData($_POST['email'], '', '');
+                    }
+                    //see message
+                    elseif ($_POST['newPassword'] != '' and $newPasswordsSame)
+                    {
+                        return new Presentation_View_ViewEditUserDataView($_GET['blogID'],
+                                $this->userInfo['Email'], 'Old Password cannot be blank.');
+                    }
+                    //see message
+                    else
+                    {
+                        return new Presentation_View_ViewEditUserDataView($_GET['blogID'],
+                                $this->userInfo['Email'], 'New Password and Confirmation Password do not match.');
+                    }
                 }
+                //want to change email and change password
+                elseif ($_POST['newPassword'] != '' and $newPasswordsSame)
+                {
+                    if ($this->VerifyPassword($_POST['newPassword']))
+                    {
+                        return $this->ProcessEditUserData($_POST['email'], $_POST['oldPassword'], $_POST['newPassword']);
+                    }
+                    else
+                    {
+                        return new Presentation_View_ViewEditUserDataView($_GET['blogID'],
+                                $this->userInfo['Email'], 'New Password must be between 6 and 20 characters.');
+                    }
+                }
+                //old password entered but nothing entered in the new password fields
+                elseif ($_POST['newPassword'] == $_POST['confirmNewPassword'])
+                {
+                    return new Presentation_View_ViewEditUserDataView($_GET['blogID'],
+                                $this->userInfo['Email'], 'All password fields must be entered in.');
+                }
+                //new password and confirmation do not match
                 else
                 {
-                    return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'Email cannot be blank.');
+                    return new Presentation_View_ViewEditUserDataView($_GET['blogID'],
+                                $this->userInfo['Email'], 'New Password and Confirmation Password do not match.');
                 }
             }
+            //see message
             else
             {
-                return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'New Password and Confirmation Password do not match.');
+                return new Presentation_View_ViewEditUserDataView($_GET['blogID'],
+                            $this->userInfo['Email'], 'Email cannot be blank');
             }
+            
             break;
 
         case 'ViewRegister':
@@ -976,19 +1051,39 @@ class BusinessLogic_User_User
             break;
 
         case 'ProcessRegister':
-            if ($_POST['username'] != '' and $_POST['email'] != ''
-                and $_POST['password'] != '' and $_POST['confirmPassword'] != '')
+            //Form filled in
+            if (    $_POST['username']          != ''
+                and $_POST['email']             != ''
+                and $_POST['password']          != ''
+                and $_POST['confirmPassword']   != '')
             {
                 if ($_POST['password'] == $_POST['confirmPassword'])
                 {
-                    return $this->ProcessRegister($_POST['username'], $_POST['email'],
-                                                  $_POST['password']);
+                    //Enforce length requirements
+                    if ($this->VerifyUsername($_POST['username']))
+                    {
+                        if ($this->VerifyPassword($_POST['password']))
+                        {
+                            return $this->ProcessRegister($_POST['username'], $_POST['email'],
+                              $_POST['password']);
+                        }
+                        else
+                        {
+                            return new Presentation_View_ViewRegisterView($_POST['username'],
+                                     $_POST['email'], 'Password must be between 6 and 20 characters.');
+                        }
+                    }
+                    else
+                    {
+                        return new Presentation_View_ViewRegisterView($_POST['username'],
+                                     $_POST['email'], 'Username must be between 5 and 15 characters.');
+                    }
+
                 }
                 else
                 {
-                    $tryagain = new Presentation_View_ViewRegisterView('Password and Confirmation Password do not match.');
-                    $tryagain->SetFields($_POST['username'],$_POST['email']);
-                    return $tryagain;
+                    return new Presentation_View_ViewRegisterView($_POST['username'],
+                                     $_POST['email'], 'Password and Confirmation Password do not match.');
                 }
             }
             else

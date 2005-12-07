@@ -6,20 +6,13 @@ class Presentation_View_ViewRegisterView extends Presentation_View_View
     private $username;
     private $email;
     
-    public function __construct($errorMessage)
+    public function __construct($username, $email, $errorMessage)
     {
-        $this->errorMessage = $errorMessage;
-        $this->username = '';
-        $this->email = '';
-    }
-
-    public function SetFields($username,$email)
-    {
-        //Instead of returning a newly blank form when the user fills registration incorrectly, we can have it return what they typed in just before:
         $this->username = $username;
         $this->email = $email;
+        $this->errorMessage = $errorMessage;
     }
-    
+
     public function Display()
     {
         $form = '<fieldset><legend><img src="UI/Themes/Images/Controls/register.png" id="controlbarimg" /> Account Registration</legend>'
