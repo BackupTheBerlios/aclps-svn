@@ -71,22 +71,13 @@ class BusinessLogic_User_User
                 {
                     return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'Old Password provided is invalid.');
                 }
-                //after change, forward user to blog frontpage:
-                $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $_GET['blogID'];
-                header("Location: $path");
-                exit;
             }
-            elseif ($oldPassword != '' or $newPassword != '')
-            {
-                    return new Presentation_View_ViewEditUserDataView($_GET['blogID'], $this->userInfo['Email'], 'The password fields were not filled in correctly.');
-            }
-            else
-            {
-                //forward user to blog frontpage:
-                $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $_GET['blogID'];
-                header("Location: $path");
-                exit;
-            }
+            
+            //forward user to blog frontpage:
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $_GET['blogID'];
+            header("Location: $path");
+            exit;
+
         }
         else
         {
@@ -99,7 +90,7 @@ class BusinessLogic_User_User
         //if (BusinessLogic_User_UserSecurity::GetInstance()->ViewRegister())
         if (true)
         {
-            return new Presentation_View_ViewRegisterView('');
+            return new Presentation_View_ViewRegisterView('', '', '');
         }
         else
         {
@@ -126,7 +117,7 @@ class BusinessLogic_User_User
         }
         else
         {
-          return new Presentation_View_ViewRegisterView("The username $username is already in use.");
+          return new Presentation_View_ViewRegisterView($username, $email, "The username $username is already in use.");
         }
     }
 
@@ -705,17 +696,22 @@ class BusinessLogic_User_User
     {
         if ($this->CheckSignedIn())
         {
-            $hasBlog = false;
-
-            
-            foreach($this->permissions as $key=>$value)
+            if (!empty($this->permissions))
             {
-                if ($value == 'Owner')
+                $hasBlog = false;
+                foreach($this->permissions as $key=>$value)
                 {
-                    return true;
+                    if ($value == 'Owner')
+                    {
+                        $hasBlog = true;
+                    }
                 }
+                return $hasBlog;
             }
-            return false;
+            else
+            {
+                return false;
+            }
         }
         else
         {
@@ -942,7 +938,12 @@ class BusinessLogic_User_User
     private function VerifyUsername($name)
     {
         //remove all whitespace
-        $name = str_replace(' ', '', $name);
+        $newname = str_replace(' ', '', $name);
+
+        if ($name != $newname)
+        {
+            return false;
+        }
         
         //name is in length range [5,15]
         if (strlen($name) > 4 and strlen($name) < 16)
@@ -958,7 +959,13 @@ class BusinessLogic_User_User
     private function VerifyPassword($password)
     {
         //remove all whitespace
-        $password = str_replace(' ', '', $password);
+        $newpassword = str_replace(' ', '', $password);
+        
+        if ($password != $newpassword)
+        {
+            return false;
+        }
+        
 
         //name is in length range [6,20]
         if (strlen($password) > 5 and strlen($password) < 21)
@@ -992,7 +999,7 @@ class BusinessLogic_User_User
                 if ($_POST['oldPassword'] == '')
                 {
                     //want to change email but not password
-                    if ($_POST['newPassword'] == '' and $newPasswordSame)
+                    if ($_POST['newPassword'] == '' and $newPasswordsSame)
                     {
                         return $this->ProcessEditUserData($_POST['email'], '', '');
                     }
@@ -1068,13 +1075,13 @@ class BusinessLogic_User_User
                         else
                         {
                             return new Presentation_View_ViewRegisterView($_POST['username'],
-                                     $_POST['email'], 'Password must be between 6 and 20 characters.');
+                                     $_POST['email'], 'Password must be between 6 and 20 characters and contain no spaces.');
                         }
                     }
                     else
                     {
                         return new Presentation_View_ViewRegisterView($_POST['username'],
-                                     $_POST['email'], 'Username must be between 5 and 15 characters.');
+                                     $_POST['email'], 'Username must be between 5 and 15 characters and contain no spaces.');
                     }
 
                 }
@@ -1086,7 +1093,8 @@ class BusinessLogic_User_User
             }
             else
             {
-                return new Presentation_View_ViewRegisterView('You must fill in the entire form.');
+                return new Presentation_View_ViewRegisterView($_POST['username'],
+                                     $_POST['email'], 'You must fill in the entire form.');
             }
 
             break;
