@@ -27,14 +27,14 @@ class Presentation_View_NewBlogView extends Presentation_View_View
         $form = $form.'</select></td></tr>'
             
             . '<tr><td colspan="2"><label for="headertog">Header Image:</label></td></tr>'
-            . '<tr><td><input type="radio" name="headertog" value="no"></td><td>None</td></tr>'
-            . '<tr><td><input type="radio" name="headertog" value="def" checked></td><td>Theme Default</td></tr>'
-            . '<tr><td><input type="radio" name="headertog" value="cust"></td><td>Custom URL: <input type="text" name="headerimg" size="40"></td></tr>'
+            . '<tr><td><input type="radio" name="headertog" value="no" onFocus="javascript:headerImage.value=\'\'"></td><td>None</td></tr>'
+            . '<tr><td><input type="radio" name="headertog" value="def" checked onFocus="javascript:headerImage.value=\'\'"></td><td>Theme Default</td></tr>'
+            . '<tr><td><input type="radio" name="headertog" value="cust"></td><td>Custom URL: <input type="text" name="headerimg" size="40" onFocus="javascript:headertog[2].checked=\'1\'"></td></tr>'
 
             . '<tr><td colspan="2"><label for="footertog">Footer Image:</label></td></tr>'
-            . '<tr><td><input type="radio" name="footertog" value="no"></td><td>None</td></tr>'
-            . '<tr><td><input type="radio" name="footertog" value="def" checked></td><td>Theme Default</td></tr>'
-            . '<tr><td><input type="radio" name="footertog" value="cust"></td><td>Custom URL: <input type="text" name="footerimg" size="40"></td></tr>'
+            . '<tr><td><input type="radio" name="footertog" value="no" onFocus="javascript:footerImage.value=\'\'"></td><td>None</td></tr>'
+            . '<tr><td><input type="radio" name="footertog" value="def" checked onFocus="javascript:footerImage.value=\'\'"></td><td>Theme Default</td></tr>'
+            . '<tr><td><input type="radio" name="footertog" value="cust"></td><td>Custom URL: <input type="text" name="footerimg" size="40" onFocus="javascript:footertog[2].checked=\'1\'"></td></tr>'
             
             . '<tr><td colspan="2"><label for="about">About Text (for sidebar):</label></td></tr>'
             . '<tr><td colspan="2" align="center"><textarea name="about" rows="7" cols="50"></textarea></td></tr>'

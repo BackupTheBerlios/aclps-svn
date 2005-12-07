@@ -79,7 +79,14 @@ class BusinessLogic_Blog_Blog
             if ($headertog == "no")
                 $headerimg = '';
             elseif ($headertog == "cust")
+            {
                 $headerimg = $_POST['headerImage'];
+                //insert http if not there:
+                if (!strstr($headerimg,"://"))
+                {
+                    $headerimg = 'http://'.$headerimg;
+                }
+            }
             else
                 $headerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultHeader($themeid);
 
@@ -87,7 +94,14 @@ class BusinessLogic_Blog_Blog
             if ($footertog == "no")
                 $footerimg = '';
             elseif ($footertog == "cust")
+            {
                 $footerimg = $_POST['footerImage'];
+                //insert http if not there:
+                if (!strstr($footerimg,"://"))
+                {
+                    $footerimg = 'http://'.$footerimg;
+                }
+            }
             else
                 $footerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultFooter($themeid);
             
@@ -97,14 +111,6 @@ class BusinessLogic_Blog_Blog
             $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$_GET['blogID'];
             header("Location: $path");
             exit;
-            
-        case 'EditLinks':
-            //TODO
-            break;
-            
-        case 'ProcessEditLinks':
-            //TODO
-            break;
 	    
         case 'EditMembership':
             $aViewBlogView->SetContent($this->EditMembership($_GET['blogID']));
@@ -139,7 +145,14 @@ class BusinessLogic_Blog_Blog
             if ($headertog == "no")
                 $headerimg = '';
             elseif ($headertog == "cust")
+            {
                 $headerimg = $_POST['headerimg'];
+                //insert http if not there:
+                if (!strstr($headerimg,"://"))
+                {
+                    $headerimg = 'http://'.$headerimg;
+                }
+            }
             else
                 $headerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultHeader($themeid);
 
@@ -147,7 +160,14 @@ class BusinessLogic_Blog_Blog
             if ($footertog == "no")
                 $footerimg = '';
             elseif ($footertog == "cust")
+            {
                 $footerimg = $_POST['footerimg'];
+                //insert http if not there:
+                if (!strstr($footerimg,"://"))
+                {
+                    $footerimg = 'http://'.$footerimg;
+                }
+            }        
             else
                 $footerimg = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemeDefaultFooter($themeid);
             

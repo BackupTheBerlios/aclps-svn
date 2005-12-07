@@ -53,7 +53,7 @@ class Presentation_View_EditBlogLayoutView extends Presentation_View_View
         }
         
         $form = '<fieldset><legend>Edit Your Blog</legend>'
-            . '<form method="post" action="index.php?&Action=ProcessEditBlogLayout&blogID=' . $this->blogID . '">'
+            . '<form method="post" name="editblogform" action="index.php?&Action=ProcessEditBlogLayout&blogID=' . $this->blogID . '">'
             . '<table id="formtable"><tr><td colspan="2"><label for="blogTitle">Title:</label> '
             . '<input type="text" name="blogTitle" value="'.$this->title.'"></td></tr>'
             . '<tr><td colspan="2"><label for="theme">Theme:</label> '
@@ -71,14 +71,14 @@ class Presentation_View_EditBlogLayoutView extends Presentation_View_View
         
         $form = $form.'</select></td></tr>'
             . '<tr><td colspan="2"><label for="headertog">Header Image:</label></td></tr>'
-            . '<tr><td><input type="radio" name="headertog" value="no" '.$headerNone.'></td><td>None</td></tr>'
-            . '<tr><td><input type="radio" name="headertog" value="def" '.$headerDefault.'></td><td>Theme Default</td></tr>'
-            . '<tr><td><input type="radio" name="headertog" value="cust" '.$headerCustom.'></td><td>Custom URL: <input type="text" name="headerImage" value="'.$headerCustomURL.'" size="40"></td></tr>'
+            . '<tr><td><input type="radio" name="headertog" value="no" '.$headerNone.' onFocus="javascript:headerImage.value=\'\'"></td><td>None</td></tr>'
+            . '<tr><td><input type="radio" name="headertog" value="def" '.$headerDefault.' onFocus="javascript:headerImage.value=\'\'"></td><td>Theme Default</td></tr>'
+            . '<tr><td><input type="radio" name="headertog" value="cust" '.$headerCustom.'></td><td>Custom URL: <input type="text" name="headerImage" value="'.$headerCustomURL.'" size="40" onFocus="javascript:headertog[2].checked=\'1\'"></td></tr>'
 
             . '<tr><td colspan="2"><label for="footertog">Footer Image:</label></td></tr>'
-            . '<tr><td><input type="radio" name="footertog" value="no" '.$footerNone.'></td><td>None</td></tr>'
-            . '<tr><td><input type="radio" name="footertog" value="def" '.$footerDefault.'></td><td>Theme Default</td></tr>'
-            . '<tr><td><input type="radio" name="footertog" value="cust" '.$footerCustom.'></td><td>Custom URL: <input type="text" name="footerImage" value="'.$footerCustomURL.'" size="40"></td></tr>'
+            . '<tr><td><input type="radio" name="footertog" value="no" '.$footerNone.' onFocus="javascript:footerImage.value=\'\'"></td><td>None</td></tr>'
+            . '<tr><td><input type="radio" name="footertog" value="def" '.$footerDefault.' onFocus="javascript:footerImage.value=\'\'"></td><td>Theme Default</td></tr>'
+            . '<tr><td><input type="radio" name="footertog" value="cust" '.$footerCustom.'></td><td>Custom URL: <input type="text" name="footerImage" value="'.$footerCustomURL.'" size="40" onFocus="javascript:footertog[2].checked=\'1\'"></td></tr>'
 
             . '<tr><td colspan="2"><label for="about">About Text (for sidebar):</label></td></tr>'
             . '<tr><td colspan="2" align="center"><textarea name="about" rows="7" cols="50">' . $this->about . '</textarea></td></tr>'

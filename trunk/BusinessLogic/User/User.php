@@ -476,8 +476,6 @@ class BusinessLogic_User_User
 
                 $aViewChangeMemberRankCollectionView->AddView(new Presentation_View_ViewChangeMemberRankView($userID, $username, $rank, $this->GetRankList($blogID)));
             }
-            
-            print 'CHECK: '.$aViewChangeMemberRankCollectionView;//TODO: remove debug printing thing
             return $aViewChangeMemberRankCollectionView;
         }
         else

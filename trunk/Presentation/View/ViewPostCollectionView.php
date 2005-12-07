@@ -35,24 +35,29 @@ class Presentation_View_ViewPostCollectionView extends Presentation_View_View
     {
         if (is_array($this->posts))
         {
-            $ret = '<div id="postcollection">';
             if (count($this->posts) < 1)
             {
-                $ret .= "No posts found.\n";
+                $ret = '<div id="postcollection">';
+                $ret .= "<fieldset><legend>Nothing Found</legend>No posts found. Sorry!</fieldset>\n";
+                $ret .= '</div>';
             }
             else
             {
+                $ret = '<div id="postcollection">';
                 foreach($this->posts as $value)
                 {
                     $ret .= $value->Display()."\n";
                 }
+                $ret .= '</div>';
             }
-            $ret .= '</div>';
             return $ret;
         }
         elseif (!isset($this->posts))
         {
-            return '<div id="postcollection">No Posts</div>';
+            $ret = '<div id="postcollection">';
+            $ret .= "<fieldset><legend>Nothing Found</legend>No posts found. Sorry!</fieldset>\n";
+            $ret .= '</div>';
+            return $ret;
         }
         else
         {
