@@ -32,7 +32,7 @@ class Presentation_View_ViewAssociatedBlogView extends Presentation_View_View
         else
         {
             $ret .= ' - <a href ="index.php?Action=LeaveBlog&blogID=' . $this->cBlogID
-                . '&leaveBlogID=' . $this->blogID . '">Leave Blog</a></div>';
+                . '&leavingBlogID=' . $this->blogID . '">Leave Blog</a></div>';
         }
         
         $ret .= '</div>';

@@ -606,6 +606,53 @@ class BusinessLogic_User_User
 
     }
 
+    public function LeaveBlog($blogID, $leavingBlogID)
+    {
+        //If user is a member of the blog
+        if ($this->GetPermissionForBlog($leavingBlogID) != 'Nobody')
+        {
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+            $query = 'select Title from [0] where blogID="[1]"';
+            $arguments = array('Blogs', $leavingBlogID);
+            $result = $DataAccess->Select($query, $arguments);
+            
+            if (count($result) > 0)
+            {
+                $title = $result[0]['Title'];
+                return new Presentation_View_LeaveBlogView($blogID, $leavingBlogID, $title);
+            }
+            else
+            {
+                throw new Exception('Blog does not exist.');
+            }
+        }
+        else
+        {
+            throw new Exception('You are not a member of this blog.');
+        }
+    }
+    
+    public function ProcessLeaveBlog($blogID, $leavingBlogID)
+    {
+        //If user is a member of the blog
+        if ($this->GetPermissionForBlog($leavingBlogID) != 'Nobody')
+        {
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+            $query = 'delete from [0] where UserID ="[1]" and BlogID="[2]"';
+            $arguments = array('User_Auth', $this->GetUserID, $leavingBlogID);
+            $result = $DataAccess->Delete($query, $arguments);
+            
+            $this->UpdatePermissions();
+            
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewDashboard&blogID=' . $blogID;
+            header("Location: $path");
+            exit;
+        }
+        else
+        {
+            throw new Exception('You are not a member of this blog.');
+        }
+    }
     //**********************************
     //NON-ACTION FUNCTIONS
     //**********************************
@@ -1184,9 +1231,21 @@ class BusinessLogic_User_User
             break;
 
         case 'LeaveBlog':
-            print 'Not Implemented Yet';
+            if (isset($_GET['leavingBlogID']))
+            {
+                return $this->LeaveBlog($_GET['blogID'], $_GET['leavingBlogID']);
+            }
+            else
+                throw new Exception('Malformed Action.');
             break;
+
         case 'ProcessLeaveBlog':
+            if (isset($_GET['leavingBlogID']))
+            {
+                return $this->ProcessLeaveBlog($_GET['blogID'], $_GET['leavingBlogID']);
+            }
+            else
+                throw new Exception('Malformed Action.');
             break;
 
         default:

@@ -1,28 +1,29 @@
 <?php
 
   //this class represents a post to be deleted
-class Presentation_View_DeletePostView extends Presentation_View_View
+class Presentation_View_LeaveBlogView extends Presentation_View_View
 {
-    private $post;
+    private $blogID;
+    private $leavingBlogID;
+    private $title;
     
-    public function __construct($post)
+    public function __construct($blogID, $leavingBlogID, $title)
     {
-        if (is_array($post))
-        {
-            throw new Exception("DeletePostViews only support a single ViewPostView");
-        }
-        $this->post = $post;
+        $this->blogID = $blogID;
+        $this->leavingBlogID = $leavingBlogID;
+        $this->title = $title;
     }
 
     public function Display()
     {
-        $form = '<fieldset><legend><img src="UI/Themes/Images/Controls/deletepost.png" id="controlbarimg" /> Post Deletion</legend>'
-            . '<form method="post" action="index.php?blogID='.$this->post->GetBlogID().'&Action=ProcessDeletePost">'
-            . '<input type="hidden" name="postID" value="'.$this->post->GetPostID().'">'
-            . '<table id="formtable"><tr><td align="center">Do you really want to delete this post?</td></tr>'
+        $form = '<fieldset><legend> Leave Blog</legend>'
+            . '<form method="post" action="index.php?blogID='. $this->blogID
+            . '&leavingBlogID=' . $this->leavingBlogID
+            . '&Action=ProcessLeaveBlog">'
+            . '<table id="formtable"><tr><td align="center">Do you really want to leave ' . $this->title . '?</td></tr>'
             . '<tr><td align="center"><input type="submit" id="submit" value="Yes"></td></tr></table>'
             . '</form></fieldset>';
-        return $this->post->Display().$form;
+        return $form;
     }
 }
 
