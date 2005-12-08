@@ -10,7 +10,8 @@ class Presentation_View_ViewAssociatedBlogCollectionView extends Presentation_Vi
     
     public function Display()
     {
-        $ret = '<fieldset><legend>Associated Blogs</legend>';
+        $ret = '<div id=dashboardcollection>';
+        $ret = $ret . '<b>Associated Blogs:</b><br />';
         
         if (count($this->Views) > 0)
         {
@@ -21,10 +22,10 @@ class Presentation_View_ViewAssociatedBlogCollectionView extends Presentation_Vi
         }
         else
         {
-            $ret .= 'You are not associated with any blogs.';
+            $ret .= '<div id=dashboardelementnoborder>You are not associated with any blogs.</div>';
         }
 
-        $ret .= '</fieldset>';
+        $ret .= '</div>';
 
         return $ret;
     }

@@ -1183,6 +1183,12 @@ class BusinessLogic_User_User
             return $this->ProcessRemoveMember($_GET['blogID']);
             break;
 
+        case 'LeaveBlog':
+            print 'Not Implemented Yet';
+            break;
+        case 'ProcessLeaveBlog':
+            break;
+
         default:
             return BusinessLogic_Post_Post::GetInstance()->HandleRequest();
     	}

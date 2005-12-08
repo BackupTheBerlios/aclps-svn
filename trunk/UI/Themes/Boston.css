@@ -2,11 +2,36 @@
 
 body
 {
-  background-color: #FFFFFF;
+  background-color: #686767;
   margin: 0px;
   text-align: center;
-}
+  
+  scrollbar-face-color: #333333;
+  scrollbar-arrow-color: #990000;
+  scrollbar-track-color: white;
+  scrollbar-shadow-color: white;
+  scrollbar-highlight-color: white;
+  scrollbar-3dlight-color: white;
+  scrollbar-darkshadow-Color: white;
+  
+  background-image:url(http://cs411.beoba.net/ACLPS/UI/Themes/Images/boston-background.jpg);
+/*  background-repeat:no-repeat; */
+  background-attachment:fixed;
+  background-position: 0px 50px;
 
+}
+A
+{
+  color: #990000;
+  text-decoration: none;
+}
+A:hover
+{
+  LEFT: 1px;
+  POSITION: relative;
+  TOP: 1px;
+  COLOR: red;
+}
 #controlbarimg
 { 
   margin: 1px 2px 1px 2px;
@@ -30,11 +55,12 @@ body
 #topbar a
 {
   margin-left: 4px;
-  color: blue;
-  text-decoration: none;
   font-weight: bold;
 }
-
+#topbar img
+{
+  filter:chroma(color: dbeaed);
+}
 #headerimage
 {
   text-align: center;
@@ -47,32 +73,32 @@ body
 #footerimage
 {
   text-align: center;
-  margin-bottom: 20px;
+  margin: 20px;
 }
 #blogfooterimg
 { 
   border: 0;
 }
-
 #container
 {
   width: 770px;
   margin: 0 auto 0 auto;
   padding: 0;
+  margin: 20px;
+  color: white;
 }
-
 #content
 {
-  width: 510px;
+  width: 520px;
   float: left;
   font-family: sans-serif;
   font-size: 14px;
-  background-color: #EEEEEE;
+  background-color: #000000;
   border: 1px solid #666666;
   padding: 5px;
   margin-bottom: 20px;
+  color: white;
 }
-
 #sidecontent
 {
   text-align: center;
@@ -88,8 +114,9 @@ body
   font-size: 12px;
   background-color: #EEEEEE;
   margin-bottom: 15px;
-  border: 1px solid #666666;
+  border: 2px dotted #990000;
   padding: 5px;
+  color: black;
 }
 
 /* CALENDAR CRAP HERE */
@@ -100,15 +127,18 @@ body
   text-align: center;
   font-family: sans-serif;
   font-size: 12px;
-  background-color: #EEEEEE;
+  background-color: #600000;
+  color: white;
   margin-bottom: 15px;
-  border: 1px solid #666666;
-  padding: 0px;
+  border: 5px solid #666666;
+  padding: 2px;
+
 }
 
 #calendar_table td
 { 
   padding: 2px;
+  border: 3px solid black;
 }
 
 tr#calendar_week_row
@@ -119,17 +149,16 @@ tr#calendar_week_row
 
 #calendar_month_year
 {
+  color: #ffffff;
   text-align: center;
   font-weight: bold;
   letter-spacing: 5px;
   margin-bottom: 4px;
 }
 #calendar_month_year a
-{ 
-  text-decoration: none;
-  color: blue;
+{
+  color:
 }
-
 #calendar_week
 {
   color: #333333;
@@ -138,12 +167,15 @@ tr#calendar_week_row
 #calendar_today
 {
   font-weight: bold;
+  color: red;
 }
-
-#calendar_posts a,#calendar_today a
+#calendar_today a
 {
-  text-decoration: none;
-  color: blue;
+
+}
+#calendar_posts a
+{
+
 }
 
 /* BLOG CRAP HERE */
@@ -153,56 +185,58 @@ tr#calendar_week_row
   text-align: left;
   background-color: #DDDDDD;
   border: 1px solid #BBBBBB;
+  margin: 5px;
+  margin-top: 10px;
 }
-
 #blogcontrols a
 { 
   margin-left: 4px;
-  color: blue;
-  text-decoration: none;
   font-size: 12px;
+}
+#blogcontrols img
+{
+  filter:chroma(color: d4e6ea);
 }
 
 /* POST CRAP HERE */
 
 #post
-{ 
-  margin-top: 5px;
-  border: 1px solid #CCCCCC;
+{
+  margin: 5px;
+  border: 1px solid #6d0000;
+  border-bottom: 2px solid #6d0000;
 }
-
 #postcontrols
 { 
   text-align: left;
-  background-color: #DDDDDD;
+  background-color: #6d0000;
   border-bottom: 1px solid #CCCCCC;
 }
 #postcontrols a
 { 
   margin-left: 4px;
-  color: blue;
-  text-decoration: none;
   font-size: 11px;
 }
 #posttitle
 {
   text-align: left;
   font-family: serif;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
-  padding: 5px 0px 0px 5px;
-  background: #E5E5E5;
-  border-bottom: 1px solid #CCCCCC
+  padding: 2px 0px 0px 2px;
+  background: #6d0000;
+  border-bottom: 2px dotted #000000;
+  border-top: 2px dotted #000000;
 }
 #posttitle a
-{ 
-  text-decoration: none;
-  color: #000000;
+{
+
 }
+
 #postauthor
 {
   text-align: left;
-  color: #333333;
+  color: #808080;
   margin-left: 10px;
   padding-top:3px;
   font-size: 11px;
@@ -210,7 +244,7 @@ tr#calendar_week_row
 #posttime
 {
   text-align: left;
-  color: #333333;
+  color: #808080;
   margin-left: 10px;
   padding-top:3px;
   font-size: 11px;
@@ -219,6 +253,8 @@ tr#calendar_week_row
 { 
   text-align: left;
   padding: 7px 5px 5px 5px;
+  color: #FFFFFF;
+  background-color: #2a0000;
 }
 #postcommentlink
 { 
@@ -229,7 +265,7 @@ tr#calendar_week_row
 }
 #postcommentlink a
 { 
-  color: blue;
+
 }
 
 /*COMMENT CRAP HERE*/
@@ -239,40 +275,41 @@ tr#calendar_week_row
   text-align: left;
   padding: 10px 5px 7px 5px;
   font-size: 14px;
+  color: white;
 }
 
 #comment
 { 
   margin-top: 5px;
-  border: 1px solid #CCCCCC;
+  border: 1px solid #990000;
 }
 #commentcontrols
 { 
   text-align: left;
-  background-color: #DDDDDD;
-  border-bottom: 1px solid #CCCCCC;
+  background-color: black;
+  border-bottom: 1px solid #990000;
 }
 #commentcontrols a
 {
   margin-left: 4px;
-  color: blue;
-  text-decoration: none;
   font-size: 11px;
 }
 #commenttitle
 {
   text-align: left;
   font-family: serif;
+  color:black;
   font-size: 18px;
   font-weight: bold;
   padding: 5px 0px 5px 5px;
   background: #E5E5E5;
-  border-bottom: 1px solid #CCCCCC
+  border-bottom: 2px dotted #990000;
+  border-top: 2px dotted #990000;
 }
 #commentauthor
 {
   text-align: left;
-  color: #333333;
+  color: #808080;
   margin-left: 10px;
   padding-top:3px;
   font-size: 11px;
@@ -280,7 +317,7 @@ tr#calendar_week_row
 #commenttime
 {
   text-align: left;
-  color: #333333;
+  color: #808080;
   margin-left: 10px;
   padding-top:3px;
   font-size: 11px;
@@ -290,8 +327,8 @@ tr#calendar_week_row
   text-align: left;
   clear: left;
   padding: 7px 5px 5px 5px;
+  background-color: #2a0000;
 }
-
 
 /* FORM CRAP HERE */
 
@@ -300,16 +337,18 @@ fieldset
   margin: 5px 0px 0px 0px;
   text-align: center;
   font-size: 12px;
-  border: 1px solid #CCCCCC;
+  border: 1px solid #990000;
+  color: #990000;
 }
 fieldset a
 { 
-  color: blue;
+
 }
 legend
 {
   font-size: 12px;
   font-weight: bold;
+  color:#990000;
 }
 
 label
@@ -324,86 +363,17 @@ table#formtable
   font-weight: normal;
   margin: 0 auto 0 auto;
   font-size: 12px;
+  color:white;
 }
 
 input, textarea, select
 {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 2px;
   margin: 2px;
-  border: #000000 1px solid;
+  border: 2px dotted #990000;
   font-weight: normal;
   font-size: 12px;
   font-family: sans-serif;
-}
-
-/* DASHBOARD MODIFICATIONS */
-
-#myblog
-{ 
-  text-align: left;
-  background-color: #DDDDDD;
-  border: 1px solid #BBBBBB;
-  margin-top: 2px;
-}
-
-#myblog a
-{ 
-  margin-left: 4px;
-  color: blue;
-  text-decoration: none;
-  font-size: 12px;
-}
-
-#dashboardcollection
-{
-  margin-top: 15px;
-}
-
-#dashboardelementnoborder
-{ 
-  margin-top: 10px;
-}
-
-#dashboardelement
-{ 
-  margin-top: 5px;
-  border: 1px solid #CCCCCC;
-}
-#dashboardelement_title
-{
-  text-align: left;
-  font-family: serif;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 5px 0px 0px 5px;
-  background: #E5E5E5;
-  background-color: #DDDDDD;
-  border-bottom: 1px solid #CCCCCC;
-}
-#dashboardelement_title a
-{ 
-  text-decoration: none;
-  color: #000066;
-}
-#dashboardelement_rank
-{
-  font-family: serif;
-  padding: 5px 0px 0px 5px;
-  text-align: left;
-  background-color: #DDDDDD;
-  background: #E5E5E5;
-  border-bottom: 1px solid #CCCCCC;
-}
-
-#dashboardelement_controls
-{ 
-  padding: 2px 5px 0px 2px;
-  text-align: right;
-  border-bottom: 1px solid #CCCCCC;
-}
-#dashboardelement_controls a
-{ 
-  font-size: 12px;
-  text-decoration: none;
+  color: black;
 }

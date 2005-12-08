@@ -10,13 +10,14 @@ class Presentation_View_ViewDashboardInvitationCollectionView extends Presentati
 
     public function Display()
     {
-        $ret = '<fieldset><legend>Invitations</legend>';
-        
+        $ret = '<div id=dashboardcollection>';
+
         if (count($this->Views) > 0)
         {
+            $ret = $ret . '<b>Invitations:</b><br />';
             foreach($this->Views as $view)
             {
-                $ret .= $view->Display();
+                $ret = $ret . $view->Display();
             }
         }
         else
@@ -24,7 +25,7 @@ class Presentation_View_ViewDashboardInvitationCollectionView extends Presentati
             $ret .= 'You have no pending invitations.';
         }
 
-        $ret .= '</fieldset>';
+        $ret .= '</div>';
 
         return $ret;
     }

@@ -104,31 +104,20 @@ class BusinessLogic_Blog_BlogDataAccess
         $user = BusinessLogic_User_User::GetInstance();
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         
+        $ViewDashboardView = new Presentation_View_ViewDashboardView();
+        
         // Get My Blog Information
-        if ($user->IsUserBlogOwner())
+        if (!$user->IsUserBlogOwner())
         {
-            $blogID = $user->GetUserBlogID();
-            
-            $query = 'select Title from [0] where blogID="[1]"';
-            $arguments = array('Blogs', $blogID);
-            $result = $DataAccess->Select($query, $arguments);
-            
-            $blogTitle = $result[0]['Title'];
+            $ViewDashboardView->AddView(new Presentation_View_ViewMyBlogView($_POST['blogID']));
         }
-        else
-        {
-            $blogID = 0;
-            $blogTitle = '';
-        }
-        
-        $ViewMyBlogView = new Presentation_View_ViewMyBlogView($blogID, $blogTitle);
-        
+
         //Get Associated Blog Information
         $query = 'select BlogID, Auth from [0] where UserID="[1]"';
         $arguments = array('User_Auth', $user->GetUserID());
         $associatedBlogResult = $DataAccess->Select($query, $arguments);
         
-        $associatedBlogs = array();
+        $aViewAssociatedBlogCollectionView = new Presentation_View_ViewAssociatedBlogCollectionView();
         
         if (count($associatedBlogResult) > 0)
         {
@@ -138,57 +127,45 @@ class BusinessLogic_Blog_BlogDataAccess
                 $arguments = array('Blogs', $value['BlogID']);
                 $result = $DataAccess->Select($query, $arguments);
                 
+                $cBlogID = $_GET['blogID'];
                 $blogID = $value['BlogID'];
                 $rank = $value['Auth'];
                 $title = $result[0]['Title'];
                 
-                $associatedBlogs[$blogID] = array('rank' => $rank, 'title' => $title);
+                $aViewAssociatedBlogCollectionView->AddView
+                        (new Presentation_View_ViewAssociatedBlogView($cBlogID, $blogID, $title, $rank));
                 
             }
         }
-        
-        $aViewAssociatedBlogCollectionView = new Presentation_View_ViewAssociatedBlogCollectionView();
-        
-        foreach($associatedBlogs as $blogID=>$arr)
-        {
-            $aViewAssociatedBlogCollectionView->AddView(new Presentation_View_ViewAssociatedBlogView($blogID, $arr['title'], $arr['rank']));
-        }
+
+        $ViewDashboardView->AddView($aViewAssociatedBlogCollectionView);
         
         //Get Invitations
         $query = 'select * from [0] where UserID="[1]"';
         $arguments = array('Invitations', $user->GetUserID());
         $invitationsResult = $DataAccess->Select($query, $arguments);
 
-        $invitations = array();
-
         if (count($invitationsResult) > 0)
         {
+            $aViewDashboardInvitationCollectionView = new Presentation_View_ViewDashboardInvitationCollectionView();
             foreach ($invitationsResult as $key=>$value)
             {
                 $query = 'select Title from [0] where BlogID="[1]"';
                 $arguments = array('Blogs', $value['BlogID']);
                 $result = $DataAccess->Select($query, $arguments);
-
+                
+                $cBlogID = $_GET['blogID'];
                 $blogID = $value['BlogID'];
                 $rank = $value['Rank'];
                 $title = $result[0]['Title'];
 
-                $invitations[$blogID] = array('rank' => $rank, 'title' => $title);
+                $aViewDashboardInvitationCollectionView->AddView(new Presentation_View_ViewDashboardInvitationView
+                            ($cBlogID, $blogID, $title, $rank));
 
             }
+
+            $ViewDashboardView->AddView($aViewDashboardInvitationCollectionView);
         }
-
-        $aViewDashboardInvitationCollectionView = new Presentation_View_ViewDashboardInvitationCollectionView();
-
-        foreach($invitations as $blogID=>$arr)
-        {
-            $aViewDashboardInvitationCollectionView->AddView(new Presentation_View_ViewDashboardInvitationView($_GET['blogID'], $blogID, $arr['title'], $arr['rank']));
-        }
-
-        $ViewDashboardView = new Presentation_View_ViewDashboardView;
-        $ViewDashboardView->AddView($ViewMyBlogView);
-        $ViewDashboardView->AddView($aViewAssociatedBlogCollectionView);
-        $ViewDashboardView->AddView($aViewDashboardInvitationCollectionView);
 
         return $ViewDashboardView;
     }

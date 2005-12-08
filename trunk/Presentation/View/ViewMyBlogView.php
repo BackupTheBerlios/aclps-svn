@@ -5,28 +5,14 @@ class Presentation_View_ViewMyBlogView extends Presentation_View_View
     private $blogID;
     private $blogTitle;
     
-    public function __construct($blogID, $blogTitle)
+    public function __construct($blogID)
     {
         $this->blogID = $blogID;
-        $this->blogTitle = $blogTitle;
     }
     
     public function Display()
     {
-        $ret = '<fieldset><legend>My Blog</legend>';
-        
-        if ($this->blogID != 0 and $this->blogTitle != '')
-        {
-            $ret = $ret
-                    . '<a href="index.php?Action=ViewBlog&blogID=' . $this->blogID . '">' . $this->blogTitle . '</a>';
-        }
-        else
-        {
-            $ret = $ret
-                    . '<a href="index.php?Action=NewBlog&blogID=1">Create My Blog</a>';
-        }
-        
-        $ret = $ret . '</fieldset>';
+        $ret = '<div id=myblog><a href="index.php?Action=NewBlog&blogID=' . $this->blogID . '">Create My Blog</a></div>';
         
         return $ret;
     }
