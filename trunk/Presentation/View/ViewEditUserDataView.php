@@ -22,11 +22,10 @@ class Presentation_View_ViewEditUserDataView extends Presentation_View_View
 
       if ($this->errorMessage != '')
       {
-        $form = $form.'<p>'.$this->errorMessage.'</p>';
+        $form .= '<p>'.$this->errorMessage.'</p>';
       }
 
-        $form = $form
-            . '<table id="formtable"><tr><td colspan="2">Change Email:</td></tr>'
+        $form .= '<table id="formtable"><tr><td colspan="2">Change Email:</td></tr>'
             . '<tr><td><label for="email"> Email:</label></td><td><input type="text" name="email" value="' . $this->email . '"></td></tr>'
             . '<tr><td colspan="2">Change Password:</td></tr>'
             . '<tr><td><label for="oldPassword"> Current Password:</label></td><td><input type="password" name="oldPassword"></td></tr>'

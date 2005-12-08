@@ -74,11 +74,14 @@ class Presentation_View_ViewPostView extends Presentation_View_View
         //returns UNEDITED, RAW CONTENT (keeping aclps code) (for editing)
         return $this->content;
     }
-
     public function GetHTMLContent()
     {
         //returns htmlized content (for display)
         return BusinessLogic_ACLPSCodeConverter::ACLPSCodeToHTML($this->content);
+    }
+    public function SetContent($content)
+    {
+        $this->content = $content;
     }
 
     public function GetAuthorID()
@@ -95,10 +98,18 @@ class Presentation_View_ViewPostView extends Presentation_View_View
     {
         return $this->title;
     }
+    public function SetTitle($title)
+    {
+        $this->title = $title;
+    }
 
     public function GetPublic()
     {
         return $this->public;
+    }
+    public function SetPublic()
+    {
+        $this->public = $public;
     }
 
     public function GetTimestamp()

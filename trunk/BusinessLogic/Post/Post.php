@@ -13,7 +13,7 @@ class BusinessLogic_Post_Post
         return unserialize($_SESSION['BusinessLogic_Post_Post']);
     }
 
-    public function NewPost($blogID)
+    public function NewPost($blogID,$defaulttitle,$defaultcontent,$defaultpublic,$errmsg)
     {
         //Calls the PostSecurity class to determine if the user can create a new post. If so, a NewPostView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Post_PostSecurity::GetInstance()->NewPost($blogID))
@@ -21,8 +21,7 @@ class BusinessLogic_Post_Post
             throw new Exception('Authentication failed.');
         }
         //Create a new empty post form and return it.
-        //$blogID, $postID, $authorID, $title, $public, $timestamp, $content
-        return new Presentation_View_NewPostView($blogID);
+        return new Presentation_View_NewPostView($blogID,$defaulttitle,$defaultcontent,$defaultpublic,$errmsg);
     }
 
     public function ProcessNewPost($postView)
@@ -36,14 +35,14 @@ class BusinessLogic_Post_Post
         return BusinessLogic_Post_PostDataAccess::GetInstance()->ProcessNewPost($postView);
     }
 
-    public function EditPost($blogID, $postID)
+    public function EditPost($blogID,$postID,$defaulttitle,$defaultcontent,$defaultpublic,$errmsg)
     {
         //Calls the PostSecurity class to determine if the user can edit a post. If so, PostDataAccess is called and an EditPostView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Post_PostSecurity::GetInstance()->EditPost($blogID,$postID))
         {
             throw new Exception('Authentication failed.');
         }
-        return BusinessLogic_Post_PostDataAccess::GetInstance()->EditPost($postID);
+        return BusinessLogic_Post_PostDataAccess::GetInstance()->EditPost($postID,$defaulttitle,$defaultcontent,$defaultpublic,$errmsg);
     }
 
     public function ProcessEditPost($postView,$useNowForTimestamp)
@@ -188,12 +187,26 @@ class BusinessLogic_Post_Post
             }
             break;
         case 'NewPost':
-            return $this->NewPost($blogID);
+            return $this->NewPost($blogID,'','',true,'');
             break;
         case 'ProcessNewPost':
             $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
+            $public = ($_POST['public'] == 'on');
+            $errmsg = '';
             $title = substr($_POST['title'],0,30);
-            $view = new Presentation_View_ViewPostView($blogID,0,$authorID,$title,$_POST['public'],0,$_POST['content']);
+            if (strlen($title) < 1)
+            {
+                $errmsg .= 'Post title cannot be empty. ';
+            }
+            if (strlen($_POST['content']) < 1)
+            {
+                $errmsg .= 'Post content cannot be empty. ';
+            }
+            if (strlen($errmsg) > 0)
+            {
+                return $this->NewPost($blogID,$title,$_POST['content'],$public,$errmsg);
+            }
+            $view = new Presentation_View_ViewPostView($blogID,0,$authorID,$title,$public,0,$_POST['content']);
             $this->ProcessNewPost($view);
             //forward user to viewing the blog that the post was just made in:
             $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$blogID;
@@ -201,13 +214,31 @@ class BusinessLogic_Post_Post
             exit;
         case 'EditPost':
             $postID = $_GET['postID'];
-            return $this->EditPost($blogID,$postID);
+            //2 = dont modify post's current public status
+            return $this->EditPost($blogID,$postID,'','',2,'');
             break;
         case 'ProcessEditPost':
             $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
-            $title = substr($_POST['title'],0,30);
             $public = ($_POST['public'] == 'on');
-            $view = new Presentation_View_ViewPostView($blogID,$_POST['postID'],$authorID,$title,$public, 0, $_POST['content']);
+            $errmsg = '';
+            if (strlen($_POST['title']) < 1)
+            {
+                $errmsg .= 'Post title cannot be empty. ';
+            }
+            if (strlen($_POST['content']) < 1)
+            {
+                $errmsg .= 'Post content cannot be empty. ';
+            }
+            if (strlen($_POST['postID'] < 1))
+            {
+                throw new Exception("PostID must be set.");
+            }
+            $title = substr($_POST['title'],0,30);
+            if (strlen($errmsg) > 0)
+            {
+                return $this->EditPost($blogID,$_POST['postID'],$title,$_POST['content'],$public,$errmsg);
+            }
+            $view = new Presentation_View_ViewPostView($blogID,$_POST['postID'],$authorID,$title,$public,0,$_POST['content']);
             $updateTimestamp = ($_POST['timestamp'] == 'now');
             $this->ProcessEditPost($view,$updateTimestamp);
             //forward user to viewing newly edited post:
@@ -220,6 +251,10 @@ class BusinessLogic_Post_Post
             break;
         case 'ProcessDeletePost':
             $postID = $_POST['postID'];
+            if (strlen($postID < 1))
+            {
+                throw new Exception("PostID must be set.");
+            }
             $this->ProcessDeletePost($blogID,$postID);
             //forward user to viewing posts in blog:
             $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$blogID;

@@ -19,14 +19,14 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
     public function __construct($blogID, $contentOptionsFlag, $headerImage, $footerImage, $theme, $title, $rssurl)
     {
 	$this->blogID = $blogID;
-	$this->SetContentOptions($contentOptionsFlag);
+        $this->title = $title;
 	$this->headerImage = $headerImage;
 	$this->footerImage = $footerImage;
 	$this->theme = $theme;
-        $this->title = $title;
         $this->rssurl = $rssurl;
 	$this->content = '';
 	$this->sideContent = '';
+	$this->SetContentOptions($contentOptionsFlag);
     }
 
     private function SetContentOptions($flag)
@@ -35,7 +35,7 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
         {
         case 'Owner':
             $this->contentOptions = '<div id="blogcontrols">'
-                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />Blog Home</a> '
+                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />'.ucwords($this->title).' Home</a> '
                 . '<a href="index.php?Action=NewPost&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" />New Post</a> '
                 . '<a href="index.php?Action=EditBlogLayout&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/admin2.png" id="controlbarimg" />Blog Appearance</a> '
                 . '<a href="index.php?Action=EditMembership&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/editusers2.png" id="controlbarimg" />Blog Membership</a> '
@@ -45,7 +45,7 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
         case 'Editor':
             $this->contentOptions = '<div id="blogcontrols">'
                 . ''
-                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />Blog Home</a> '
+                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />'.ucwords($this->title).' Home</a> '
                 . '<a href="index.php?Action=EditMembership&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/editusers2.png" id="controlbarimg" />Blog Membership</a> '
                 . '<a href="index.php?Action=NewPost&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" />New Post</a> '
                 . '</div>';
@@ -53,7 +53,7 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
             
         case 'Author':
             $this->contentOptions = '<div id="blogcontrols">'
-                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />Blog Home</a> '
+                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />'.ucwords($this->title).' Home</a> '
                 . '<a href="index.php?Action=NewPost&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/newpost.png" id="controlbarimg" />New Post</a> '
                 . '</div>';
             break;
@@ -61,7 +61,7 @@ class Presentation_View_ViewBlogView extends Presentation_View_View
         case 'Nobody':
         default:
             $this->contentOptions = '<div id="blogcontrols">'
-                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />Blog Home</a> '
+                . '<a href="index.php?Action=ViewBlog&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/home.png" id="controlbarimg" />'.ucwords($this->title).' Home</a> '
                 . '</div>';
             break;
         }

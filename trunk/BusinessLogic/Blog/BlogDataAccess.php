@@ -218,7 +218,7 @@ class BusinessLogic_Blog_BlogDataAccess
         return new Presentation_View_ViewCalendarView($blogID, $postsarray, $year, $month);
     }
 
-    public function EditBlogLayout($blogID)
+    public function EditBlogLayout($blogID, $headertext)
     {
         $query = 'select * from [0] where BlogID="[1]"';
         $arguments = array('Blogs', $blogID);
@@ -230,7 +230,7 @@ class BusinessLogic_Blog_BlogDataAccess
         $themeID = $row['ThemeID'];
         $defaultHeader = $this->GetThemeDefaultHeader($themeID);
         $defaultFooter = $this->GetThemeDefaultFooter($themeID);
-        return new Presentation_View_EditBlogLayoutView($blogID, $this->GetThemesList(), $row['Title'], $row['About'], $themeID, $row['HeaderImage'], $row['FooterImage'], $defaultHeader, $defaultFooter);
+        return new Presentation_View_EditBlogLayoutView($blogID, $this->GetThemesList(), $row['Title'], $row['About'], $themeID, $row['HeaderImage'], $row['FooterImage'], $defaultHeader, $defaultFooter, $headertext);
     }
 
     public function ProcessEditBlogLayout($blogID,$title,$about,$themeid,$headerimg,$footerimg)

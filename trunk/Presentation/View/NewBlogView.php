@@ -5,27 +5,33 @@ class Presentation_View_NewBlogView extends Presentation_View_View
     private $blogID;
     private $themeslist;
     
-    public function __construct($blogID, $themeslist)
+    public function __construct($blogID, $themeslist,$headertext)
     {
-        //blogid is passed solely for returning to system when user submits processnewblog form
+        //blogid is the current blogid being viewed when working on the form
         $this->blogID = $blogID;
         $this->themeslist = $themeslist;
+        $this->headertext = $headertext;
     }
 
     public function Display()
     {
         $form = '<fieldset><legend>Create Your Blog</legend>'
-            . '<form method="post" action="index.php?blogID='.$this->blogID.'&Action=ProcessNewBlog">'
-            . '<table id="formtable"><tr><td colspan="2"><label for="title">Title:</label>'
+            . '<form method="post" action="index.php?blogID='.$this->blogID.'&Action=ProcessNewBlog">';
+
+        if (strlen($this->headertext) > 0)
+        {
+            $form .= '<p>'.$this->headertext.'</p>';
+        }
+
+        $form .= '<table id="formtable"><tr><td colspan="2"><label for="title">Title:</label>'
             . ' <input type="text" name="title"></td></tr>'
-            
             . '<tr><td colspan="2"><label for="theme">Theme:</label> <select name="theme">';
+
         foreach ($this->themeslist as $key=>$value)
         {
-            $form = $form.'<option value="'.$key.'">'.$value.'</option>';
+            $form .= '<option value="'.$key.'">'.$value.'</option>';
         }
-        $form = $form.'</select></td></tr>'
-            
+        $form .= '</select></td></tr>'
             . '<tr><td colspan="2"><label for="headertog">Header Image:</label></td></tr>'
             . '<tr><td><input type="radio" name="headertog" value="no" onFocus="javascript:headerImage.value=\'\'"></td><td>None</td></tr>'
             . '<tr><td><input type="radio" name="headertog" value="def" checked onFocus="javascript:headerImage.value=\'\'"></td><td>Theme Default</td></tr>'

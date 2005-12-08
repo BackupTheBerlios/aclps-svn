@@ -22,19 +22,19 @@ class BusinessLogic_Post_PostDataAccess
     public function ProcessNewPost($postView)
     {
         //Inserts data into the Posts table.
-        $query = 'insert into Posts (BlogID,UserID,Title,Timestamp,Content) VALUES ("[0]","[1]","[2]",NOW(),"[3]")';
+        $query = 'insert into Posts (BlogID,UserID,Title,Timestamp,Public,Content) VALUES ("[0]","[1]","[2]",NOW(),"[3]","[4]")';
         $arguments = array($postView->GetBlogID(), $postView->GetAuthorID(),
-                           $postView->GetTitle(), $postView->GetACLPSContent());
+                           $postView->GetTitle(), $postView->GetPublic(), $postView->GetACLPSContent());
 
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         $response = $DataAccess->Insert($query, $arguments);
         return $response;
     }
 
-    public function EditPost($postID)
+    public function EditPost($postID,$defaulttitle,$defaultcontent,$defaultpublic,$errmsg)
     {
         //Returns an EditPostView with data from the Posts table.
-        return new Presentation_View_EditPostView($this->GetSinglePost($postID));
+        return new Presentation_View_EditPostView($this->GetSinglePost($postID),$defaulttitle,$defaultcontent,$defaultpublic,$errmsg);
     }
 
     public function ProcessEditPost($postView,$useNowForTimestamp)

@@ -55,11 +55,16 @@ class BusinessLogic_Blog_Blog
             break;
             
         case 'EditBlogLayout':
-            $aViewBlogView->SetContent($this->EditBlogLayout($_GET['blogID']));
+            $aViewBlogView->SetContent($this->EditBlogLayout($_GET['blogID'],''));
             break;
             
         case 'ProcessEditBlogLayout':
             $title = $_POST['blogTitle'];
+            if (strlen($title) < 1)
+            {
+                $aViewBlogView->SetContent($this->EditBlogLayout($_GET['blogID'],'Blog title cannot be empty.'));
+                break;
+            }
             $about = $_POST['about'];
             
             //ensure that chosen themeID is actually an available theme
@@ -117,7 +122,7 @@ class BusinessLogic_Blog_Blog
             break;
 	    
         case 'NewBlog':
-            $aViewBlogView->SetContent($this->NewBlog($_GET['blogID']));
+            $aViewBlogView->SetContent($this->NewBlog($_GET['blogID'],''));
             break;
             //blogid is passed solely for returning to system when user submits processnewblog form
             //$path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewBlog&blogID='.$this->NewBlog($_GET['blogID']);
@@ -126,6 +131,11 @@ class BusinessLogic_Blog_Blog
 	    
         case 'ProcessNewBlog':
             $title = $_POST['title'];
+            if (strlen($title) < 1)
+            {
+                $aViewBlogView->SetContent($this->NewBlog($_GET['blogID'],'Blog title cannot be empty.'));
+                break;
+            }
             $about = $_POST['about'];
             
             //ensure that chosen themeID is actually an available theme
@@ -236,11 +246,11 @@ class BusinessLogic_Blog_Blog
         return $rssView;
     }
 
-    public function EditBlogLayout($blogID)
+    public function EditBlogLayout($blogID,$headertext)
     {
         if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditBlogLayout($blogID))
         {
-            return BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditBlogLayout($blogID);
+            return BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditBlogLayout($blogID,$headertext);
         }
         else
         {
@@ -253,33 +263,6 @@ class BusinessLogic_Blog_Blog
         if (BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessEditBlogLayout($blogID))
         {
             BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditBlogLayout($blogID,$title,$about,$themeid,$headerimg,$footerimg);
-        }
-        else
-        {
-            throw new Exception('Authentication failed.');
-        }
-    }
-
-    public function EditLinks($blogID)
-    {
-		if(BusinessLogic_Blog_BlogSecurity::GetInstance()->EditLinks($blogID))
-        {
-            BusinessLogic_Blog_BlogDataAccess::GetInstance()->EditLinks($blogID);
-        }
-        else
-        {
-            throw new Exception('Authentication failed.');
-        }
-    }
-
-    public function ProcessEditLinks($blogID,$urls,$titles)
-    {
-		 if(BusinessLogic_Blog_BlogSecurity::GetInstance()->ProcessEditLinks($blogID))
-        {
-            BusinessLogic_Blog_BlogDataAccess::GetInstance()->ProcessEditLinks($blogID, $urls,$titles);
-            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewBlog&blogID=' . $blogID;
-            header("Location: $path");
-            exit;
         }
         else
         {
@@ -313,7 +296,7 @@ class BusinessLogic_Blog_Blog
         }
     }
 
-    public function NewBlog($blogID)
+    public function NewBlog($blogID,$headertext)
     {
         //Calls the BlogSecurity class to determine if the user can create a new blog. If so, a NewBlogView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Blog_BlogSecurity::GetInstance()->NewBlog())
@@ -322,7 +305,7 @@ class BusinessLogic_Blog_Blog
         }
         //blogid is passed solely for returning to system when user submits processnewblog form
         $themeslist = BusinessLogic_Blog_BlogDataAccess::GetInstance()->GetThemesList();
-        return new Presentation_View_NewBlogView($blogID,$themeslist);
+        return new Presentation_View_NewBlogView($blogID,$themeslist,$headertext);
     }
 
     public function ProcessNewBlog($title,$about,$theme,$headerimg,$footerimg)

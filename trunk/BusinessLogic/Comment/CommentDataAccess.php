@@ -19,12 +19,6 @@ class BusinessLogic_Comment_CommentDataAccess
         return unserialize($_SESSION['BusinessLogic_Comment_CommentDataAccess']);
     }
 
-    public function NewComment($blogID, $postID)
-    {
-        //Creates a new empty comment and returns it.
-        return new Presentation_View_NewCommentView($blogID,$postID);
-    }
-
     public function ProcessNewComment($commentView)
     {
         //Inserts data into the Comments table.
@@ -37,10 +31,10 @@ class BusinessLogic_Comment_CommentDataAccess
         $response = $DataAccess->Insert($query, $arguments);
     }
 
-    public function EditComment($commentID)
+    public function EditComment($commentID,$defaulttitle,$defaultcontent,$errmsg)
     {
         //Returns an EditCommentView with data from the Comments table.
-        return new Presentation_View_EditCommentView($this->GetSingleComment($commentID));
+        return new Presentation_View_EditCommentView($this->GetSingleComment($commentID),$defaulttitle,$defaultcontent,$errmsg);
     }
 
     public function ProcessEditComment($commentView)

@@ -13,14 +13,14 @@ class BusinessLogic_Comment_Comment
         return unserialize($_SESSION['BusinessLogic_Comment_Comment']);
     }
 
-    public function NewComment($blogID, $postID)
+    public function NewComment($blogID, $postID, $defaulttitle, $defaultcontent, $errmsg)
     {
         //Calls the CommentSecurity class to determine if the user can create a new comment. If so, a NewCommentView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->NewComment($blogID))
         {
             throw new Exception('Authentication failed.');
         }
-        return BusinessLogic_Comment_CommentDataAccess::GetInstance()->NewComment($blogID,$postID);
+        return new Presentation_View_NewCommentView($blogID,$postID, $defaulttitle, $defaultcontent, $errmsg);
     }
 
     public function ProcessNewComment($commentView)
@@ -34,14 +34,14 @@ class BusinessLogic_Comment_Comment
         BusinessLogic_Comment_CommentDataAccess::GetInstance()->ProcessNewComment($commentView);
     }
 
-    public function EditComment($blogID, $commentID)
+    public function EditComment($blogID, $commentID, $defaulttitle, $defaultcontent, $errmsg)
     {
         //Calls the CommentSecurity class to determine if the user can edit a comment. If so, CommentDataAccess is called and an EditCommentView is returned. Otherwise, an exception is thrown.
         if (!BusinessLogic_Comment_CommentSecurity::GetInstance()->EditComment($blogID))
         {
             throw new Exception('Authentication failed.');
         }
-        return BusinessLogic_Comment_CommentDataAccess::GetInstance()->EditComment($commentID);
+        return BusinessLogic_Comment_CommentDataAccess::GetInstance()->EditComment($commentID, $defaulttitle, $defaultcontent, $errmsg);
     }
 
     public function ProcessEditComment($commentView)
@@ -94,13 +94,26 @@ class BusinessLogic_Comment_Comment
         $blogID = $_GET['blogID'];
         switch($request)
         {
-        case 'NewComment':
-            $postID = $_GET['postID'];
-            return $this->NewComment($postID,$blogID);
-            break;
         case 'ProcessNewComment':
             $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
             $title = substr($_POST['title'],0,30);
+            $errmsg = '';
+            if (strlen($title) < 1)
+            {
+                $errmsg .= 'Comment title cannot be empty. ';
+            }
+            if (strlen($_POST['content']) < 1)
+            {
+                $errmsg .= 'Comment content cannot be empty. ';
+            }
+            if (strlen($_POST['postID'] < 1))
+            {
+                throw new Exception("PostID must be set.");
+            }
+            if (strlen($errmsg) > 0)
+            {
+                return $this->NewComment($blogID,$_POST['postID'],$title,$_POST['content'],$errmsg);
+            }
             //__construct($blogID, $postID, $commentID, $authorID, $title, $timestamp, $content)
             $view = new Presentation_View_ViewCommentView($blogID,$_POST['postID'],0,$authorID,$title,0,$_POST['content']);
             $this->ProcessNewComment($view);
@@ -110,17 +123,36 @@ class BusinessLogic_Comment_Comment
             exit;
         case 'EditComment':
             $commentID = $_GET['commentID'];
-            return $this->EditComment($blogID,$commentID);
+            return $this->EditComment($blogID,$commentID,'','','');
             break;
         case 'ProcessEditComment':
             $authorID = BusinessLogic_User_User::GetInstance()->GetUserID();
             $title = substr($_POST['title'],0,30);
+            $errmsg = '';
+            if (strlen($title) < 1)
+            {
+                $errmsg .= 'Comment title cannot be empty. ';
+            }
+            if (strlen($_POST['content']) < 1)
+            {
+                $errmsg .= 'Comment content cannot be empty. ';
+            }
+            if (strlen($_POST['commentID'] < 1))
+            {
+                throw new Exception("CommentID must be set.");
+            }
+
+            if (strlen($errmsg) > 0)
+            {
+                return $this->EditComment($blogID,$_POST['commentID'],$title,$_POST['content'],$errmsg);
+            }
             $view = new Presentation_View_ViewCommentView($blogID,0,$_POST['commentID'],$authorID,$title, 0, $_POST['content']);
             $this->ProcessEditComment($view);
             //forward user to viewing the post:
             $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewPost&blogID='.$blogID.'&postID='.$_POST['postID'];
-            header("Location: $path");
-            exit;
+            #header("Location: $path");
+            #exit;
+            break;//TODO: fix this when done
         case 'DeleteComment':
             $commentID = $_GET['commentID'];
             $comment = $this->DeleteComment($blogID,$commentID);
@@ -128,6 +160,10 @@ class BusinessLogic_Comment_Comment
             break;
         case 'ProcessDeleteComment':
             $commentID = $_POST['commentID'];
+            if (strlen($commentID < 1))
+            {
+                throw new Exception("CommentID must be set.");
+            }
             $this->ProcessDeleteComment($blogID,$commentID);
             //forward user to viewing the post:
             $path = $_SERVER['DIRECTORY_ROOT'].'index.php?Action=ViewPost&blogID='.$blogID.'&postID='.$_POST['postID'];

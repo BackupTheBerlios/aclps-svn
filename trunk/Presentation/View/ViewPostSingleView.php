@@ -16,7 +16,7 @@ class Presentation_View_ViewPostSingleView extends Presentation_View_View
         $this->post = $post;
         $this->comments = $comments;
         try {
-            $this->commentform = BusinessLogic_Comment_Comment::GetInstance()->NewComment($post->GetBlogID(),$post->GetPostID());
+            $this->commentform = BusinessLogic_Comment_Comment::GetInstance()->NewComment($post->GetBlogID(),$post->GetPostID(),'','','');
         } catch (Exception $e) {
             //do nothing, this user just cant make new comments
         }
