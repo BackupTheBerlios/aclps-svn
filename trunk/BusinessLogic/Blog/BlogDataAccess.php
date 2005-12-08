@@ -105,41 +105,7 @@ class BusinessLogic_Blog_BlogDataAccess
         $DataAccess = DataAccess_DataAccessFactory::GetInstance();
         
         $ViewDashboardView = new Presentation_View_ViewDashboardView();
-        
-        // Get My Blog Information
-        if (!$user->IsUserBlogOwner())
-        {
-            $ViewDashboardView->AddView(new Presentation_View_ViewMyBlogView($_POST['blogID']));
-        }
 
-        //Get Associated Blog Information
-        $query = 'select BlogID, Auth from [0] where UserID="[1]"';
-        $arguments = array('User_Auth', $user->GetUserID());
-        $associatedBlogResult = $DataAccess->Select($query, $arguments);
-        
-        $aViewAssociatedBlogCollectionView = new Presentation_View_ViewAssociatedBlogCollectionView();
-        
-        if (count($associatedBlogResult) > 0)
-        {
-            foreach ($associatedBlogResult as $key=>$value)
-            {
-                $query = 'select Title from [0] where BlogID="[1]"';
-                $arguments = array('Blogs', $value['BlogID']);
-                $result = $DataAccess->Select($query, $arguments);
-                
-                $cBlogID = $_GET['blogID'];
-                $blogID = $value['BlogID'];
-                $rank = $value['Auth'];
-                $title = $result[0]['Title'];
-                
-                $aViewAssociatedBlogCollectionView->AddView
-                        (new Presentation_View_ViewAssociatedBlogView($cBlogID, $blogID, $title, $rank));
-                
-            }
-        }
-
-        $ViewDashboardView->AddView($aViewAssociatedBlogCollectionView);
-        
         //Get Invitations
         $query = 'select * from [0] where UserID="[1]"';
         $arguments = array('Invitations', $user->GetUserID());
@@ -166,6 +132,34 @@ class BusinessLogic_Blog_BlogDataAccess
 
             $ViewDashboardView->AddView($aViewDashboardInvitationCollectionView);
         }
+
+        //Get Associated Blog Information
+        $query = 'select BlogID, Auth from [0] where UserID="[1]"';
+        $arguments = array('User_Auth', $user->GetUserID());
+        $associatedBlogResult = $DataAccess->Select($query, $arguments);
+        
+        $aViewAssociatedBlogCollectionView = new Presentation_View_ViewAssociatedBlogCollectionView(!$user->IsUserBlogOwner(), $_REQUEST['blogID']);
+        
+        if (count($associatedBlogResult) > 0)
+        {
+            foreach ($associatedBlogResult as $key=>$value)
+            {
+                $query = 'select Title from [0] where BlogID="[1]"';
+                $arguments = array('Blogs', $value['BlogID']);
+                $result = $DataAccess->Select($query, $arguments);
+                
+                $cBlogID = $_GET['blogID'];
+                $blogID = $value['BlogID'];
+                $rank = $value['Auth'];
+                $title = $result[0]['Title'];
+                
+                $aViewAssociatedBlogCollectionView->AddView
+                        (new Presentation_View_ViewAssociatedBlogView($cBlogID, $blogID, $title, $rank));
+                
+            }
+        }
+
+        $ViewDashboardView->AddView($aViewAssociatedBlogCollectionView);
 
         return $ViewDashboardView;
     }

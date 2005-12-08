@@ -19,7 +19,7 @@ class Presentation_View_ViewDashboardInvitationView extends Presentation_View_Vi
     {
         $ret = '<div id="dashboardelement"><div id="dashboardelement_title"><a href="index.php?Action=ViewBlog&blogID='
             . $this->blogID . '">' . $this->title . '</a></div>'
-            . '<div id="dashboardelement_subtitle">' . $this->rank . '</div>'
+            . '<div id="dashboardelement_subtitle">Invited to be an ' . $this->rank . '</div>'
             . '<div id="dashboardelement_controls">'
             . '<a href ="index.php?Action=ViewBlog&blogID=' . $this->blogID . '">View Blog</a>'
             . ' - <a href="index.php?Action=AcceptInvitation'

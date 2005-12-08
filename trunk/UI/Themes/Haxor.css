@@ -346,3 +346,62 @@ input, textarea, select
   font-size: 12px;
   font-family: monospace;
 }
+
+/* DASHBOARD STUFF */
+
+#dashboardcollection
+{
+  margin-top: 5px;
+  border: 1px solid #00FF00;
+}
+
+#dashboardcollectionheader
+{ 
+  padding: 2px 0px 2px 4px;
+  text-align: left;
+  font-family: monospace;
+  font-size: 16px;
+  font-weight: bold;
+  color: #00EE00;
+  background-color: #004400;
+}
+
+#dashboardelement_title
+{
+  color: #00EE00;
+  text-align: left;
+  font-family: monospace;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 2px 0px 2px 5px;
+  background-color: #003300;
+  border-top: 1px solid #00FF00;
+  border-bottom: 1px solid #00CC00;
+}
+#dashboardelement_title a
+{ 
+  text-decoration: none;
+  color: #00FF00;
+}
+
+#dashboardelement_subtitle
+{
+  text-align: left;
+  color: #00AA00;
+  margin-left: 10px;
+  padding-top:3px;
+  font-size: 11px;
+}
+
+#dashboardelement_controls
+{ 
+  padding: 2px 5px 2px 2px;
+  text-align: right;
+  color: #00AA00;
+}
+#dashboardelement_controls a
+{ 
+  font-size: 12px;
+  text-decoration: none;
+  color: #00FF00;
+}

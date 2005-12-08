@@ -337,7 +337,7 @@ input, textarea, select
   font-family: sans-serif;
 }
 
-/* DASHBOARD MODIFICATIONS */
+/* DASHBOARD STUFF */
 
 #dashboardcollection
 {
@@ -345,32 +345,6 @@ input, textarea, select
   border-top: 1px solid #BBBBBB;
   border-left: 1px solid #BBBBBB;
   border-right: 1px solid #BBBBBB;  
-}
-
-#myblog
-{ 
-  text-align: left;
-  background-color: #DDDDDD;
-  border: 1px solid #BBBBBB;
-  margin-top: 2px;
-}
-#myblog a
-{ 
-  margin-left: 4px;
-  color: blue;
-  text-decoration: none;
-  font-size: 12px;
-}
-
-#dashboardelementnoborder
-{ 
-  margin-top: 10px;
-}
-
-#dashboardelement
-{ 
-  /*
-  border: 1px solid #CCCCCC;*/
 }
 
 #dashboardcollectionheader
@@ -390,7 +364,7 @@ input, textarea, select
   font-family: serif;
   font-size: 14px;
   font-weight: bold;
-  padding: 5px 0px 0px 5px;
+  padding: 2px 0px 2px 5px;
   background-color: #E5E5E5;
   border-bottom: 1px solid #CCCCCC;
 }
