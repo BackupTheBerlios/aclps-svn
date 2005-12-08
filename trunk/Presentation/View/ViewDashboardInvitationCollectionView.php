@@ -10,14 +10,14 @@ class Presentation_View_ViewDashboardInvitationCollectionView extends Presentati
 
     public function Display()
     {
-        $ret = '<div id=dashboardcollection>';
+        $ret = '<div id="dashboardcollection">';
 
         if (count($this->Views) > 0)
         {
-            $ret = $ret . '<b>Invitations:</b><br />';
+            $ret .= '<div id="dashboardcollectionheader">Invitations:</div><br />';
             foreach($this->Views as $view)
             {
-                $ret = $ret . $view->Display();
+                $ret .= $view->Display();
             }
         }
         else
