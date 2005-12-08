@@ -21,7 +21,7 @@ class Presentation_View_ViewTopBarView extends Presentation_View_View
                 .'<a href="index.php?Action=EditUserData&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/edituser.png" id="controlbarimg" />Edit My Account</a> '
                 .'<a href="index.php?Action=ProcessSignOut&blogID=1"><img src="UI/Themes/Images/Controls/signout.png" id="controlbarimg" />Sign Out</a> '
                 .'<a href="index.php?Action=ViewSearch&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/search.png" id="controlbarimg" />Search</a> '
-                .'<a href="help.php"><img src="UI/Themes/Images/Controls/help.png" id="controlbarimg" />Help</a> ';
+                .'<a href="UI/Help/help.php"><img src="UI/Themes/Images/Controls/help.png" id="controlbarimg" />Help</a> ';
         }
         else
         {
@@ -29,7 +29,7 @@ class Presentation_View_ViewTopBarView extends Presentation_View_View
                 .'<a href="index.php?Action=ViewRegister&blogID='. $this->blogID.'"><img src="UI/Themes/Images/Controls/register.png" id="controlbarimg" />Register An Account</a> '
                 .'<a href="index.php?Action=ViewSignIn&blogID='.$this->blogID.'"><img src="UI/Themes/Images/Controls/signin.png" id="controlbarimg" />Sign In</a> '
                 .'<a href="index.php?Action=ViewSearch&blogID='. $this->blogID.'"><img src="UI/Themes/Images/Controls/search.png" id="controlbarimg" />Search</a> '
-                .'<a href="help.php"><img src="UI/Themes/Images/Controls/help.png" id="controlbarimg" />Help</a> ';
+                .'<a href="UI/Help/help.php"><img src="UI/Themes/Images/Controls/help.png" id="controlbarimg" />Help</a> ';
         }
         
         return $ret;
