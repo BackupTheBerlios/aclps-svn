@@ -639,9 +639,9 @@ class BusinessLogic_User_User
         {
             $DataAccess = DataAccess_DataAccessFactory::GetInstance();
             $query = 'delete from [0] where UserID ="[1]" and BlogID="[2]"';
-            $arguments = array('User_Auth', $this->GetUserID, $leavingBlogID);
+            $arguments = array('User_Auth', $this->GetUserID(), $leavingBlogID);
             $result = $DataAccess->Delete($query, $arguments);
-            
+
             $this->UpdatePermissions();
             
             $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewDashboard&blogID=' . $blogID;
@@ -651,6 +651,76 @@ class BusinessLogic_User_User
         else
         {
             throw new Exception('You are not a member of this blog.');
+        }
+    }
+    
+    public function DeleteBlog($blogID, $deleteBlogID)
+    {
+        //If user is a member of the blog
+        if ($this->GetPermissionForBlog($deleteBlogID) == 'Owner')
+        {
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+            $query = 'select Title from [0] where blogID="[1]"';
+            $arguments = array('Blogs', $deleteBlogID);
+            $result = $DataAccess->Select($query, $arguments);
+
+            if (count($result) > 0)
+            {
+                $title = $result[0]['Title'];
+                return new Presentation_View_DeleteBlogView($blogID, $deleteBlogID, $title);
+            }
+            else
+            {
+                throw new Exception('Blog does not exist.');
+            }
+        }
+        else
+        {
+            throw new Exception('Access Denied.');
+        }
+    }
+
+    public function ProcessDeleteBlog($deleteBlogID)
+    {
+        //If user is a member of the blog
+        if ($deleteBlogID == 1)
+        {
+            throw new Exception('Cannot delete ACLPS home.');
+        }
+        
+        if ($this->GetPermissionForBlog($deleteBlogID) == 'Owner')
+        {
+            $DataAccess = DataAccess_DataAccessFactory::GetInstance();
+            
+            $query = 'delete from [0] where BlogID="[1]"';
+            $arguments = array('Invitations', $deleteBlogID);
+            $result = $DataAccess->Delete($query, $arguments);
+            
+            $query = 'delete from [0] where BlogID="[1]"';
+            $arguments = array('Comments', $deleteBlogID);
+            $result = $DataAccess->Delete($query, $arguments);
+            
+            $query = 'delete from [0] where BlogID="[1]"';
+            $arguments = array('Posts', $deleteBlogID);
+            $result = $DataAccess->Delete($query, $arguments);
+            
+            $query = 'delete from [0] where BlogID="[1]"';
+            $arguments = array('User_Auth', $deleteBlogID);
+            $result = $DataAccess->Delete($query, $arguments);
+            
+            $query = 'delete from [0] where BlogID="[1]"';
+            $arguments = array('Blogs', $deleteBlogID);
+            $result = $DataAccess->Delete($query, $arguments);
+
+            $this->UpdatePermissions();
+
+            $path = $_SERVER['DIRECTORY_ROOT'] . 'index.php?Action=ViewDashboard&blogID=1';
+            header("Location: $path");
+            exit;
+        }
+        else
+        {
+            throw new Exception('Access Denied.');
         }
     }
     //**********************************
@@ -806,34 +876,6 @@ class BusinessLogic_User_User
         else
         {
             throw new Exception('User already owns a blog.');
-        }
-    }
-
-    //Deletes all members of a blog
-    public function DeleteBlog($blogID)
-    {
-        if ($this->IsUserBlogOwner())
-        {
-            if ($this->GetUserBlogID() == $blogID)
-            {
-                $query = 'delete from [0] where BlogID="[1]"';
-                $arguments = array('User_Auth', $blogID);
-
-                $DataAccess = DataAccess_DataAccessFactory::GetInstance();
-                $result = $DataAccess->Delete($query, $arguments);
-
-                $this->UpdatePermissions();
-
-                return true;
-            }
-            else
-            {
-                throw new Exception('User does not own the specified blog.');
-            }
-        }
-        else
-        {
-            throw new Exception("User doesn't own a blog.");
         }
     }
 
@@ -1243,6 +1285,24 @@ class BusinessLogic_User_User
             if (isset($_GET['leavingBlogID']))
             {
                 return $this->ProcessLeaveBlog($_GET['blogID'], $_GET['leavingBlogID']);
+            }
+            else
+                throw new Exception('Malformed Action.');
+            break;
+            
+        case 'DeleteBlog':
+            if (isset($_GET['deleteBlogID']))
+            {
+                return $this->DeleteBlog($_GET['blogID'], $_GET['deleteBlogID']);
+            }
+            else
+                throw new Exception('Malformed Action.');
+            break;
+
+        case 'ProcessDeleteBlog':
+            if (isset($_GET['deleteBlogID']))
+            {
+                return $this->ProcessDeleteBlog($_GET['deleteBlogID']);
             }
             else
                 throw new Exception('Malformed Action.');
